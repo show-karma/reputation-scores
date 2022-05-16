@@ -1,0 +1,9 @@
+{
+    "editor.wordWrap": "on",
+    "editor.tabSize": 2,
+    "eslint.alwaysShowStatus": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  }
+  

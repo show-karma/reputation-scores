@@ -1,0 +1,17 @@
+{
+  "name": "karma-score",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/show-karma/reputation-scores"
+  },
+  "license": "MIT",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
