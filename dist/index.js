@@ -33,6 +33,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./score/default-dao-score.provider"), exports);
 __exportStar(require("./score/ens-dao-score.provider"), exports);
 __exportStar(require("./score/gitcoin-dao-score.provider"), exports);
-__exportStar(require("./score/indexcoop-dao-score.provider"), exports);
 __exportStar(require("./score/optimism-dao-score.provider"), exports);
 __exportStar(require("./score/interfaces"), exports);
