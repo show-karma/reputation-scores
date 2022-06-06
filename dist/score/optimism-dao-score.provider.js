@@ -16,13 +16,7 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
     );
   }
   getKarmaScore(stat, median) {
-    return (
-      Math.round(
-        stat.forumActivityScore +
-          (stat.offChainVotesPct || 0) * 3 +
-          (stat.onChainVotesPct || 0) * 5
-      ) || 0
-    );
+    return Math.round(stat.delegatedVotes / 10000);
   }
 }
 exports.OptimismDaoScoreProvider = OptimismDaoScoreProvider;

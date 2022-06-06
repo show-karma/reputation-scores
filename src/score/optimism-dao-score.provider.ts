@@ -18,12 +18,6 @@ export class OptimismDaoScoreProvider
   }
 
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
-    return (
-      Math.round(
-        stat.forumActivityScore +
-          (stat.offChainVotesPct || 0) * 3 +
-          (stat.onChainVotesPct || 0) * 5
-      ) || 0
-    );
+    return Math.round(stat.delegatedVotes / 10000);
   }
 }
