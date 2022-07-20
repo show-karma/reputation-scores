@@ -18,9 +18,9 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
   getKarmaScore(stat, median) {
     return (
       Math.round(
-        stat.forumActivityScore +
+        stat.delegatedVotes * 0.0005 +
+          stat.forumActivityScore +
           (stat.offChainVotesPct || 0) * 3 +
-          (stat.onChainVotesPct || 0) * 5 +
           (stat.discordMessagesCount || 0) * 0.01
       ) || 0
     );
