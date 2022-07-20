@@ -4,8 +4,8 @@ export interface DaoProviderDescriptor {
 }
 
 export enum DelegateStatPeriod {
-  lifetime = 'lifetime',
-  '30d' = '30d'
+  lifetime = "lifetime",
+  "30d" = "30d",
 }
 
 export interface DelegateStat {
@@ -28,6 +28,7 @@ export interface DelegateStat {
   percentile: number;
   createdAt: Date;
   updatedAt: Date;
+  discordMessagesCount: number;
 }
 
 export class BaseProvider {
@@ -40,7 +41,7 @@ export class BaseProvider {
   toProviderDescriptor(): DaoProviderDescriptor {
     return {
       cls: this.constructor.name,
-      args: this.args
+      args: this.args,
     };
   }
 }
@@ -49,4 +50,3 @@ export interface GetDaoScore {
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
   getForumScore(stat: Partial<DelegateStat>): number;
 }
-
