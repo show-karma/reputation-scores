@@ -19,7 +19,7 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
     return (
       Math.round(
         stat.delegatedVotes * 0.0005 +
-          stat.forumActivityScore +
+          (stat.forumActivityScore || 0) +
           (stat.offChainVotesPct || 0) * 3 +
           (stat.discordMessagesCount || 0) * 0.01
       ) || 0
