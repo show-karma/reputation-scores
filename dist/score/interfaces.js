@@ -13,7 +13,7 @@ class BaseProvider {
     toProviderDescriptor() {
         return {
             cls: this.constructor.name,
-            args: this.args
+            args: this.args,
         };
     }
 }
