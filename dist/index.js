@@ -20,3 +20,4 @@ __exportStar(require("./score/gitcoin-dao-score.provider"), exports);
 __exportStar(require("./score/optimism-dao-score.provider"), exports);
 __exportStar(require("./score/idle-dao-score.provider"), exports);
 __exportStar(require("./score/interfaces"), exports);
+__exportStar(require("./score/gitcoin-health-score.provider"), exports);

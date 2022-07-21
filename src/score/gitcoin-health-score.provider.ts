@@ -1,8 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 import moment from 'moment';
-import { DelegateStat, DelegateStatPeriod } from '../entities/delegate-stat.entity';
-import { AdditionalScoreProvider } from './interfaces';
+import { AdditionalScoreProvider, DelegateStat, DelegateStatPeriod } from './interfaces';
 
 interface GithubRecord {
   address: string;

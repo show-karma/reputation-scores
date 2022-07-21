@@ -50,3 +50,9 @@ export interface GetDaoScore {
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
   getForumScore(stat: Partial<DelegateStat>): number;
 }
+
+export interface AdditionalScoreProvider {
+  preload(): Promise<void>;
+  isPublicAddressEligible(publicAddress: string): Promise<boolean>;
+  getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
+}
