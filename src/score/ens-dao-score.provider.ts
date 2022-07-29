@@ -18,7 +18,6 @@ export class EnsDaoScoreProvider extends DefaultDaoScoreProvider {
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
     return (
       Math.round(
-        stat.forumActivityScore +
           (stat.offChainVotesPct || 0) * 5 +
           (stat.onChainVotesPct || 0) * 2 +
           (stat.delegatedVotes/1000)
