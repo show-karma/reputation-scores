@@ -12,9 +12,9 @@ class EnsDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoScorePr
             stat.forumPostsReadCount * 0.1) || 0);
     }
     getKarmaScore(stat, median) {
-        return (Math.round(stat.forumActivityScore +
-            (stat.offChainVotesPct || 0) * 3 +
-            (stat.delegatedVotes > median ? 20 : 0)) || 0);
+        return (Math.round((stat.offChainVotesPct || 0) * 5 +
+            (stat.onChainVotesPct || 0) * 2 +
+            (stat.delegatedVotes / 1000)) || 0);
     }
 }
 exports.EnsDaoScoreProvider = EnsDaoScoreProvider;
