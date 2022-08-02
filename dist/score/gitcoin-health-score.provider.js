@@ -67,16 +67,12 @@ class GitcoinHealthScoreProvider {
         return Math.floor(score);
     }
     getWorkstreamInvolvement(publicAddress) {
-        const workstream = this.githubData[publicAddress]?.workstream;
-        if (workstream) {
-            if (workstream) {
-                const part = workstream.split(' ')[1]?.toLowerCase();
-                if (part === 'lead')
-                    return 5;
-                if (part === 'contributor')
-                    return 3;
-            }
-        }
+        const workstreamsLead = this.githubData[publicAddress]?.workstreamsLead;
+        const workstreamsContributor = this.githubData[publicAddress]?.workstreamsContributor;
+        if (workstreamsLead)
+            return 5;
+        if (workstreamsContributor)
+            return 3;
         return 0;
     }
     getStewardDays(publicAddress) {

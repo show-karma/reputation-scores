@@ -7,6 +7,8 @@ interface GithubRecord {
   address: string;
   steward_since: string;
   workstream: string;
+  workstreamsLead: string;
+  workstreamsContributor: string;
 }
 
 const GITHUB_DATA_URL = 'https://www.daostewards.xyz/assets/stewards/stewards_data.json';
@@ -80,14 +82,11 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
   }
 
   private getWorkstreamInvolvement(publicAddress: string): number {
-    const workstream = this.githubData[publicAddress]?.workstream;
-    if (workstream) {
-      if (workstream) {
-        const part = workstream.split(' ')[1]?.toLowerCase();
-        if (part === 'lead') return 5;
-        if (part === 'contributor') return 3;
-      }
-    }
+    const workstreamsLead = this.githubData[publicAddress]?.workstreamsLead;
+    const workstreamsContributor = this.githubData[publicAddress]?.workstreamsContributor;
+    if (workstreamsLead) return 5;
+    if (workstreamsContributor) return 3;
+
     return 0;
   }
 
