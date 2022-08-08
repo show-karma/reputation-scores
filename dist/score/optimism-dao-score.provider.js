@@ -14,5 +14,8 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
     getKarmaScore(stat, median) {
         return Math.round(stat.delegatedVotes / 10000);
     }
+    getKarmaScoreProps() {
+        return ['delegatedVotes'];
+    }
 }
 exports.OptimismDaoScoreProvider = OptimismDaoScoreProvider;

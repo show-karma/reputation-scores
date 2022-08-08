@@ -17,5 +17,8 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
             (stat.offChainVotesPct || 0) * 3 +
             (stat.discordMessagesCount || 0) * 0.01) || 0);
     }
+    getKarmaScoreProps() {
+        return ['delegatedVotes', 'forumActivityScore', 'offChainVotesPct', 'discordMessagesCount'];
+    }
 }
 exports.IdleDaoScoreProvider = IdleDaoScoreProvider;

@@ -14,5 +14,8 @@ class GitcoinDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoSco
             stat.forumLikesReceived * 0.5 +
             stat.forumPostsReadCount * 0.1) || 0);
     }
+    getKarmaScoreProps() {
+        return ['forumActivityScore', 'offChainVotesPct'];
+    }
 }
 exports.GitcoinDaoScoreProvider = GitcoinDaoScoreProvider;
