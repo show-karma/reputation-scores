@@ -24,4 +24,8 @@ export class EnsDaoScoreProvider extends DefaultDaoScoreProvider {
       ) || 0
     );
   }
+
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
+    return ['offChainVotesPct', 'onChainVotesPct', 'delegatedVotes'];
+  }
 }

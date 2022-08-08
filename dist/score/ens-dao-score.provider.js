@@ -16,5 +16,8 @@ class EnsDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoScorePr
             (stat.onChainVotesPct || 0) * 2 +
             (stat.delegatedVotes / 1000)) || 0);
     }
+    getKarmaScoreProps() {
+        return ['offChainVotesPct', 'onChainVotesPct', 'delegatedVotes'];
+    }
 }
 exports.EnsDaoScoreProvider = EnsDaoScoreProvider;
