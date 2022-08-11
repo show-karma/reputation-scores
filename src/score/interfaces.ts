@@ -49,6 +49,7 @@ export class BaseProvider {
 export interface GetDaoScore {
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
   getForumScore(stat: Partial<DelegateStat>): number;
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[]
 }
 
 export interface AdditionalScoreProvider {

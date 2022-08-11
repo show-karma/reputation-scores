@@ -16,5 +16,8 @@ class DefaultDaoScoreProvider extends interfaces_1.BaseProvider {
             (stat.offChainVotesPct || 0) * 3 +
             (stat.onChainVotesPct || 0) * 5) || 0);
     }
+    getKarmaScoreProps() {
+        return ['forumActivityScore', 'offChainVotesPct', 'onChainVotesPct'];
+    }
 }
 exports.DefaultDaoScoreProvider = DefaultDaoScoreProvider;

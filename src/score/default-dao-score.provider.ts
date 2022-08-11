@@ -26,4 +26,8 @@ export class DefaultDaoScoreProvider
       ) || 0
     );
   }
+
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
+    return ['forumActivityScore', 'offChainVotesPct', 'onChainVotesPct'];
+  }
 }

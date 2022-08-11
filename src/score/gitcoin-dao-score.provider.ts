@@ -20,4 +20,8 @@ export class GitcoinDaoScoreProvider extends DefaultDaoScoreProvider {
       ) || 0
     );
   }
+
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
+    return ['forumActivityScore', 'offChainVotesPct'];
+  }
 }

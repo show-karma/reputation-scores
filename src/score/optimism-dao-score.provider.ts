@@ -20,4 +20,8 @@ export class OptimismDaoScoreProvider
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
     return Math.round(stat.delegatedVotes / 10000);
   }
+
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
+    return ['delegatedVotes'];
+  }
 }
