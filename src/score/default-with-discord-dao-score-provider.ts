@@ -29,6 +29,11 @@ export class DefaultWithDiscordDaoScoreProvider
   }
 
   getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
-    return ["forumActivityScore", "offChainVotesPct", "onChainVotesPct"];
+    return [
+      "forumActivityScore",
+      "offChainVotesPct",
+      "onChainVotesPct",
+      "discordMessagesCount",
+    ];
   }
 }

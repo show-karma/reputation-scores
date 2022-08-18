@@ -26,7 +26,12 @@ class DefaultWithDiscordDaoScoreProvider extends interfaces_1.BaseProvider {
     );
   }
   getKarmaScoreProps() {
-    return ["forumActivityScore", "offChainVotesPct", "onChainVotesPct"];
+    return [
+      "forumActivityScore",
+      "offChainVotesPct",
+      "onChainVotesPct",
+      "discordMessagesCount",
+    ];
   }
 }
 exports.DefaultWithDiscordDaoScoreProvider = DefaultWithDiscordDaoScoreProvider;
