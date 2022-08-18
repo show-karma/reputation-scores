@@ -7,12 +7,12 @@ export class DefaultWithDiscordDaoScoreProvider
   getForumScore(stat: Partial<DelegateStat>): number {
     return (
       Math.round(
-        stat.proposalsInitiated * 10 +
-          stat.proposalsDiscussed * 2 +
-          stat.forumPostCount +
-          stat.forumTopicCount * 3 +
-          stat.forumLikesReceived * 0.5 +
-          stat.forumPostsReadCount * 0.1
+        (stat.proposalsInitiated || 0) * 10 +
+          (stat.proposalsDiscussed || 0) * 2 +
+          (stat.forumPostCount || 0) +
+          (stat.forumTopicCount || 0) * 3 +
+          (stat.forumLikesReceived || 0) * 0.5 +
+          (stat.forumPostsReadCount || 0) * 0.1
       ) || 0
     );
   }
@@ -20,7 +20,7 @@ export class DefaultWithDiscordDaoScoreProvider
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
     return (
       Math.round(
-        stat.forumActivityScore +
+        (stat.forumActivityScore || 0) +
           (stat.offChainVotesPct || 0) * 3 +
           (stat.onChainVotesPct || 0) * 5 +
           (stat.discordMessagesCount || 0) * 0.01
