@@ -4,7 +4,9 @@ export interface DaoProviderDescriptor {
 }
 export declare enum DelegateStatPeriod {
     lifetime = "lifetime",
-    "30d" = "30d"
+    "30d" = "30d",
+    '180d' = "180d",
+    '1y' = "1y"
 }
 export interface DelegateStat {
     id: number;
