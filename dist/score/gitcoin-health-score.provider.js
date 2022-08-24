@@ -30,7 +30,7 @@ class GitcoinHealthScoreProvider {
             return this.get30dScore(publicAddress, stat);
         }
         else {
-            throw new Error('Unknown period');
+            return null;
         }
     }
     getLifetimeScore(publicAddress, stat) {
