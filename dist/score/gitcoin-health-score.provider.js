@@ -30,7 +30,8 @@ class GitcoinHealthScoreProvider {
             return this.get30dScore(publicAddress, stat);
         }
         else {
-            return null;
+            // TODO fix it
+            return this.get30dScore(publicAddress, stat);
         }
     }
     getLifetimeScore(publicAddress, stat) {
