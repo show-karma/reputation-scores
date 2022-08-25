@@ -31,6 +31,7 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
       "delegatedVotes",
       "forumActivityScore",
       "offChainVotesPct",
+      "onChainVotesPct",
       "discordMessagesCount",
     ];
   }

@@ -31,6 +31,7 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
       "delegatedVotes",
       "forumActivityScore",
       "offChainVotesPct",
+      "onChainVotesPct",
       "discordMessagesCount",
     ];
   }
