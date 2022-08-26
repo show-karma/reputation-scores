@@ -12,9 +12,10 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
             (stat.forumPostsReadCount || 0) * 0.1) || 0);
     }
     getKarmaScore(stat, median) {
-        return (Math.round(stat.delegatedVotes * 0.0005 +
+        return (Math.round(stat.delegatedVotes * 0.1 +
             (stat.forumActivityScore || 0) +
             (stat.offChainVotesPct || 0) * 3 +
+            (stat.onChainVotesPct || 0) * 5 +
             (stat.discordMessagesCount || 0) * 0.01) || 0);
     }
     getKarmaScoreProps() {
@@ -22,6 +23,7 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
             "delegatedVotes",
             "forumActivityScore",
             "offChainVotesPct",
+            "onChainVotesPct",
             "discordMessagesCount",
         ];
     }
