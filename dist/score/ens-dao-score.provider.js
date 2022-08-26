@@ -14,10 +14,16 @@ class EnsDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoScorePr
     getKarmaScore(stat, median) {
         return (Math.round((stat.offChainVotesPct || 0) * 5 +
             (stat.onChainVotesPct || 0) * 2 +
-            (stat.delegatedVotes / 1000)) || 0);
+            stat.delegatedVotes / 1000 +
+            (stat.discordMessagesCount || 0) * 0.01) || 0);
     }
     getKarmaScoreProps() {
-        return ['offChainVotesPct', 'onChainVotesPct', 'delegatedVotes'];
+        return [
+            "offChainVotesPct",
+            "onChainVotesPct",
+            "delegatedVotes",
+            "discordMessagesCount",
+        ];
     }
 }
 exports.EnsDaoScoreProvider = EnsDaoScoreProvider;

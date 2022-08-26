@@ -25,7 +25,12 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     );
   }
 
-  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
-    return ['delegatedVotes', 'forumActivityScore', 'offChainVotesPct', 'discordMessagesCount'];
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
+    return [
+      "delegatedVotes",
+      "forumActivityScore",
+      "offChainVotesPct",
+      "discordMessagesCount",
+    ];
   }
 }

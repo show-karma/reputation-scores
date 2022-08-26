@@ -1,4 +1,4 @@
-import { BaseProvider, DelegateStat, GetDaoScore } from './interfaces';
+import { BaseProvider, DelegateStat, GetDaoScore } from "./interfaces";
 
 export class DefaultDaoScoreProvider
   extends BaseProvider
@@ -21,13 +21,19 @@ export class DefaultDaoScoreProvider
     return (
       Math.round(
         stat.forumActivityScore +
-        (stat.offChainVotesPct || 0) * 3 +
-        (stat.onChainVotesPct || 0) * 5
+          (stat.offChainVotesPct || 0) * 3 +
+          (stat.onChainVotesPct || 0) * 5 +
+          (stat.discordMessagesCount || 0) * 0.01
       ) || 0
     );
   }
 
-  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
-    return ['forumActivityScore', 'offChainVotesPct', 'onChainVotesPct'];
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
+    return [
+      "forumActivityScore",
+      "offChainVotesPct",
+      "onChainVotesPct",
+      "discordMessagesCount",
+    ];
   }
 }

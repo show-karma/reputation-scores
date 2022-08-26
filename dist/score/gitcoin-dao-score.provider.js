@@ -12,10 +12,11 @@ class GitcoinDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoSco
             stat.forumPostCount +
             stat.forumTopicCount * 3 +
             stat.forumLikesReceived * 0.5 +
-            stat.forumPostsReadCount * 0.1) || 0);
+            stat.forumPostsReadCount * 0.1 +
+            (stat.discordMessagesCount || 0) * 0.01) || 0);
     }
     getKarmaScoreProps() {
-        return ['forumActivityScore', 'offChainVotesPct'];
+        return ["forumActivityScore", "offChainVotesPct", "discordMessagesCount"];
     }
 }
 exports.GitcoinDaoScoreProvider = GitcoinDaoScoreProvider;

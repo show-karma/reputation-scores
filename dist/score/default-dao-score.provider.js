@@ -14,10 +14,16 @@ class DefaultDaoScoreProvider extends interfaces_1.BaseProvider {
     getKarmaScore(stat, median) {
         return (Math.round(stat.forumActivityScore +
             (stat.offChainVotesPct || 0) * 3 +
-            (stat.onChainVotesPct || 0) * 5) || 0);
+            (stat.onChainVotesPct || 0) * 5 +
+            (stat.discordMessagesCount || 0) * 0.01) || 0);
     }
     getKarmaScoreProps() {
-        return ['forumActivityScore', 'offChainVotesPct', 'onChainVotesPct'];
+        return [
+            "forumActivityScore",
+            "offChainVotesPct",
+            "onChainVotesPct",
+            "discordMessagesCount",
+        ];
     }
 }
 exports.DefaultDaoScoreProvider = DefaultDaoScoreProvider;
