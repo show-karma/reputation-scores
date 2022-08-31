@@ -1,10 +1,14 @@
-import { DefaultDaoScoreProvider } from './default-dao-score.provider';
-import { DelegateStat } from './interfaces';
+import { DefaultDaoScoreProvider } from "./default-dao-score.provider";
+import { DelegateStat } from "./interfaces";
 
 export class GitcoinDaoScoreProvider extends DefaultDaoScoreProvider {
   getKarmaScore(stat: Partial<DelegateStat>): number {
     return (
-      Math.round(stat.forumActivityScore + (stat.offChainVotesPct || 0)) || 0
+      Math.round(
+        stat.forumActivityScore +
+          (stat.offChainVotesPct || 0) +
+          (stat.discordMessagesCount || 0) * 0.01
+      ) || 0
     );
   }
 
@@ -21,7 +25,7 @@ export class GitcoinDaoScoreProvider extends DefaultDaoScoreProvider {
     );
   }
 
-  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
-    return ['forumActivityScore', 'offChainVotesPct'];
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
+    return ["forumActivityScore", "offChainVotesPct", "discordMessagesCount"];
   }
 }

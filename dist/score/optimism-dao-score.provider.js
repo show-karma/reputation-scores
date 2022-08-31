@@ -12,10 +12,10 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
             stat.forumPostsReadCount * 0.1) || 0);
     }
     getKarmaScore(stat, median) {
-        return Math.round(stat.delegatedVotes / 10000);
+        return Math.round(stat.delegatedVotes / 10000 + (stat.discordMessagesCount || 0) * 0.01);
     }
     getKarmaScoreProps() {
-        return ['delegatedVotes'];
+        return ["delegatedVotes", "discordMessagesCount"];
     }
 }
 exports.OptimismDaoScoreProvider = OptimismDaoScoreProvider;

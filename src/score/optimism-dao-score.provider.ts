@@ -18,10 +18,12 @@ export class OptimismDaoScoreProvider
   }
 
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
-    return Math.round(stat.delegatedVotes / 10000);
+    return Math.round(
+      stat.delegatedVotes / 10000 + (stat.discordMessagesCount || 0) * 0.01
+    );
   }
 
-  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
-    return ['delegatedVotes'];
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
+    return ["delegatedVotes", "discordMessagesCount"];
   }
 }

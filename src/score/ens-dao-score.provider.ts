@@ -1,5 +1,5 @@
-import { DefaultDaoScoreProvider } from './default-dao-score.provider';
-import { DelegateStat } from './interfaces';
+import { DefaultDaoScoreProvider } from "./default-dao-score.provider";
+import { DelegateStat } from "./interfaces";
 
 export class EnsDaoScoreProvider extends DefaultDaoScoreProvider {
   getForumScore(stat: Partial<DelegateStat>): number {
@@ -18,14 +18,20 @@ export class EnsDaoScoreProvider extends DefaultDaoScoreProvider {
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
     return (
       Math.round(
-          (stat.offChainVotesPct || 0) * 5 +
+        (stat.offChainVotesPct || 0) * 5 +
           (stat.onChainVotesPct || 0) * 2 +
-          (stat.delegatedVotes/1000)
+          stat.delegatedVotes / 1000 +
+          (stat.discordMessagesCount || 0) * 0.01
       ) || 0
     );
   }
 
-  getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[] {
-    return ['offChainVotesPct', 'onChainVotesPct', 'delegatedVotes'];
+  getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
+    return [
+      "offChainVotesPct",
+      "onChainVotesPct",
+      "delegatedVotes",
+      "discordMessagesCount",
+    ];
   }
 }
