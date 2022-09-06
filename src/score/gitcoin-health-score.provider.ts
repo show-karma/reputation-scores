@@ -51,7 +51,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     ]);
 
     const score =
-      karmaData.offChainVotesPct * 0.07 +
+      karmaData.offChainVotesPct * 0.7 +
       (karmaData.proposalsInitiated * 1.5 +
         karmaData.proposalsDiscussed * 1 +
         (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
@@ -72,7 +72,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     ]);
 
     const score =
-      karmaData.offChainVotesPct * 0.07 +
+      karmaData.offChainVotesPct * 0.7 +
       karmaData.proposalsInitiated * 1.5 +
       karmaData.proposalsDiscussed * 0.7 +
       (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
