@@ -35,6 +35,8 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
       return this.getLifetimeScore(publicAddress, stat);
     } else if (stat.period === DelegateStatPeriod['30d']) {
       return this.get30dScore(publicAddress, stat);
+    } else if (stat.period === DelegateStatPeriod['180d']) {
+      return this.get30dScore(publicAddress, stat)/6;
     } else {
       // TODO fix it
       return this.get30dScore(publicAddress, stat)
