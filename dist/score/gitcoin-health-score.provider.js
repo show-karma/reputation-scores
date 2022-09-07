@@ -29,6 +29,9 @@ class GitcoinHealthScoreProvider {
         else if (stat.period === interfaces_1.DelegateStatPeriod['30d']) {
             return this.get30dScore(publicAddress, stat);
         }
+        else if (stat.period === interfaces_1.DelegateStatPeriod['180d']) {
+            return this.get30dScore(publicAddress, stat) / 6;
+        }
         else {
             // TODO fix it
             return this.get30dScore(publicAddress, stat);
