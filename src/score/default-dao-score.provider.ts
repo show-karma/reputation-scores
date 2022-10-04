@@ -7,12 +7,12 @@ export class DefaultDaoScoreProvider
   getForumScore(stat: Partial<DelegateStat>): number {
     return (
       Math.round(
-        stat.proposalsInitiated * 10 +
-          stat.proposalsDiscussed * 2 +
-          stat.forumPostCount +
-          stat.forumTopicCount * 3 +
-          stat.forumLikesReceived * 0.5 +
-          stat.forumPostsReadCount * 0.1
+        stat.proposalsInitiated * 1 +
+          stat.proposalsDiscussed * 0.2 +
+          stat.forumPostCount * 0.1 +
+          stat.forumTopicCount * 0.3 +
+          stat.forumLikesReceived * 0.05 +
+          stat.forumPostsReadCount * 0.01
       ) || 0
     );
   }

@@ -4,12 +4,12 @@ exports.DefaultDaoScoreProvider = void 0;
 const interfaces_1 = require("./interfaces");
 class DefaultDaoScoreProvider extends interfaces_1.BaseProvider {
     getForumScore(stat) {
-        return (Math.round(stat.proposalsInitiated * 10 +
-            stat.proposalsDiscussed * 2 +
-            stat.forumPostCount +
-            stat.forumTopicCount * 3 +
-            stat.forumLikesReceived * 0.5 +
-            stat.forumPostsReadCount * 0.1) || 0);
+        return (Math.round(stat.proposalsInitiated * 1 +
+            stat.proposalsDiscussed * 0.2 +
+            stat.forumPostCount * 0.1 +
+            stat.forumTopicCount * 0.3 +
+            stat.forumLikesReceived * 0.05 +
+            stat.forumPostsReadCount * 0.01) || 0);
     }
     getKarmaScore(stat, median) {
         return (Math.round(stat.forumActivityScore +
