@@ -6,3 +6,4 @@ export * from "./score/idle-dao-score.provider";
 export * from "./score/interfaces";
 export * from "./score/gitcoin-health-score.provider";
 export * from "./score/default-with-discord-dao-score-provider";
+export * from "./score/default-with-dework-dao-score.provider";

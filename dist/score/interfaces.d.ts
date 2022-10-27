@@ -5,8 +5,8 @@ export interface DaoProviderDescriptor {
 export declare enum DelegateStatPeriod {
     lifetime = "lifetime",
     "30d" = "30d",
-    '180d' = "180d",
-    '1y' = "1y"
+    "180d" = "180d",
+    "1y" = "1y"
 }
 export interface DelegateStat {
     id: number;
@@ -29,6 +29,7 @@ export interface DelegateStat {
     createdAt: Date;
     updatedAt: Date;
     discordMessagesCount: number;
+    deworkPoints: number;
 }
 export declare class BaseProvider {
     private readonly args;
@@ -38,7 +39,7 @@ export declare class BaseProvider {
 export interface GetDaoScore {
     getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
     getForumScore(stat: Partial<DelegateStat>): number;
-    getKarmaScoreProps(): (keyof Partial<DelegateStat> | 'median')[];
+    getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[];
 }
 export interface AdditionalScoreProvider {
     preload(): Promise<void>;
