@@ -4,6 +4,7 @@ exports.BaseProvider = exports.DelegateStatPeriod = void 0;
 var DelegateStatPeriod;
 (function (DelegateStatPeriod) {
     DelegateStatPeriod["lifetime"] = "lifetime";
+    DelegateStatPeriod["7d"] = "7d";
     DelegateStatPeriod["30d"] = "30d";
     DelegateStatPeriod["180d"] = "180d";
     DelegateStatPeriod["1y"] = "1y";
