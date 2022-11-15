@@ -22,6 +22,6 @@ export class OptimismDaoScoreProvider
   }
 
   getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
-    return ["delegatedVotes", "discordMessagesCount"];
+    return ["delegatedVotes", "offChainVotesPct"];
   }
 }
