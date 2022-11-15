@@ -15,7 +15,7 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
         return Math.round(stat.delegatedVotes / 10000 + stat.offChainVotesPct * 2);
     }
     getKarmaScoreProps() {
-        return ["delegatedVotes", "discordMessagesCount"];
+        return ["delegatedVotes", "offChainVotesPct"];
     }
 }
 exports.OptimismDaoScoreProvider = OptimismDaoScoreProvider;
