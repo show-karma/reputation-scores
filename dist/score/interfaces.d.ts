@@ -31,6 +31,7 @@ export interface DelegateStat {
     updatedAt: Date;
     discordMessagesCount: number;
     deworkPoints: number;
+    snapshotDelegatedVotes: number;
 }
 export declare class BaseProvider {
     private readonly args;
