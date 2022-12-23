@@ -6,15 +6,16 @@ class GitcoinDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoSco
     getKarmaScore(stat) {
         return (Math.round(stat.forumActivityScore +
             (stat.offChainVotesPct || 0) +
-            (stat.discordMessagesCount || 0) * 0.01) || 0);
+            (stat.discordMessagePercentile || 0) * 0.01) || 0);
     }
+    // 1660 sum of all forum props percentiles
     getForumScore(stat) {
-        return (Math.round(stat.proposalsInitiated * 10 +
-            stat.proposalsDiscussed * 2 +
-            stat.forumPostCount +
-            stat.forumTopicCount * 3 +
-            stat.forumLikesReceived * 0.5 +
-            stat.forumPostsReadCount * 0.1) || 0);
+        return (Math.round(((stat.proposalsInitiatedPercentile || 0) * 10 +
+            (stat.proposalsDiscussedPercentile || 0) * 2 +
+            (stat.forumPostCountPercentile || 0) +
+            (stat.forumTopicCountPercentile || 0) * 3 +
+            (stat.forumLikesReceivedPercentile || 0) * 0.5 +
+            (stat.forumPostsReadCountPercentile || 0) * 0.1) * 100 / 1660) || 0);
     }
     getKarmaScoreProps() {
         return ["forumActivityScore", "offChainVotesPct", "discordMessagesCount"];

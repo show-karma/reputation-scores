@@ -33,6 +33,13 @@ export interface DelegateStat {
   updatedAt: Date;
   discordMessagesCount: number;
   deworkPoints: number;
+  discordMessagePercentile: number;
+  proposalsInitiatedPercentile: number;
+  proposalsDiscussedPercentile: number;
+  forumPostCountPercentile: number;
+  forumTopicCountPercentile: number;
+  forumLikesReceivedPercentile: number;
+  forumPostsReadCountPercentile: number;
 }
 
 export class BaseProvider {
