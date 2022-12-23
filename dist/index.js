@@ -23,3 +23,4 @@ __exportStar(require("./score/interfaces"), exports);
 __exportStar(require("./score/gitcoin-health-score.provider"), exports);
 __exportStar(require("./score/default-with-discord-dao-score-provider"), exports);
 __exportStar(require("./score/default-with-dework-dao-score.provider"), exports);
+__exportStar(require("./score/gitcoin-dao-percentile-score-provider"), exports);
