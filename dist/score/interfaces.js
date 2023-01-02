@@ -6,6 +6,7 @@ var DelegateStatPeriod;
     DelegateStatPeriod["lifetime"] = "lifetime";
     DelegateStatPeriod["7d"] = "7d";
     DelegateStatPeriod["30d"] = "30d";
+    DelegateStatPeriod["90d"] = "90d";
     DelegateStatPeriod["180d"] = "180d";
     DelegateStatPeriod["1y"] = "1y";
 })(DelegateStatPeriod = exports.DelegateStatPeriod || (exports.DelegateStatPeriod = {}));
