@@ -7,6 +7,7 @@ export enum DelegateStatPeriod {
   lifetime = "lifetime",
   "7d" = "7d",
   "30d" = "30d",
+  "90d" = "90d",
   "180d" = "180d",
   "1y" = "1y",
 }
