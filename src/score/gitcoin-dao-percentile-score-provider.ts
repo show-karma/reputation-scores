@@ -4,11 +4,10 @@ import {DelegateStat} from "./interfaces";
 export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
   // 200 is max karma score
   getKarmaScore(stat: Partial<DelegateStat>): number {
-    return (
-      Math.round(
+    return Math.round((
         (stat.forumActivityScore +
-        (stat.offChainVotesPct || 0)) || 0) / 200 * 100
-    );
+        (stat.offChainVotesPct || 0)) || 0) / 200 * 100);
+
   }
 
   // 1660 sum of all forum props percentiles

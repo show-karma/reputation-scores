@@ -5,7 +5,7 @@ const default_dao_score_provider_1 = require("./default-dao-score.provider");
 class GitcoinDaoPercentileScoreProvider extends default_dao_score_provider_1.DefaultDaoScoreProvider {
     // 200 is max karma score
     getKarmaScore(stat) {
-        return (Math.round((stat.forumActivityScore +
+        return Math.round(((stat.forumActivityScore +
             (stat.offChainVotesPct || 0)) || 0) / 200 * 100);
     }
     // 1660 sum of all forum props percentiles
