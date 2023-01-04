@@ -2,13 +2,12 @@ import {DefaultDaoScoreProvider} from "./default-dao-score.provider";
 import {DelegateStat} from "./interfaces";
 
 export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
+  // 200 is max karma score
   getKarmaScore(stat: Partial<DelegateStat>): number {
     return (
       Math.round(
-        stat.forumActivityScore +
-        (stat.offChainVotesPct || 0) +
-        (stat.discordMessagePercentile || 0) * 0.01
-      ) || 0
+        (stat.forumActivityScore +
+        (stat.offChainVotesPct || 0)) || 0) / 200 * 100
     );
   }
 
