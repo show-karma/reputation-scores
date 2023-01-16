@@ -5,7 +5,9 @@ import {
   AdditionalScoreProvider,
   DelegateStat,
   DelegateStatPeriod,
+  ScoreMultiplier,
 } from "./interfaces";
+import { getMultipliers, coalesce } from "./multipliers/get-multipliers";
 
 interface GithubRecord {
   address: string;
@@ -20,6 +22,7 @@ const GITHUB_DATA_URL =
 
 export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
   private githubData: Record<string, GithubRecord>;
+  private multipliers: ScoreMultiplier;
 
   async preload(): Promise<void> {
     const data = (await axios.get(GITHUB_DATA_URL)).data.data as GithubRecord[];
@@ -39,12 +42,14 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     publicAddress: string,
     stat: Partial<DelegateStat>
   ): Promise<number> {
+    this.multipliers = await getMultipliers(stat.daoName);
+
     if (stat.period === DelegateStatPeriod.lifetime) {
       return this.getLifetimeScore(publicAddress, stat);
     } else if (stat.period === DelegateStatPeriod["30d"]) {
       return this.get30dScore(publicAddress, stat);
     } else if (stat.period === DelegateStatPeriod["180d"]) {
-      return Math.floor(this.get30dScore(publicAddress, stat) / 6);
+      return Math.floor((await this.get30dScore(publicAddress, stat)) / 6);
     } else {
       // TODO fix it
       return this.get30dScore(publicAddress, stat);
@@ -64,17 +69,19 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     ]);
 
     const {
-      healthScore: { lifetime },
-    } = multipliers;
+      healthScore: { lifetime = {} },
+    } = this.multipliers;
 
     const score =
-      karmaData.offChainVotesPct * lifetime.offChainVotesPct +
-      (karmaData.proposalsInitiated * lifetime.proposalsInitiated +
-        karmaData.proposalsDiscussed * lifetime.proposalsDiscussed +
+      karmaData.offChainVotesPct * coalesce(lifetime.offChainVotesPct, 1) +
+      (karmaData.proposalsInitiated * coalesce(lifetime.proposalsInitiated, 1) +
+        karmaData.proposalsDiscussed *
+          coalesce(lifetime.proposalsDiscussed, 1) +
         (karmaData.forumTopicCount - karmaData.proposalsInitiated) *
-          lifetime["forumTopicCount-proposalsInitiated"] +
+          coalesce(lifetime["forumTopicCount-proposalsInitiated"], 1) +
         (karmaData.forumPostCount - karmaData.proposalsDiscussed) *
-          lifetime["forumPostCount-proposalsDiscussed"]) /
+          coalesce(lifetime["forumPostCount-proposalsDiscussed"]),
+      1) /
         Math.sqrt(this.getStewardDays(publicAddress)) +
       this.getWorkstreamInvolvement(publicAddress);
 
@@ -94,8 +101,8 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     ]);
 
     const {
-      healthScore: { "30d": monthly },
-    } = multipliers;
+      healthScore: { "30d": monthly = {} },
+    } = this.multipliers;
 
     const score =
       karmaData.offChainVotesPct * monthly.offChainVotesPct +
@@ -111,14 +118,18 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
   }
 
   private getWorkstreamInvolvement(publicAddress: string): number {
-    const { workstreamInvolvement } = multipliers;
+    const { workstreamInvolvement } = this.multipliers;
+
     const workstreamsLead = this.githubData[publicAddress]?.workstreamsLead;
     const workstreamsContributor =
       this.githubData[publicAddress]?.workstreamsContributor;
-    if (workstreamsLead) return workstreamInvolvement.lead;
-    if (workstreamsContributor) return workstreamInvolvement.contributor;
 
-    return workstreamInvolvement.none;
+    if (workstreamsLead) return coalesce(workstreamInvolvement?.lead, 5);
+
+    if (workstreamsContributor)
+      return coalesce(workstreamInvolvement?.contributor, 3);
+
+    return coalesce(workstreamInvolvement?.none, 0);
   }
 
   private getStewardDays(publicAddress: string) {

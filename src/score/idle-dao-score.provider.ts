@@ -1,6 +1,9 @@
 import { BaseProvider, DelegateStat, GetDaoScore } from "./interfaces";
 
 export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
+  preload(daoName: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   getForumScore(stat: Partial<DelegateStat>): number {
     return (
       Math.round(

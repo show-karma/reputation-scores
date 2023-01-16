@@ -43,12 +43,15 @@ export interface DelegateStat {
   forumPostsReadCountPercentile: number;
 }
 
-export class BaseProvider {
+export abstract class BaseProvider {
   private readonly args: unknown[];
+  protected multipliers: ScoreMultiplier;
 
   constructor(...args: unknown[]) {
     this.args = args;
   }
+
+  abstract preload(daoName: string): Promise<void>;
 
   toProviderDescriptor(): DaoProviderDescriptor {
     return {
@@ -68,4 +71,23 @@ export interface AdditionalScoreProvider {
   preload(): Promise<void>;
   isPublicAddressEligible(publicAddress: string): Promise<boolean>;
   getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
+}
+
+export interface MultiplierType {
+  "7d": Record<string, number>;
+  "180d": Record<string, number>;
+  "90d": Record<string, number>;
+  "30d": Record<string, number>;
+  lifetime: Record<string, number>;
+}
+interface WorkstreamInvolvement {
+  lead: number;
+  contributor: number;
+  none: number;
+}
+export interface ScoreMultiplier {
+  score: MultiplierType;
+  healthScore?: MultiplierType;
+  forumScore?: MultiplierType;
+  workstreamInvolvement?: WorkstreamInvolvement;
 }

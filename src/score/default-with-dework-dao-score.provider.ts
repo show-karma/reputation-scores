@@ -4,6 +4,10 @@ export class DefaultWithDeworkDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore
 {
+  preload(daoName: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
   getForumScore(stat: Partial<DelegateStat>): number {
     return (
       Math.round(
