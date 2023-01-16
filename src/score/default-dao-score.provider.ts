@@ -1,4 +1,10 @@
-import { BaseProvider, DelegateStat, GetDaoScore } from "./interfaces";
+import {
+  BaseProvider,
+  DelegateStat,
+  DelegateStatPeriod,
+  GetDaoScore,
+  ScoreBreakdownCalc,
+} from "./interfaces";
 import { coalesce, getMultipliers } from "./multipliers/get-multipliers";
 
 export class DefaultDaoScoreProvider
@@ -32,12 +38,14 @@ export class DefaultDaoScoreProvider
     } = this.multipliers;
     return (
       Math.round(
-        stat.forumActivityScore * coalesce(lifetime.forumActivityScore, 1) +
-          (stat.offChainVotesPct || 0) *
-            coalesce(lifetime.offChainVotesPct, 1) +
-          (stat.onChainVotesPct || 0) * coalesce(lifetime.onChainVotesPct, 1) +
-          (stat.discordMessagesCount || 0) *
-            coalesce(lifetime.discordMessagesCount, 1)
+        stat.forumActivityScore ||
+          0 * coalesce(lifetime.forumActivityScore, 1) +
+            (stat.offChainVotesPct || 0) *
+              coalesce(lifetime.offChainVotesPct, 1) +
+            (stat.onChainVotesPct || 0) *
+              coalesce(lifetime.onChainVotesPct, 1) +
+            (stat.discordMessagesCount || 0) *
+              coalesce(lifetime.discordMessagesCount, 1)
       ) || 0
     );
   }
@@ -48,6 +56,60 @@ export class DefaultDaoScoreProvider
       "offChainVotesPct",
       "onChainVotesPct",
       "discordMessagesCount",
+    ];
+  }
+
+  getScoreBreakdownCalc(
+    stat: Partial<DelegateStat>,
+    period: DelegateStatPeriod = DelegateStatPeriod.lifetime
+  ): ScoreBreakdownCalc {
+    const {
+      score: { lifetime = {} },
+    } = this.multipliers;
+
+    return [
+      {
+        label: "Percent Multiplier",
+        value: 1,
+        multiplier: 100,
+        children: [
+          {
+            op: "/",
+            label: "Forum activity score",
+            value: coalesce(stat.forumActivityScore),
+            multiplier: coalesce(lifetime.forumActivityScore, 1),
+          },
+          {
+            label: "Off-chain votes pct",
+            value: coalesce(stat.offChainVotesPct),
+            multiplier: coalesce(lifetime.offChainVotesPct, 1),
+            op: "+",
+          },
+          {
+            label: "On-chain votes pct",
+            value: coalesce(stat.onChainVotesPct),
+            multiplier: coalesce(lifetime.onChainVotesPct, 1),
+            op: "+",
+          },
+          {
+            label: "Discord messages count",
+            value: coalesce(stat.discordMessagesCount),
+            multiplier: coalesce(lifetime.discordMessagesCount, 1),
+            op: "+",
+          },
+        ],
+      },
+      {
+        label: "Percent Divider",
+        value:
+          (coalesce(lifetime.forumActivityScore) +
+            coalesce(lifetime.offChainVotesPct) +
+            coalesce(lifetime.onChainVotesPct) +
+            coalesce(lifetime.discordMessagesCount)) *
+          100,
+        multiplier: 1,
+        op: "/",
+      },
     ];
   }
 }

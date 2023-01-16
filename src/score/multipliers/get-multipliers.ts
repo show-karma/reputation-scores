@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ScoreMultiplier } from "../interfaces";
 const githubUrl = (resourceName: string) =>
   `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
@@ -6,16 +6,23 @@ const githubUrl = (resourceName: string) =>
 const multipliers: Record<string, ScoreMultiplier> = {};
 
 export async function getMultipliers(
-  daoName: string | "default"
+  resourceName: "default" | string
 ): Promise<ScoreMultiplier> {
-  if (multipliers[daoName]) {
-    return multipliers[daoName];
+  if (multipliers[resourceName]) {
+    return multipliers[resourceName];
   }
-  const { data: resource } = await axios.get<ScoreMultiplier>(
-    githubUrl(daoName ?? "default")
-  );
-  multipliers[daoName] = resource;
-  return resource;
+  try {
+    const { data: resource } = await axios.get<ScoreMultiplier>(
+      githubUrl(resourceName || "default")
+    );
+    multipliers[resourceName] = resource;
+    return resource;
+  } catch (err) {
+    const error = err as AxiosError;
+    if (error.response.status === 404) {
+      return getMultipliers("default");
+    }
+  }
 }
 
 /**
@@ -24,6 +31,6 @@ export async function getMultipliers(
  * @param value
  * @param replacement
  */
-export function coalesce(value: number, replacement = 0) {
-  return value || replacement;
+export function coalesce(value: string | number, replacement = 0) {
+  return value && !Number.isNaN(+value) ? +value : replacement;
 }

@@ -53,6 +53,8 @@ export abstract class BaseProvider {
 
   abstract preload(daoName: string): Promise<void>;
 
+  // abstract getScoreBreakdownCalc(): ScoreBreakdownCalc;
+
   toProviderDescriptor(): DaoProviderDescriptor {
     return {
       cls: this.constructor.name,
@@ -91,3 +93,15 @@ export interface ScoreMultiplier {
   forumScore?: MultiplierType;
   workstreamInvolvement?: WorkstreamInvolvement;
 }
+
+export type Operator = "+" | "-" | "/" | "*";
+
+export interface ScoreBreakdownCalcItem {
+  label: string;
+  value: number;
+  multiplier: number;
+  children?: ScoreBreakdownCalc;
+  op?: Operator;
+}
+
+export type ScoreBreakdownCalc = ScoreBreakdownCalcItem[];
