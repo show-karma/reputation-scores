@@ -6,7 +6,6 @@ import {
   DelegateStat,
   DelegateStatPeriod,
 } from "./interfaces";
-import { multipliers } from "./multipliers/gitcoin";
 
 interface GithubRecord {
   address: string;
