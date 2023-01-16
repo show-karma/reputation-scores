@@ -1,0 +1,35 @@
+export const multipliers = {
+  score: {
+    "7d": {},
+    "30d": {},
+    "90d": {},
+    "180d": {},
+    lifetime: {},
+  },
+
+  workstreamInvolvement: {
+    lead: 5,
+    contributor: 3,
+    none: 0,
+  },
+
+  healthScore: {
+    "7d": {},
+    "30d": {
+      offChainVotesPct: 0.7,
+      proposalsInitiated: 1.5,
+      proposalsDiscussed: 0.7,
+      "forumTopicCount-proposalsInitiated": 1.1,
+      "forumPostCount-proposalsDiscussed": 0.6,
+    },
+    "90d": {},
+    "180d": {},
+    lifetime: {
+      offChainVotesPct: 0.7,
+      proposalsInitiated: 1.5,
+      proposalsDiscussed: 1,
+      "forumTopicCount-proposalsInitiated": 1.1,
+      "forumPostCount-proposalsDiscussed": 0.7,
+    },
+  },
+};
