@@ -1,4 +1,0 @@
-[submodule "src/score/multipliers"]
-	path = src/score/multipliers
-	url = https://github.com/show-karma/dao-score-multiplier
-	branch = main
