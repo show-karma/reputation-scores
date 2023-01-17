@@ -69,24 +69,23 @@ export class DefaultDaoScoreProvider
 
     return [
       {
-        label: "Forum activity score",
+        label: "Forum Activity Score",
         value: coalesce(stat.forumActivityScore),
         weight: coalesce(lifetime.forumActivityScore, 1),
       },
       {
-        label: "Off-chain votes pct",
+        label: "Off-Chain Votes Pct",
         value: coalesce(stat.offChainVotesPct),
         weight: coalesce(lifetime.offChainVotesPct, 1),
         op: "+",
       },
       {
-        label: "On-chain votes pct",
+        label: "On-Chain Votes Pct",
         value: coalesce(stat.onChainVotesPct),
         weight: coalesce(lifetime.onChainVotesPct, 1),
-        op: "+",
       },
       {
-        label: "Discord messages count",
+        label: "Discord Messages Count",
         value: coalesce(stat.discordMessagesCount),
         weight: coalesce(lifetime.discordMessagesCount, 1),
         op: "+",

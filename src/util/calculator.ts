@@ -31,9 +31,9 @@ export class ScoreCalculator {
    * Calculate the score based on the given definition
    *
    * Definition is given by
-   * 
+   *
    * `(parent <op> (result(...children)) <next.op> (...recursion)`
-   * 
+   *
    * #### Example
    * ```ts
    * const calc = new ScoreCalculator();
@@ -41,7 +41,7 @@ export class ScoreCalculator {
    *  {
    *    label: 'Age',
    *    value: 30,
-   *    weight: 1,
+   *    weight: 2,
    *    children: [{
    *      label: 'Weight',
    *      value: 2,
@@ -58,7 +58,7 @@ export class ScoreCalculator {
    * ];
    *
    * calc.calculate(breakdown);
-   * // ((30 * 1) / (2*1)) + (30 * 0.5) = 30
+   * // ((30 * 2) / (2*1)) + (30 * 0.5) = 45
    * ```
    *
    * @param breakdown
@@ -77,7 +77,7 @@ export class ScoreCalculator {
         const { op = "+" } = item.children[0];
         // Gets the result from the operation `parent <op> children`
         // Then multiplies by parent weight
-        result += this.evaluate(op, subTotal, childrenValue) * item.weight;
+        result += this.evaluate(op, subTotal, childrenValue);
       } else if (item.op && index > 0) {
         // If item has operator, gets the result
         result = this.evaluate(item.op, result, subTotal);

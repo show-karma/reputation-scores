@@ -97,11 +97,39 @@ export interface ScoreMultiplier {
 export type Operator = "+" | "-" | "/" | "*";
 
 export interface ScoreBreakdownCalcItem {
+  /**
+   * The item name
+   */
   label: string;
+  /**
+   * The value to be weighted
+   */
   value: number;
+  /**
+   * The weight to multiply the value
+   */
   weight: number;
-  children?: ScoreBreakdownCalc;
+  /**
+   * The sub calculation, will be interpreted as
+   *
+   * > `Parent <Child[0].op> ( ChildrenResult )`
+   */
+  children?: ScoreBreakdownChildren;
+  /**
+   * Mathematical operator represented as string
+   */
   op?: Operator;
 }
 
 export type ScoreBreakdownCalc = ScoreBreakdownCalcItem[];
+type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
+  /**
+   * The operator type. The first item in the children array
+   * defines the operation
+   * > `Parent <op> ChildrenResult`
+   *
+   * next items are interpreted as
+   * > `[Child N-1] <op> [Child N]`
+   */
+  op: Operator;
+})[];

@@ -33,6 +33,22 @@ export async function getWeights(
 /**
  * Checks if a value is falsy and returns a replacement if so.
  * Otherwise keeps the current value.
+ * 
+ * 
+ * ### Example
+ * ```ts
+ * coalesce(value, 1)
+ * // 1, as value is undefined
+ * 
+ * const value = 2;
+ * coalesce(value, 1)
+ * // 2, as value is defined
+ * 
+ * const value = null;
+ * coalesce(value, 1)
+ * // 1, as value is falsy
+ * ```
+ * 
  * @param value
  * @param replacement
  */
