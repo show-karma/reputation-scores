@@ -3,6 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultDaoPercentileScoreProvider = void 0;
 const interfaces_1 = require("./interfaces");
 class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
+    getScoreBreakdownCalc(stat, period) {
+        throw new Error("Method not implemented.");
+    }
+    preload(resourceName) {
+        throw new Error("Method not implemented.");
+    }
     // max here 100 + 20 + 10 + 30 + 5 + 1 = 166
     getForumScore(stat) {
         return Math.round((stat.proposalsInitiatedPercentile * 1 +

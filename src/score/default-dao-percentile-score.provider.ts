@@ -1,9 +1,15 @@
-import { BaseProvider, DelegateStat, GetDaoScore } from "./interfaces";
+import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc } from "./interfaces";
 
 export class DefaultDaoPercentileScoreProvider
   extends BaseProvider
   implements GetDaoScore
 {
+  getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod): ScoreBreakdownCalc {
+    throw new Error("Method not implemented.");
+  }
+  preload(resourceName: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   // max here 100 + 20 + 10 + 30 + 5 + 1 = 166
   getForumScore(stat: Partial<DelegateStat>): number {
     return Math.round(

@@ -1,5 +1,6 @@
-import { BaseProvider, DelegateStat, GetDaoScore } from "./interfaces";
+import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc } from "./interfaces";
 export declare class OptimismDaoScoreProvider extends BaseProvider implements GetDaoScore {
+    getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod): ScoreBreakdownCalc;
     preload(daoName: string): Promise<void>;
     getForumScore(stat: Partial<DelegateStat>): number;
     getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
