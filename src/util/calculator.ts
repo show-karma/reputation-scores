@@ -24,12 +24,16 @@ export class ScoreCalculator {
       throw new Error(`Invalid character "${op}" at expression.`);
 
     const result = +eval(`${first}${op}${second}`);
-    return result && Number.isFinite(result) ? result : 0;
+    return result && !Number.isNaN(result) ? result : 0;
   }
 
   /**
    * Calculate the score based on the given definition
    *
+   * Definition is given by
+   * 
+   * `(parent <op> (result(...children)) <next.op> (...recursion)`
+   * 
    * #### Example
    * ```ts
    * const calc = new ScoreCalculator();

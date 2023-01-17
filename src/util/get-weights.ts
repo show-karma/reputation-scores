@@ -3,6 +3,11 @@ import { ScoreMultiplier } from "../score/interfaces";
 const githubUrl = (resourceName: string) =>
   `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
 
+/**
+ * Runtime storage of the weight values. This will
+ * ensure that the whole task will use the same values
+ * event if it updates.
+ */
 const weights: Record<string, ScoreMultiplier> = {};
 
 export async function getWeights(
