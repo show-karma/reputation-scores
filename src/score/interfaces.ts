@@ -45,7 +45,7 @@ export interface DelegateStat {
 
 export abstract class BaseProvider {
   private readonly args: unknown[];
-  protected multipliers: ScoreMultiplier;
+  protected weights: ScoreMultiplier;
 
   constructor(...args: unknown[]) {
     this.args = args;
@@ -99,7 +99,7 @@ export type Operator = "+" | "-" | "/" | "*";
 export interface ScoreBreakdownCalcItem {
   label: string;
   value: number;
-  multiplier: number;
+  weight: number;
   children?: ScoreBreakdownCalc;
   op?: Operator;
 }

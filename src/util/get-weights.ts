@@ -1,26 +1,26 @@
 import axios, { AxiosError } from "axios";
-import { ScoreMultiplier } from "../interfaces";
+import { ScoreMultiplier } from "../score/interfaces";
 const githubUrl = (resourceName: string) =>
   `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
 
-const multipliers: Record<string, ScoreMultiplier> = {};
+const weights: Record<string, ScoreMultiplier> = {};
 
-export async function getMultipliers(
+export async function getWeights(
   resourceName: "default" | string
 ): Promise<ScoreMultiplier> {
-  if (multipliers[resourceName]) {
-    return multipliers[resourceName];
+  if (weights[resourceName]) {
+    return weights[resourceName];
   }
   try {
     const { data: resource } = await axios.get<ScoreMultiplier>(
       githubUrl(resourceName || "default")
     );
-    multipliers[resourceName] = resource;
+    weights[resourceName] = resource;
     return resource;
   } catch (err) {
     const error = err as AxiosError;
     if (error.response.status === 404) {
-      return getMultipliers("default");
+      return getWeights("default");
     }
   }
 }

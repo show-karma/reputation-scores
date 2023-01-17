@@ -7,7 +7,7 @@ import {
   DelegateStatPeriod,
   ScoreMultiplier,
 } from "./interfaces";
-import { getMultipliers, coalesce } from "./multipliers/get-multipliers";
+import { getMultipliers, coalesce } from "../util/get-weights";
 
 interface GithubRecord {
   address: string;
