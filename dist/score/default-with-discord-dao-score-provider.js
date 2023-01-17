@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultWithDiscordDaoScoreProvider = void 0;
 const interfaces_1 = require("./interfaces");
 class DefaultWithDiscordDaoScoreProvider extends interfaces_1.BaseProvider {
+    preload(daoName) {
+        throw new Error("Method not implemented.");
+    }
     getForumScore(stat) {
         return (Math.round((stat.proposalsInitiated || 0) * 10 +
             (stat.proposalsDiscussed || 0) * 2 +

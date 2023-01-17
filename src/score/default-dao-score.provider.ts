@@ -11,8 +11,8 @@ export class DefaultDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore
 {
-  async preload(daoName: string) {
-    const resource = await getWeights(daoName);
+  async preload(resourceName: string) {
+    const resource = await getWeights(resourceName);
     this.weights = resource;
   }
 

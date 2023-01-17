@@ -51,7 +51,7 @@ export abstract class BaseProvider {
     this.args = args;
   }
 
-  abstract preload(daoName: string): Promise<void>;
+  abstract preload(resourceName: string | "default"): Promise<void>;
 
   // abstract getScoreBreakdownCalc(): ScoreBreakdownCalc;
 

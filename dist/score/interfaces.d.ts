@@ -40,9 +40,11 @@ export interface DelegateStat {
     forumLikesReceivedPercentile: number;
     forumPostsReadCountPercentile: number;
 }
-export declare class BaseProvider {
+export declare abstract class BaseProvider {
     private readonly args;
+    protected weights: ScoreMultiplier;
     constructor(...args: unknown[]);
+    abstract preload(resourceName: string | "default"): Promise<void>;
     toProviderDescriptor(): DaoProviderDescriptor;
 }
 export interface GetDaoScore {
@@ -55,3 +57,59 @@ export interface AdditionalScoreProvider {
     isPublicAddressEligible(publicAddress: string): Promise<boolean>;
     getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
 }
+export interface MultiplierType {
+    "7d": Record<string, number>;
+    "180d": Record<string, number>;
+    "90d": Record<string, number>;
+    "30d": Record<string, number>;
+    lifetime: Record<string, number>;
+}
+interface WorkstreamInvolvement {
+    lead: number;
+    contributor: number;
+    none: number;
+}
+export interface ScoreMultiplier {
+    score: MultiplierType;
+    healthScore?: MultiplierType;
+    forumScore?: MultiplierType;
+    workstreamInvolvement?: WorkstreamInvolvement;
+}
+export declare type Operator = "+" | "-" | "/" | "*";
+export interface ScoreBreakdownCalcItem {
+    /**
+     * The item name
+     */
+    label: string;
+    /**
+     * The value to be weighted
+     */
+    value: number;
+    /**
+     * The weight to multiply the value
+     */
+    weight: number;
+    /**
+     * The sub calculation, will be interpreted as
+     *
+     * > `Parent <Child[0].op> ( ChildrenResult )`
+     */
+    children?: ScoreBreakdownChildren;
+    /**
+     * Mathematical operator represented as string
+     */
+    op?: Operator;
+}
+export declare type ScoreBreakdownCalc = ScoreBreakdownCalcItem[];
+declare type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
+    /**
+     * The operator type. The first item in the children array
+     * defines the operation
+     * > `Parent <op> ChildrenResult`
+     *
+     * next items are interpreted as
+     * > `[Child N-1] <op> [Child N]`
+     */
+    op: Operator;
+})[];
+export {};

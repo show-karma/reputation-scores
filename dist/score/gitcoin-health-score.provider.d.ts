@@ -1,6 +1,7 @@
-import { AdditionalScoreProvider, DelegateStat } from './interfaces';
+import { AdditionalScoreProvider, DelegateStat } from "./interfaces";
 export declare class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     private githubData;
+    private multipliers;
     preload(): Promise<void>;
     isPublicAddressEligible(publicAddress: string): Promise<boolean>;
     getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;

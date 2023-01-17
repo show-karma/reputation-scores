@@ -14,6 +14,7 @@ class BaseProvider {
     constructor(...args) {
         this.args = args;
     }
+    // abstract getScoreBreakdownCalc(): ScoreBreakdownCalc;
     toProviderDescriptor() {
         return {
             cls: this.constructor.name,

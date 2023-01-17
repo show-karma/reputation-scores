@@ -7,7 +7,7 @@ import {
   DelegateStatPeriod,
   ScoreMultiplier,
 } from "./interfaces";
-import { getMultipliers, coalesce } from "../util/get-weights";
+import { getWeights, coalesce } from "../util/get-weights";
 
 interface GithubRecord {
   address: string;
@@ -32,6 +32,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
       }
     });
     this.githubData = _.keyBy(data, "address");
+    this.multipliers = await getWeights("gitcoin");
   }
 
   isPublicAddressEligible(publicAddress: string): Promise<boolean> {
@@ -42,8 +43,6 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     publicAddress: string,
     stat: Partial<DelegateStat>
   ): Promise<number> {
-    this.multipliers = await getMultipliers(stat.daoName);
-
     if (stat.period === DelegateStatPeriod.lifetime) {
       return this.getLifetimeScore(publicAddress, stat);
     } else if (stat.period === DelegateStatPeriod["30d"]) {
