@@ -4,12 +4,14 @@ import {
   DelegateStatPeriod,
   GetDaoScore,
   ScoreBreakdownCalc,
+  ScoreMultiplier,
 } from "./interfaces";
 
 export class OptimismDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore
 {
+  weights: ScoreMultiplier;
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
     period?: DelegateStatPeriod

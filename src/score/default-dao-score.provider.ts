@@ -4,6 +4,7 @@ import {
   DelegateStatPeriod,
   GetDaoScore,
   ScoreBreakdownCalc,
+  ScoreMultiplier,
 } from "./interfaces";
 import { coalesce, getWeights } from "../util/get-weights";
 
@@ -59,6 +60,7 @@ export class DefaultDaoScoreProvider
     ];
   }
 
+  weights: ScoreMultiplier;
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
     period: DelegateStatPeriod = DelegateStatPeriod.lifetime

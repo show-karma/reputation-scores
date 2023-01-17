@@ -1,6 +1,7 @@
-import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc } from "./interfaces";
+import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc, ScoreMultiplier } from "./interfaces";
 
 export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
+  weights: ScoreMultiplier;
   getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod): ScoreBreakdownCalc {
     throw new Error("Method not implemented.");
   }

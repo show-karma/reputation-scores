@@ -42,12 +42,11 @@ export interface DelegateStat {
 }
 export declare abstract class BaseProvider {
     private readonly args;
-    protected weights: ScoreMultiplier;
     constructor(...args: unknown[]);
-    abstract preload(resourceName: string | "default"): Promise<void>;
     toProviderDescriptor(): DaoProviderDescriptor;
 }
 export interface GetDaoScore {
+    weights: ScoreMultiplier;
     getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
     getForumScore(stat: Partial<DelegateStat>): number;
     getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[];
