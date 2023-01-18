@@ -63,33 +63,75 @@ export class DefaultDaoScoreProvider
   weights: ScoreMultiplier;
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
-    period: DelegateStatPeriod = DelegateStatPeriod.lifetime
+    period: DelegateStatPeriod = DelegateStatPeriod.lifetime,
+    type: "forum" | "score" = "score"
   ): ScoreBreakdownCalc {
     const {
-      score: { lifetime = {} },
+      score: { lifetime: score = {} },
+      forumScore: { lifetime: forum = {} },
     } = this.weights;
+
+    if (type === "forum")
+      return [
+        {
+          label: "Forum Topic Count",
+          value: coalesce(stat.proposalsInitiated),
+          weight: coalesce(forum.proposalsInitiated),
+          op: "+",
+        },
+        {
+          label: "Proposals Discussed",
+          value: coalesce(stat.proposalsDiscussed),
+          weight: coalesce(forum.proposalsDiscussed),
+          op: "+",
+        },
+        {
+          label: "Forum Post Count",
+          value: coalesce(stat.forumPostCount),
+          weight: coalesce(forum.forumPostCount),
+          op: "+",
+        },
+        {
+          label: "Forum Topic Count",
+          value: coalesce(stat.forumTopicCount),
+          weight: coalesce(forum.forumTopicCount),
+          op: "+",
+        },
+        {
+          label: "Forum Likes Received",
+          value: coalesce(stat.forumLikesReceived),
+          weight: coalesce(forum.forumLikesReceived),
+          op: "+",
+        },
+        {
+          label: "Forum Posts Read Count",
+          value: coalesce(stat.forumPostsReadCount),
+          weight: coalesce(forum.forumPostsReadCount),
+          op: "+",
+        },
+      ];
 
     return [
       {
         label: "Forum Activity Score",
         value: coalesce(stat.forumActivityScore),
-        weight: coalesce(lifetime.forumActivityScore, 1),
+        weight: coalesce(score.forumActivityScore, 1),
       },
       {
         label: "Off-Chain Votes Pct",
         value: coalesce(stat.offChainVotesPct),
-        weight: coalesce(lifetime.offChainVotesPct, 1),
+        weight: coalesce(score.offChainVotesPct, 1),
         op: "+",
       },
       {
         label: "On-Chain Votes Pct",
         value: coalesce(stat.onChainVotesPct),
-        weight: coalesce(lifetime.onChainVotesPct, 1),
+        weight: coalesce(score.onChainVotesPct, 1),
       },
       {
         label: "Discord Messages Count",
         value: coalesce(stat.discordMessagesCount),
-        weight: coalesce(lifetime.discordMessagesCount, 1),
+        weight: coalesce(score.discordMessagesCount, 1),
         op: "+",
       },
     ];

@@ -66,7 +66,8 @@ export interface GetDaoScore {
   preload(resourceName: string | "default"): Promise<void>;
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
-    period?: DelegateStatPeriod
+    period?: DelegateStatPeriod,
+    type?: "forum" | "score"
   ): ScoreBreakdownCalc;
 }
 

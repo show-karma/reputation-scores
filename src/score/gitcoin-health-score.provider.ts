@@ -22,7 +22,7 @@ const GITHUB_DATA_URL =
 
 export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
   private githubData: Record<string, GithubRecord>;
-  private multipliers: ScoreMultiplier;
+  private weights: ScoreMultiplier;
 
   async preload(): Promise<void> {
     const data = (await axios.get(GITHUB_DATA_URL)).data.data as GithubRecord[];
@@ -48,7 +48,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     } else if (stat.period === DelegateStatPeriod["30d"]) {
       return this.get30dScore(publicAddress, stat);
     } else if (stat.period === DelegateStatPeriod["180d"]) {
-      return Math.floor((await this.get30dScore(publicAddress, stat)) / 6);
+      return Math.floor(this.get30dScore(publicAddress, stat) / 6);
     } else {
       // TODO fix it
       return this.get30dScore(publicAddress, stat);

@@ -1,10 +1,15 @@
-import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc, ScoreMultiplier } from "./interfaces";
+import {
+  BaseProvider,
+  DelegateStat,
+  DelegateStatPeriod,
+  GetDaoScore,
+  ScoreBreakdownCalc,
+  ScoreMultiplier,
+} from "./interfaces";
 
 export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
   weights: ScoreMultiplier;
-  getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod): ScoreBreakdownCalc {
-    throw new Error("Method not implemented.");
-  }
+
   preload(daoName: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
@@ -41,5 +46,12 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
       "onChainVotesPct",
       "discordMessagesCount",
     ];
+  }
+
+  getScoreBreakdownCalc(
+    stat: Partial<DelegateStat>,
+    period?: DelegateStatPeriod
+  ): ScoreBreakdownCalc {
+    throw new Error("Method not implemented.");
   }
 }

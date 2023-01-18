@@ -1,3 +1,4 @@
+import { coalesce, getWeights } from "src/util/get-weights";
 import {
   BaseProvider,
   DelegateStat,
@@ -12,24 +13,24 @@ export class OptimismDaoScoreProvider
   implements GetDaoScore
 {
   weights: ScoreMultiplier;
-  getScoreBreakdownCalc(
-    stat: Partial<DelegateStat>,
-    period?: DelegateStatPeriod
-  ): ScoreBreakdownCalc {
-    throw new Error("Method not implemented.");
+
+  async preload(): Promise<void> {
+    this.weights = await getWeights("optimism");
   }
-  preload(daoName: string): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
+
   getForumScore(stat: Partial<DelegateStat>): number {
+    const {
+      forumScore: { lifetime = {} },
+    } = this.weights;
+
     return (
       Math.round(
-        stat.proposalsInitiated * 10 +
-          stat.proposalsDiscussed * 2 +
-          stat.forumPostCount +
-          stat.forumTopicCount * 3 +
-          stat.forumLikesReceived * 0.5 +
-          stat.forumPostsReadCount * 0.1
+        stat.proposalsInitiated * coalesce(lifetime.proposalsInitiated, 1) +
+          stat.proposalsDiscussed * coalesce(lifetime.proposalsDiscussed, 1) +
+          stat.forumPostCount * coalesce(lifetime.forumPostCount, 1) +
+          stat.forumTopicCount * coalesce(lifetime.forumTopicCount, 1) +
+          stat.forumLikesReceived * coalesce(lifetime.forumLikesReceived, 1) +
+          stat.forumPostsReadCount * coalesce(lifetime.forumPostsReadCount, 1)
       ) || 0
     );
   }
@@ -40,5 +41,69 @@ export class OptimismDaoScoreProvider
 
   getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
     return ["delegatedVotes", "offChainVotesPct"];
+  }
+
+  getScoreBreakdownCalc(
+    stat: Partial<DelegateStat>,
+    period?: DelegateStatPeriod,
+    type: "forum" | "score" = "score"
+  ): ScoreBreakdownCalc {
+    const {
+      score: { lifetime = {} },
+      forumScore: { lifetime: forum = {} },
+    } = this.weights;
+
+    if (type === "forum")
+      return [
+        {
+          label: "Proposals Initiated",
+          value: coalesce(stat.proposalsInitiated),
+          weight: coalesce(forum.proposalsInitiated),
+        },
+        {
+          label: "Proposals Discussed",
+          value: coalesce(stat.proposalsDiscussed),
+          weight: coalesce(forum.proposalsDiscussed),
+          op: "+",
+        },
+        {
+          label: "Forum Post Count",
+          value: coalesce(stat.forumPostCount),
+          weight: coalesce(forum.forumPostCount),
+          op: "+",
+        },
+        {
+          label: "Forum Topic Count",
+          value: coalesce(stat.forumTopicCount),
+          weight: coalesce(forum.forumTopicCount),
+          op: "+",
+        },
+        {
+          label: "Forum Likes Received",
+          value: coalesce(stat.forumLikesReceived),
+          weight: coalesce(forum.forumLikesReceived),
+          op: "+",
+        },
+        {
+          label: "Forum Posts Read Count",
+          value: coalesce(stat.forumPostsReadCount),
+          weight: coalesce(forum.forumPostsReadCount),
+          op: "+",
+        },
+      ];
+    else
+      return [
+        {
+          label: "Delegated Votes",
+          value: coalesce(stat.delegatedVotes),
+          weight: coalesce(lifetime.delegatedVotes),
+        },
+        {
+          label: "Off chain votes %",
+          value: coalesce(stat.offChainVotesPct),
+          weight: coalesce(lifetime.offChainVotesPct),
+          op: "+",
+        },
+      ];
   }
 }

@@ -33,9 +33,76 @@ export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
 
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
-    period?: DelegateStatPeriod
+    period?: DelegateStatPeriod,
+    type: "forum" | "score" = "score"
   ): ScoreBreakdownCalc {
+    const {
+      score: { lifetime: score = {} },
+      forumScore: { lifetime: forum = {} },
+    } = this.weights;
+
     // (100 * (children)) / 1660
+    if (type == "forum")
+      return [
+        {
+          label: "Percent Multiplier",
+          value: 100,
+          weight: 1,
+          children: [
+            {
+              label: "Proposals Initiated Percentile",
+              value: coalesce(stat.proposalsDiscussedPercentile),
+              weight: coalesce(forum.proposalsDiscussedPercentile, 1),
+              op: "*",
+            },
+            {
+              label: "Proposals Discussed Percentile",
+              value: coalesce(stat.proposalsInitiatedPercentile),
+              weight: coalesce(forum.proposalsInitiatedPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Post Count Percentile",
+              value: coalesce(stat.forumPostCountPercentile),
+              weight: coalesce(forum.forumPostCountPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Topic Count Percentile",
+              value: coalesce(stat.forumTopicCountPercentile),
+              weight: coalesce(forum.forumTopicCountPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Likes Received Percentile",
+              value: coalesce(stat.forumLikesReceivedPercentile),
+              weight: coalesce(forum.forumLikesReceivedPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Posts Read Count Percentile",
+              value: coalesce(stat.forumPostsReadCountPercentile),
+              weight: coalesce(forum.forumPostsReadCountPercentile, 1),
+              op: "+",
+            },
+          ],
+        },
+        {
+          label: "Total Weights",
+          // sum all weights * 100 to get total pct divisor
+          value:
+            (coalesce(forum.proposalsDiscussedPercentile, 1) +
+              coalesce(forum.proposalsInitiatedPercentile, 1) +
+              coalesce(forum.forumPostCountPercentile, 1) +
+              coalesce(forum.forumTopicCountPercentile, 1) +
+              coalesce(forum.forumLikesReceivedPercentile, 1) +
+              coalesce(forum.forumPostsReadCountPercentile, 1)) *
+            100,
+          weight: 1,
+          op: "/",
+        },
+      ];
+
     return [
       {
         label: "Percent Multiplier",
@@ -43,46 +110,25 @@ export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
         weight: 1,
         children: [
           {
-            label: "Proposals Initiated Percentile",
-            value: coalesce(stat.proposalsDiscussedPercentile),
-            weight: 10,
+            label: "Forum Activity Score",
+            value: coalesce(stat.forumActivityScore),
+            weight: coalesce(score.forumActivityScore, 1),
             op: "*",
           },
           {
-            label: "Proposals Discussed Percentile",
-            value: coalesce(stat.proposalsInitiatedPercentile),
-            weight: 2,
-            op: "+",
-          },
-          {
-            label: "Forum Post Count Percentile",
-            value: coalesce(stat.forumPostCountPercentile),
-            weight: 1,
-            op: "+",
-          },
-          {
-            label: "Forum Topic Count Percentile",
-            value: coalesce(stat.forumTopicCountPercentile),
-            weight: 3,
-            op: "+",
-          },
-          {
-            label: "Forum Likes Received Percentile",
-            value: coalesce(stat.forumLikesReceivedPercentile),
-            weight: 0.5,
-            op: "+",
-          },
-          {
-            label: "Forum Posts Read Count Percentile",
-            value: coalesce(stat.forumPostsReadCountPercentile),
-            weight: 0.1,
+            label: "Off-chain Votes %",
+            value: coalesce(stat.offChainVotesPct),
+            weight: coalesce(score.offChainVotesPct, 1),
             op: "+",
           },
         ],
       },
       {
-        label: "Total Divider",
-        value: 1660,
+        label: "Total Weights",
+        value:
+          (coalesce(score.forumActivityScore, 1) +
+            coalesce(score.offChainVotesPct, 1)) *
+          100,
         weight: 1,
         op: "/",
       },
