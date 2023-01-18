@@ -61,6 +61,23 @@ class GitcoinHealthScoreProvider {
             this.getWorkstreamInvolvement(publicAddress);
         return Math.floor(score);
     }
+    get180dScore(publicAddress, stat) {
+        const karmaData = this.getKarmaData(stat, [
+            "offChainVotesPct",
+            "proposalsInitiated",
+            "proposalsDiscussed",
+            "forumTopicCount",
+            "forumPostCount",
+        ]);
+        const score = (karmaData.offChainVotesPct * 0.7 +
+            karmaData.proposalsInitiated * 1.5 +
+            karmaData.proposalsDiscussed * 0.7 +
+            (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
+            (karmaData.forumPostCount - karmaData.proposalsDiscussed) * 0.6 +
+            this.getWorkstreamInvolvement(publicAddress)) *
+            (Math.min(180, this.getStewardDays(publicAddress)) / 180);
+        return Math.floor(score);
+    }
     get30dScore(publicAddress, stat) {
         const karmaData = this.getKarmaData(stat, [
             "offChainVotesPct",

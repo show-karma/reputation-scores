@@ -6,6 +6,7 @@ export declare class GitcoinHealthScoreProvider implements AdditionalScoreProvid
     isPublicAddressEligible(publicAddress: string): Promise<boolean>;
     getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
     private getLifetimeScore;
+    private get180dScore;
     private get30dScore;
     private getWorkstreamInvolvement;
     private getStewardDays;
