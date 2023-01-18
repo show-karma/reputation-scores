@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.coalesce = exports.getTotalWeight = exports.getWeights = void 0;
 const axios_1 = __importDefault(require("axios"));
-const githubUrl = (resourceName) => `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
+const githubUrl = (resourceName) => `https://raw.githubusercontent.com/show-karma/dao-score-weights/main/${resourceName}.json`;
 const weights = {};
 async function getWeights(resourceName) {
     if (weights[resourceName])
