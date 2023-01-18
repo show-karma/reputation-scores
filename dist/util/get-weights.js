@@ -6,19 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.coalesce = exports.getTotalWeight = exports.getWeights = void 0;
 const axios_1 = __importDefault(require("axios"));
 const githubUrl = (resourceName) => `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
-/**
- * Runtime storage of the weight values. This will
- * ensure that the whole task will use the same values
- * event if it updates.
- */
-const weights = {};
 async function getWeights(resourceName) {
-    if (weights[resourceName]) {
-        return weights[resourceName];
-    }
     try {
         const { data: resource } = await axios_1.default.get(githubUrl(resourceName || "default"));
-        weights[resourceName] = resource;
         return resource;
     }
     catch (err) {
