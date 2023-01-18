@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { MultiplierType, ScoreMultiplier } from "../score/interfaces";
+import { ScoreMultiplier } from "../score/interfaces";
 const githubUrl = (resourceName: string) =>
   `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
 

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coalesce = exports.getWeights = void 0;
+exports.coalesce = exports.getTotalWeight = exports.getWeights = void 0;
 const axios_1 = __importDefault(require("axios"));
 const githubUrl = (resourceName) => `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
 /**
@@ -29,6 +29,16 @@ async function getWeights(resourceName) {
     }
 }
 exports.getWeights = getWeights;
+/**
+ * Gets the sum of all weights container in a Multiplier object and
+ * by default multiply by 100.
+ * @param obj the weight definition
+ * @param pct If false, won't multiply weights by 100
+ * @returns
+ */
+const getTotalWeight = (obj, pct = true) => Object.keys(obj).reduce((acc, cur) => (acc += coalesce(obj[cur], 1)), 0) *
+    (pct ? 100 : 1);
+exports.getTotalWeight = getTotalWeight;
 /**
  * Checks if a value is falsy and returns a replacement if so.
  * Otherwise keeps the current value.

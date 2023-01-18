@@ -1,7 +1,7 @@
-import { AdditionalScoreProvider, DelegateStat } from "./interfaces";
+import { AdditionalScoreProvider, DelegateStat, DelegateStatPeriod, ScoreBreakdownCalc, ScoreBreakdownChildren } from "./interfaces";
 export declare class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     private githubData;
-    private multipliers;
+    private weights;
     preload(): Promise<void>;
     isPublicAddressEligible(publicAddress: string): Promise<boolean>;
     getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
@@ -11,4 +11,6 @@ export declare class GitcoinHealthScoreProvider implements AdditionalScoreProvid
     private getWorkstreamInvolvement;
     private getStewardDays;
     private getKarmaData;
+    getDefaultBreakdown(stat: Partial<DelegateStat>, weights: Record<string, number>, workstreamScore?: number): ScoreBreakdownChildren;
+    getScoreBreakdownCalc(publicAddress: string, stat: Partial<DelegateStat>, period?: DelegateStatPeriod, type?: "forum" | "score"): ScoreBreakdownCalc;
 }

@@ -1,3 +1,4 @@
+import { ScoreCalculator } from "../util/calculator";
 export interface DaoProviderDescriptor {
     cls: string;
     args: unknown[];
@@ -51,12 +52,13 @@ export interface GetDaoScore {
     getForumScore(stat: Partial<DelegateStat>): number;
     getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[];
     preload(resourceName: string | "default"): Promise<void>;
-    getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod): ScoreBreakdownCalc;
+    getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod, type?: "forum" | "score"): ScoreBreakdownCalc;
 }
 export interface AdditionalScoreProvider {
     preload(): Promise<void>;
     isPublicAddressEligible(publicAddress: string): Promise<boolean>;
     getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
+    getScoreBreakdownCalc(publicAddress: string, stat: Partial<DelegateStat>, period?: DelegateStatPeriod, type?: "forum" | "score"): ScoreBreakdownCalc;
 }
 export interface MultiplierType {
     "7d": Record<string, number>;
@@ -102,7 +104,7 @@ export interface ScoreBreakdownCalcItem {
     op?: Operator;
 }
 export declare type ScoreBreakdownCalc = ScoreBreakdownCalcItem[];
-declare type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
+export declare type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
     /**
      * The operator type. The first item in the children array
      * defines the operation
@@ -113,4 +115,4 @@ declare type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
      */
     op: Operator;
 })[];
-export {};
+export { ScoreCalculator };

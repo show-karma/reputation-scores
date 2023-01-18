@@ -25,5 +25,10 @@ class EnsDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoScorePr
             "discordMessagesCount",
         ];
     }
+    getScoreBreakdownCalc(stat, period, type) {
+        if (type === "forum")
+            return [];
+        return [];
+    }
 }
 exports.EnsDaoScoreProvider = EnsDaoScoreProvider;

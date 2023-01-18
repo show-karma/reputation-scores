@@ -3,5 +3,5 @@ import { DelegateStat, DelegateStatPeriod, ScoreBreakdownCalc } from "./interfac
 export declare class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
     getKarmaScore(stat: Partial<DelegateStat>): number;
     getForumScore(stat: Partial<DelegateStat>): number;
-    getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod): ScoreBreakdownCalc;
+    getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod, type?: "forum" | "score"): ScoreBreakdownCalc;
 }

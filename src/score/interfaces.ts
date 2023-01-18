@@ -1,3 +1,5 @@
+import { ScoreCalculator } from "../util/calculator";
+
 export interface DaoProviderDescriptor {
   cls: string;
   args: unknown[];
@@ -141,3 +143,5 @@ export type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
    */
   op: Operator;
 })[];
+
+export { ScoreCalculator };

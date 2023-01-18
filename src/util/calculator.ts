@@ -18,7 +18,7 @@ export class ScoreCalculator {
    * @param first
    * @param second
    */
-  evaluate(op: Operator, first: number, second: number) {
+  static evaluate(op: Operator, first: number, second: number) {
     // Checks if there are any symbols that aren't permitted.
     if (!["+", "-", "/", "*"].includes(op))
       throw new Error(`Invalid character "${op}" at expression.`);
@@ -64,7 +64,7 @@ export class ScoreCalculator {
    * @param breakdown
    * @returns
    */
-  calculate(breakdown: ScoreBreakdownCalc) {
+  static calculate(breakdown: ScoreBreakdownCalc) {
     return breakdown.reduce((result, item, index) => {
       // Gets the subtotal, being the value * weight
       const subTotal = item.value * item.weight;
