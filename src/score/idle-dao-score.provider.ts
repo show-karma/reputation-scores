@@ -1,4 +1,4 @@
-import { coalesce } from "src/util/get-weights";
+import { coalesce } from "../util/get-weights";
 import {
   BaseProvider,
   DelegateStat,

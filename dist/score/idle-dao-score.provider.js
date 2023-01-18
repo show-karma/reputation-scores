@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdleDaoScoreProvider = void 0;
-const get_weights_1 = require("src/util/get-weights");
+const get_weights_1 = require("../util/get-weights");
 const interfaces_1 = require("./interfaces");
 class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
     preload(daoName) {
