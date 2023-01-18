@@ -1,7 +1,11 @@
-import axios from 'axios';
-import _ from 'lodash';
-import moment from 'moment';
-import { AdditionalScoreProvider, DelegateStat, DelegateStatPeriod } from './interfaces';
+import axios from "axios";
+import _ from "lodash";
+import moment from "moment";
+import {
+  AdditionalScoreProvider,
+  DelegateStat,
+  DelegateStatPeriod,
+} from "./interfaces";
 
 interface GithubRecord {
   address: string;
@@ -11,7 +15,8 @@ interface GithubRecord {
   workstreamsContributor: string;
 }
 
-const GITHUB_DATA_URL = 'https://www.daostewards.xyz/assets/stewards/stewards_data.json';
+const GITHUB_DATA_URL =
+  "https://www.daostewards.xyz/assets/stewards/stewards_data.json";
 
 export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
   private githubData: Record<string, GithubRecord>;
@@ -23,33 +28,40 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
         d.address = d.address.toLowerCase();
       }
     });
-    this.githubData = _.keyBy(data, 'address');
+    this.githubData = _.keyBy(data, "address");
   }
 
   isPublicAddressEligible(publicAddress: string): Promise<boolean> {
     return Promise.resolve(!!this.githubData[publicAddress]);
   }
 
-  async getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number> {
+  async getScore(
+    publicAddress: string,
+    stat: Partial<DelegateStat>
+  ): Promise<number> {
     if (stat.period === DelegateStatPeriod.lifetime) {
       return this.getLifetimeScore(publicAddress, stat);
-    } else if (stat.period === DelegateStatPeriod['30d']) {
+    } else if (stat.period === DelegateStatPeriod["30d"]) {
       return this.get30dScore(publicAddress, stat);
-    } else if (stat.period === DelegateStatPeriod['180d']) {
-      return Math.floor(this.get30dScore(publicAddress, stat)/6);
+    } else if (stat.period === DelegateStatPeriod["180d"]) {
+      // return Math.floor(this.get30dScore(publicAddress, stat) / 6);
+      return this.get180dScore(publicAddress, stat);
     } else {
       // TODO fix it
-      return this.get30dScore(publicAddress, stat)
+      return this.get30dScore(publicAddress, stat);
     }
   }
 
-  private getLifetimeScore(publicAddress: string, stat: Partial<DelegateStat>): number {
+  private getLifetimeScore(
+    publicAddress: string,
+    stat: Partial<DelegateStat>
+  ): number {
     const karmaData = this.getKarmaData(stat, [
-      'offChainVotesPct',
-      'proposalsInitiated',
-      'proposalsDiscussed',
-      'forumTopicCount',
-      'forumPostCount'
+      "offChainVotesPct",
+      "proposalsInitiated",
+      "proposalsDiscussed",
+      "forumTopicCount",
+      "forumPostCount",
     ]);
 
     const score =
@@ -64,13 +76,40 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     return Math.floor(score);
   }
 
-  private get30dScore(publicAddress: string, stat: Partial<DelegateStat>): number {
+  private get180dScore(
+    publicAddress: string,
+    stat: Partial<DelegateStat>
+  ): number {
     const karmaData = this.getKarmaData(stat, [
-      'offChainVotesPct',
-      'proposalsInitiated',
-      'proposalsDiscussed',
-      'forumTopicCount',
-      'forumPostCount'
+      "offChainVotesPct",
+      "proposalsInitiated",
+      "proposalsDiscussed",
+      "forumTopicCount",
+      "forumPostCount",
+    ]);
+
+    const score =
+      (karmaData.offChainVotesPct * 0.7 +
+        karmaData.proposalsInitiated * 1.5 +
+        karmaData.proposalsDiscussed * 0.7 +
+        (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
+        (karmaData.forumPostCount - karmaData.proposalsDiscussed) * 0.6 +
+        this.getWorkstreamInvolvement(publicAddress)) *
+      (Math.min(180, this.getStewardDays(publicAddress)) / 180);
+
+    return Math.floor(score);
+  }
+
+  private get30dScore(
+    publicAddress: string,
+    stat: Partial<DelegateStat>
+  ): number {
+    const karmaData = this.getKarmaData(stat, [
+      "offChainVotesPct",
+      "proposalsInitiated",
+      "proposalsDiscussed",
+      "forumTopicCount",
+      "forumPostCount",
     ]);
 
     const score =
@@ -86,7 +125,8 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
 
   private getWorkstreamInvolvement(publicAddress: string): number {
     const workstreamsLead = this.githubData[publicAddress]?.workstreamsLead;
-    const workstreamsContributor = this.githubData[publicAddress]?.workstreamsContributor;
+    const workstreamsContributor =
+      this.githubData[publicAddress]?.workstreamsContributor;
     if (workstreamsLead) return 5;
     if (workstreamsContributor) return 3;
 
@@ -95,7 +135,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
 
   private getStewardDays(publicAddress: string) {
     const stewardSince = this.githubData[publicAddress]?.steward_since;
-    return Math.abs(moment.utc(stewardSince).diff(moment.utc(), 'days'));
+    return Math.abs(moment.utc(stewardSince).diff(moment.utc(), "days"));
   }
 
   private getKarmaData<T extends keyof Partial<DelegateStat>>(

@@ -8,7 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 const lodash_1 = __importDefault(require("lodash"));
 const moment_1 = __importDefault(require("moment"));
 const interfaces_1 = require("./interfaces");
-const GITHUB_DATA_URL = 'https://www.daostewards.xyz/assets/stewards/stewards_data.json';
+const GITHUB_DATA_URL = "https://www.daostewards.xyz/assets/stewards/stewards_data.json";
 class GitcoinHealthScoreProvider {
     async preload() {
         const data = (await axios_1.default.get(GITHUB_DATA_URL)).data.data;
@@ -17,7 +17,7 @@ class GitcoinHealthScoreProvider {
                 d.address = d.address.toLowerCase();
             }
         });
-        this.githubData = lodash_1.default.keyBy(data, 'address');
+        this.githubData = lodash_1.default.keyBy(data, "address");
     }
     isPublicAddressEligible(publicAddress) {
         return Promise.resolve(!!this.githubData[publicAddress]);
@@ -26,11 +26,12 @@ class GitcoinHealthScoreProvider {
         if (stat.period === interfaces_1.DelegateStatPeriod.lifetime) {
             return this.getLifetimeScore(publicAddress, stat);
         }
-        else if (stat.period === interfaces_1.DelegateStatPeriod['30d']) {
+        else if (stat.period === interfaces_1.DelegateStatPeriod["30d"]) {
             return this.get30dScore(publicAddress, stat);
         }
-        else if (stat.period === interfaces_1.DelegateStatPeriod['180d']) {
-            return Math.floor(this.get30dScore(publicAddress, stat) / 6);
+        else if (stat.period === interfaces_1.DelegateStatPeriod["180d"]) {
+            // return Math.floor(this.get30dScore(publicAddress, stat) / 6);
+            return this.get180dScore(publicAddress, stat);
         }
         else {
             // TODO fix it
@@ -39,11 +40,11 @@ class GitcoinHealthScoreProvider {
     }
     getLifetimeScore(publicAddress, stat) {
         const karmaData = this.getKarmaData(stat, [
-            'offChainVotesPct',
-            'proposalsInitiated',
-            'proposalsDiscussed',
-            'forumTopicCount',
-            'forumPostCount'
+            "offChainVotesPct",
+            "proposalsInitiated",
+            "proposalsDiscussed",
+            "forumTopicCount",
+            "forumPostCount",
         ]);
         const score = karmaData.offChainVotesPct * 0.7 +
             (karmaData.proposalsInitiated * 1.5 +
@@ -54,13 +55,30 @@ class GitcoinHealthScoreProvider {
             this.getWorkstreamInvolvement(publicAddress);
         return Math.floor(score);
     }
+    get180dScore(publicAddress, stat) {
+        const karmaData = this.getKarmaData(stat, [
+            "offChainVotesPct",
+            "proposalsInitiated",
+            "proposalsDiscussed",
+            "forumTopicCount",
+            "forumPostCount",
+        ]);
+        const score = (karmaData.offChainVotesPct * 0.7 +
+            karmaData.proposalsInitiated * 1.5 +
+            karmaData.proposalsDiscussed * 0.7 +
+            (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
+            (karmaData.forumPostCount - karmaData.proposalsDiscussed) * 0.6 +
+            this.getWorkstreamInvolvement(publicAddress)) *
+            (Math.min(180, this.getStewardDays(publicAddress)) / 180);
+        return Math.floor(score);
+    }
     get30dScore(publicAddress, stat) {
         const karmaData = this.getKarmaData(stat, [
-            'offChainVotesPct',
-            'proposalsInitiated',
-            'proposalsDiscussed',
-            'forumTopicCount',
-            'forumPostCount'
+            "offChainVotesPct",
+            "proposalsInitiated",
+            "proposalsDiscussed",
+            "forumTopicCount",
+            "forumPostCount",
         ]);
         const score = karmaData.offChainVotesPct * 0.7 +
             karmaData.proposalsInitiated * 1.5 +
@@ -81,7 +99,7 @@ class GitcoinHealthScoreProvider {
     }
     getStewardDays(publicAddress) {
         const stewardSince = this.githubData[publicAddress]?.steward_since;
-        return Math.abs(moment_1.default.utc(stewardSince).diff(moment_1.default.utc(), 'days'));
+        return Math.abs(moment_1.default.utc(stewardSince).diff(moment_1.default.utc(), "days"));
     }
     getKarmaData(stat, fields) {
         const result = {};
