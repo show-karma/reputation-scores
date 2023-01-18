@@ -56,4 +56,35 @@ export declare class ScoreCalculator {
      * @returns
      */
     static calculate(breakdown: ScoreBreakdownCalc): number;
+    /**
+     * Creates a stringified model of the calculation
+     *
+     * #### Example
+     * ```ts
+     * const calc = new ScoreCalculator();
+     * const breakdown = <ScoreBreakdownCalc>[
+     *  {
+     *    label: 'Age',
+     *    value: 30,
+     *    weight: 2,
+     *    children: [{
+     *      label: 'Weight',
+     *      value: 2,
+     *      weight: 1,
+     *      op: '/',
+     *    }]
+     *  },
+     *  {
+     *    label: 'Goals done',
+     *    value: 30,
+     *    weight: 0.5,
+     *    op: '+'
+     *  }
+     * ];
+     *
+     * calc.breakdownToString(breakdown);
+     * // ((30 * 2) / (2*1)) + (30 * 0.5)
+     * ```
+     */
+    static breakdownToString(breakdown: ScoreBreakdownCalc): string;
 }
