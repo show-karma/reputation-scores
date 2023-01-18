@@ -3,9 +3,12 @@ import { ScoreMultiplier } from "../score/interfaces";
 const githubUrl = (resourceName: string) =>
   `https://raw.githubusercontent.com/show-karma/dao-score-multiplier/main/${resourceName}.json`;
 
+const weights: Record<string, ScoreMultiplier> = {};
+
 export async function getWeights(
   resourceName: "default" | string
 ): Promise<ScoreMultiplier> {
+  if (weights[resourceName]) return weights[resourceName];
   try {
     const { data: resource } = await axios.get<ScoreMultiplier>(
       githubUrl(resourceName || "default")
