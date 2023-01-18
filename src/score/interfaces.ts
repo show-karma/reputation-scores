@@ -75,6 +75,12 @@ export interface AdditionalScoreProvider {
   preload(): Promise<void>;
   isPublicAddressEligible(publicAddress: string): Promise<boolean>;
   getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
+  getScoreBreakdownCalc(
+    publicAddress: string,
+    stat: Partial<DelegateStat>,
+    period?: DelegateStatPeriod,
+    type?: "forum" | "score"
+  ): ScoreBreakdownCalc;
 }
 
 export interface MultiplierType {
@@ -124,7 +130,7 @@ export interface ScoreBreakdownCalcItem {
 }
 
 export type ScoreBreakdownCalc = ScoreBreakdownCalcItem[];
-type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
+export type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
   /**
    * The operator type. The first item in the children array
    * defines the operation

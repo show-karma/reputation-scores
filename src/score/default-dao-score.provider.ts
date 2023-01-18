@@ -12,6 +12,8 @@ export class DefaultDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore
 {
+  weights: ScoreMultiplier;
+
   async preload(resourceName: string) {
     const resource = await getWeights(resourceName);
     this.weights = resource;
@@ -60,7 +62,6 @@ export class DefaultDaoScoreProvider
     ];
   }
 
-  weights: ScoreMultiplier;
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
     period: DelegateStatPeriod = DelegateStatPeriod.lifetime,

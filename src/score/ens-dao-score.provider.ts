@@ -1,5 +1,9 @@
 import { DefaultDaoScoreProvider } from "./default-dao-score.provider";
-import { DelegateStat } from "./interfaces";
+import {
+  DelegateStat,
+  DelegateStatPeriod,
+  ScoreBreakdownCalc,
+} from "./interfaces";
 
 export class EnsDaoScoreProvider extends DefaultDaoScoreProvider {
   getForumScore(stat: Partial<DelegateStat>): number {
@@ -33,5 +37,15 @@ export class EnsDaoScoreProvider extends DefaultDaoScoreProvider {
       "delegatedVotes",
       "discordMessagesCount",
     ];
+  }
+
+  getScoreBreakdownCalc(
+    stat: Partial<DelegateStat>,
+    period?: DelegateStatPeriod,
+    type?: "forum" | "score"
+  ): ScoreBreakdownCalc {
+    if (type === "forum") return [];
+
+    return [];
   }
 }
