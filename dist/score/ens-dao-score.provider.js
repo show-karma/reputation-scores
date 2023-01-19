@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnsDaoScoreProvider = void 0;
-const get_weights_1 = require("src/util/get-weights");
+const get_weights_1 = require("../util/get-weights");
 const default_dao_score_provider_1 = require("./default-dao-score.provider");
 class EnsDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoScoreProvider {
     getForumScore(stat) {
