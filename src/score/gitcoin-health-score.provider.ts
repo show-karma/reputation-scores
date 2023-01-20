@@ -20,7 +20,7 @@ interface GithubRecord {
 }
 
 const GITHUB_DATA_URL =
-  "https://www.daostewards.xyz/assets/stewards/stewards_data.json";
+  "https://raw.githubusercontent.com/mmmgtc/stewards-frontend/main/public/assets/stewards/stewards_data.json";
 
 export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
   private githubData: Record<string, GithubRecord>;
