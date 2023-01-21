@@ -1,15 +1,25 @@
-import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc, ScoreMultiplier } from "./interfaces";
+import {
+  BaseProvider,
+  DelegateStat,
+  DelegateStatPeriod,
+  GetDaoScore,
+  ScoreBreakdownCalc,
+  ScoreMultiplier,
+} from "./interfaces";
 
 export class DefaultWithDeworkDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore
 {
   weights: ScoreMultiplier;
-  getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod): ScoreBreakdownCalc {
-    throw new Error("Method not implemented.");
+  getScoreBreakdownCalc(
+    stat: Partial<DelegateStat>,
+    period?: DelegateStatPeriod
+  ): ScoreBreakdownCalc {
+    return [];
   }
   preload(daoName: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    return;
   }
 
   getForumScore(stat: Partial<DelegateStat>): number {

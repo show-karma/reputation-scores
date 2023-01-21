@@ -23,12 +23,7 @@ export class DefaultDaoPercentileScoreProvider
     const {
       forumScore: { lifetime },
     } = this.weights;
-    const totalWeight =
-      100 *
-      Object.keys(lifetime).reduce(
-        (acc, cur) => (acc += coalesce(lifetime[cur], 1)),
-        0
-      );
+    const totalWeight = getTotalWeight(lifetime);
     return (
       Math.round(
         ((stat.proposalsInitiatedPercentile *

@@ -4,10 +4,10 @@ exports.DefaultWithDiscordDaoScoreProvider = void 0;
 const interfaces_1 = require("./interfaces");
 class DefaultWithDiscordDaoScoreProvider extends interfaces_1.BaseProvider {
     getScoreBreakdownCalc(stat, period) {
-        throw new Error("Method not implemented.");
+        return [];
     }
     preload(daoName) {
-        throw new Error("Method not implemented.");
+        return;
     }
     getForumScore(stat) {
         return (Math.round((stat.proposalsInitiated || 0) * 10 +

@@ -1,4 +1,4 @@
-import { coalesce } from "../util/get-weights";
+import { coalesce, getWeights } from "../util/get-weights";
 import {
   BaseProvider,
   DelegateStat,
@@ -11,30 +11,44 @@ import {
 export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
   weights: ScoreMultiplier;
 
-  preload(daoName: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async preload(_: string): Promise<void> {
+    this.weights = await getWeights("idlefinance");
   }
+
   getForumScore(stat: Partial<DelegateStat>): number {
+    const {
+      forumScore: { lifetime },
+    } = this.weights;
     return (
       Math.round(
-        (stat.proposalsInitiated || 0) * 10 +
-          (stat.proposalsDiscussed || 0) * 2 +
-          (stat.forumPostCount || 0) +
-          (stat.forumTopicCount || 0) * 3 +
-          (stat.forumLikesReceived || 0) * 0.5 +
-          (stat.forumPostsReadCount || 0) * 0.1
+        (stat.proposalsInitiated || 0) *
+          coalesce(lifetime.proposalsInitiated, 1) +
+          (stat.proposalsDiscussed || 0) *
+            coalesce(lifetime.proposalsDiscussed, 1) +
+          (stat.forumPostCount || 0) * coalesce(lifetime.forumPostCount, 1) +
+          (stat.forumTopicCount || 0) * coalesce(lifetime.forumTopicCount, 1) +
+          (stat.forumLikesReceived || 0) *
+            coalesce(lifetime.forumLikesReceived, 1) +
+          (stat.forumPostsReadCount || 0) *
+            coalesce(lifetime.forumPostsReadCount, 1)
       ) || 0
     );
   }
 
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
+    const {
+      score: { lifetime },
+    } = this.weights;
     return (
       Math.round(
-        stat.delegatedVotes * 0.1 +
-          (stat.forumActivityScore || 0) +
-          (stat.offChainVotesPct || 0) * 3 +
-          (stat.onChainVotesPct || 0) * 5 +
-          (stat.discordMessagesCount || 0) * 0.01
+        stat.delegatedVotes * coalesce(lifetime.delegatedVotes, 1) +
+          (stat.forumActivityScore || 0) *
+            coalesce(lifetime.forumActivityScore, 1) +
+          (stat.offChainVotesPct || 0) *
+            coalesce(lifetime.offChainVotesPct, 1) +
+          (stat.onChainVotesPct || 0) * coalesce(lifetime.onChainVotesPct, 1) +
+          (stat.discordMessagesCount || 0) *
+            coalesce(lifetime.discordMessagesCount, 1)
       ) || 0
     );
   }

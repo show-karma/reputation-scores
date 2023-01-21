@@ -1,4 +1,4 @@
-import { coalesce } from "../util/get-weights";
+import { coalesce, getTotalWeight, getWeights } from "../util/get-weights";
 import { DefaultDaoScoreProvider } from "./default-dao-score.provider";
 import {
   DelegateStat,
@@ -7,26 +7,51 @@ import {
 } from "./interfaces";
 
 export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
+  async preload(_: string) {
+    const resource = await getWeights("gitcoin-percentile");
+    this.weights = resource;
+  }
+
   // 200 is max karma score
   getKarmaScore(stat: Partial<DelegateStat>): number {
+    const {
+      score: { lifetime },
+    } = this.weights;
+
+    const totalWeight = getTotalWeight(lifetime);
     return Math.round(
-      ((stat.forumActivityScore + (stat.offChainVotesPct || 0) || 0) / 200) *
+      ((stat.forumActivityScore * coalesce(lifetime.forumActivityScore) +
+        (stat.offChainVotesPct || 0) * coalesce(lifetime.offChainVotesPct) ||
+        0) /
+        totalWeight) *
         100
     );
   }
 
   // 1660 sum of all forum props percentiles
   getForumScore(stat: Partial<DelegateStat>): number {
+    const {
+      forumScore: { lifetime },
+    } = this.weights;
+
+    const totalWeight = getTotalWeight(lifetime);
+
     return (
       Math.round(
-        (((stat.proposalsInitiatedPercentile || 0) * 10 +
-          (stat.proposalsDiscussedPercentile || 0) * 2 +
-          (stat.forumPostCountPercentile || 0) +
-          (stat.forumTopicCountPercentile || 0) * 3 +
-          (stat.forumLikesReceivedPercentile || 0) * 0.5 +
-          (stat.forumPostsReadCountPercentile || 0) * 0.1) *
+        (((stat.proposalsInitiatedPercentile || 0) *
+          coalesce(lifetime.proposalsInitiatedPercentile) +
+          (stat.proposalsDiscussedPercentile || 0) *
+            coalesce(lifetime.proposalsDiscussedPercentile) +
+          (stat.forumPostCountPercentile || 0) *
+            coalesce(lifetime.forumPostCountPercentile) +
+          (stat.forumTopicCountPercentile || 0) *
+            coalesce(lifetime.forumTopicCountPercentile) +
+          (stat.forumLikesReceivedPercentile || 0) *
+            coalesce(lifetime.forumLikesReceivedPercentile) +
+          (stat.forumPostsReadCountPercentile || 0) *
+            coalesce(lifetime.forumPostsReadCountPercentile)) *
           100) /
-          1660
+          totalWeight
       ) || 0
     );
   }

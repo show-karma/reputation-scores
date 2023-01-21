@@ -8,12 +8,8 @@ const axios_1 = __importDefault(require("axios"));
 const lodash_1 = __importDefault(require("lodash"));
 const moment_1 = __importDefault(require("moment"));
 const interfaces_1 = require("./interfaces");
-
 const get_weights_1 = require("../util/get-weights");
-
-
 const GITHUB_DATA_URL = "https://raw.githubusercontent.com/mmmgtc/stewards-frontend/main/public/assets/stewards/stewards_data.json";
-
 class GitcoinHealthScoreProvider {
     async preload() {
         const data = (await axios_1.default.get(GITHUB_DATA_URL)).data.data;

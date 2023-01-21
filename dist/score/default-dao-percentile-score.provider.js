@@ -10,8 +10,7 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
     // max here 100 + 20 + 10 + 30 + 5 + 1 = 166
     getForumScore(stat) {
         const { forumScore: { lifetime }, } = this.weights;
-        const totalWeight = 100 *
-            Object.keys(lifetime).reduce((acc, cur) => (acc += (0, get_weights_1.coalesce)(lifetime[cur], 1)), 0);
+        const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
         return (Math.round(((stat.proposalsInitiatedPercentile *
             (0, get_weights_1.coalesce)(lifetime.proposalsInitiatedPercentile, 1) +
             stat.proposalsDiscussedPercentile *
