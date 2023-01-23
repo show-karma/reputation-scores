@@ -122,7 +122,7 @@ class ScoreCalculator {
     static breakdownToString(breakdown) {
         return breakdown.reduce((result, item, index) => {
             // Gets the subtotal, being the value * weight
-            const subTotal = `(${item.label}: ${item.value} * ${item.weight})`;
+            const subTotal = `(${item.value} * ${item.weight})`;
             // If item has children, then do the operation inside the children, multiply by its weight and then concatenates
             if (item.children) {
                 // Do calculation inside the children recursively
@@ -136,7 +136,7 @@ class ScoreCalculator {
             }
             else if (item.op && index > 0) {
                 // If item has operator, gets the result
-                result += ` ${item.op} (${item.label}: ${item.value} * ${item.weight})`; //this.evaluate(item.op, result, subTotal);
+                result += ` ${item.op} (${item.value} * ${item.weight})`; //this.evaluate(item.op, result, subTotal);
                 // Else only adds the subtotal
             }
             else
