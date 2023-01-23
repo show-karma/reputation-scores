@@ -254,7 +254,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
         delete offChainVotesObj.children[0].op;
 
         return [
-          offChainVotesObj,
+          { ...offChainVotesObj, childrenOp: "+" },
           {
             label: `Square root of Steward Days (0-180)`,
             value: Math.min(180, this.getStewardDays(publicAddress)),
