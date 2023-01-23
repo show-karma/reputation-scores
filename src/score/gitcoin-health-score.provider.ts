@@ -291,8 +291,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
             value: Math.min(180, this.getStewardDays(publicAddress)),
             // 1/180 ~ 0.005
             weight: 0.00556,
-            op: "*",
-            childrenOp: "+",
+            childrenOp: "*",
             children: this.getDefaultBreakdown(stat, weights, workstreamScore),
           },
         ];
