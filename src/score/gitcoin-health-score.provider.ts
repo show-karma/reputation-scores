@@ -6,7 +6,6 @@ import {
   DelegateStat,
   DelegateStatPeriod,
   ScoreBreakdownCalc,
-  ScoreBreakdownChildren,
   ScoreMultiplier,
 } from "./interfaces";
 import { getWeights, coalesce } from "../util/get-weights";
@@ -73,7 +72,6 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     const {
       healthScore: { lifetime = {} },
     } = this.weights;
-
     const score =
       karmaData.offChainVotesPct * coalesce(lifetime.offChainVotesPct, 1) +
       (karmaData.proposalsInitiated * coalesce(lifetime.proposalsInitiated, 1) +
@@ -82,8 +80,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
         (karmaData.forumTopicCount - karmaData.proposalsInitiated) *
           coalesce(lifetime["forumTopicCount-proposalsInitiated"], 1) +
         (karmaData.forumPostCount - karmaData.proposalsDiscussed) *
-          coalesce(lifetime["forumPostCount-proposalsDiscussed"]),
-      1) /
+          coalesce(lifetime["forumPostCount-proposalsDiscussed"], 1)) /
         Math.sqrt(this.getStewardDays(publicAddress)) +
       this.getWorkstreamInvolvement(publicAddress);
 
@@ -186,13 +183,12 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     stat: Partial<DelegateStat>,
     weights: Record<string, number>,
     workstreamScore?: number
-  ): ScoreBreakdownChildren {
-    const breakdown: ScoreBreakdownChildren = [
+  ): ScoreBreakdownCalc {
+    const breakdown: ScoreBreakdownCalc = [
       {
         label: "Off-chain Votes %",
         value: coalesce(stat.offChainVotesPct),
         weight: coalesce(weights.offChainVotesPct),
-        op: "+",
       },
       {
         label: "Proposals Initiated",
@@ -255,40 +251,27 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
         );
         const offChainVotesObj = defaultBreakdown.shift();
         offChainVotesObj.children = defaultBreakdown;
+        delete offChainVotesObj.children[0].op;
+
         return [
+          offChainVotesObj,
           {
-            label: "Off-chain Votes %",
-            value: 0,
+            label: `Square root of Steward Days (0-180)`,
+            value: Math.min(180, this.getStewardDays(publicAddress)),
             weight: 1,
-            children: [
-              {
-                label: "Score",
-                value: 0,
-                weight: 1,
-                children: defaultBreakdown,
-                op: "+",
-              },
-              {
-                label: "Square Root of Steward Days",
-                value: Math.min(180, this.getStewardDays(publicAddress)),
-                weight: 1,
-                children: [
-                  {
-                    label: `Workstream Involvement: ${
-                      workstreamScore === 5
-                        ? "Lead"
-                        : workstreamScore === 3
-                        ? "Contributor"
-                        : "None"
-                    }`,
-                    value: workstreamScore,
-                    weight: 1,
-                    op: "+",
-                  },
-                ],
-                op: "/",
-              },
-            ],
+            op: "/",
+          },
+          {
+            label: `Workstream Involvement: ${
+              workstreamScore === 5
+                ? "Lead"
+                : workstreamScore === 3
+                ? "Contributor"
+                : "None"
+            }`,
+            value: workstreamScore,
+            weight: 1,
+            op: "+",
           },
         ];
       }
@@ -303,6 +286,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
             // 1/180 ~ 0.005
             weight: 0.00556,
             op: "*",
+            childrenOp: "+",
             children: this.getDefaultBreakdown(stat, weights, workstreamScore),
           },
         ];

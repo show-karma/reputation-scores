@@ -42,11 +42,11 @@ export class ScoreCalculator {
    *    label: 'Age',
    *    value: 30,
    *    weight: 2,
+   *    childrenOp: '/',
    *    children: [{
    *      label: 'Weight',
    *      value: 2,
    *      weight: 1,
-   *      op: '/',
    *    }]
    *  },
    *  {
@@ -74,7 +74,7 @@ export class ScoreCalculator {
         const childrenValue = this.calculate(item.children);
         // The operator in the first children indicates the operation type
         // for the parent versus children
-        const { op = "+" } = item.children[0];
+        const { childrenOp: op = "+" } = item;
         // Gets the result from the operation `parent <op> children`
         // Then multiplies by parent weight
         result += this.evaluate(op, subTotal, childrenValue);
@@ -89,7 +89,7 @@ export class ScoreCalculator {
 
   /**
    * Creates a stringified model of the calculation
-   * 
+   *
    * #### Example
    * ```ts
    * const calc = new ScoreCalculator();
@@ -98,11 +98,11 @@ export class ScoreCalculator {
    *    label: 'Age',
    *    value: 30,
    *    weight: 2,
+   *    childrenOp: '/',
    *    children: [{
    *      label: 'Weight',
    *      value: 2,
    *      weight: 1,
-   *      op: '/',
    *    }]
    *  },
    *  {

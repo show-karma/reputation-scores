@@ -91,7 +91,7 @@ export class OptimismDaoScoreProvider
           op: "+",
         },
       ];
-    else
+    
       return [
         {
           label: "Delegated Votes",
