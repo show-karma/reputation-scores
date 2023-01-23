@@ -33,11 +33,11 @@ export declare class ScoreCalculator {
      *    label: 'Age',
      *    value: 30,
      *    weight: 2,
+     *    childrenOp: '/',
      *    children: [{
      *      label: 'Weight',
      *      value: 2,
      *      weight: 1,
-     *      op: '/',
      *    }]
      *  },
      *  {
@@ -67,11 +67,11 @@ export declare class ScoreCalculator {
      *    label: 'Age',
      *    value: 30,
      *    weight: 2,
+     *    childrenOp: '/',
      *    children: [{
      *      label: 'Weight',
      *      value: 2,
      *      weight: 1,
-     *      op: '/',
      *    }]
      *  },
      *  {

@@ -93,26 +93,19 @@ export interface ScoreBreakdownCalcItem {
      */
     weight: number;
     /**
+     * Operation to perform betwen parent and children
+     */
+    childrenOp?: Operator;
+    /**
      * The sub calculation, will be interpreted as
      *
      * > `Parent <Child[0].op> ( ChildrenResult )`
      */
-    children?: ScoreBreakdownChildren;
+    children?: ScoreBreakdownCalc;
     /**
      * Mathematical operator represented as string
      */
     op?: Operator;
 }
 export declare type ScoreBreakdownCalc = ScoreBreakdownCalcItem[];
-export declare type ScoreBreakdownChildren = (ScoreBreakdownCalcItem & {
-    /**
-     * The operator type. The first item in the children array
-     * defines the operation
-     * > `Parent <op> ChildrenResult`
-     *
-     * next items are interpreted as
-     * > `[Child N-1] <op> [Child N]`
-     */
-    op: Operator;
-})[];
 export { ScoreCalculator };

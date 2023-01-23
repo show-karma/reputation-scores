@@ -62,20 +62,19 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
                     op: "+",
                 },
             ];
-        else
-            return [
-                {
-                    label: "Delegated Votes",
-                    value: (0, get_weights_1.coalesce)(stat.delegatedVotes),
-                    weight: (0, get_weights_1.coalesce)(lifetime.delegatedVotes),
-                },
-                {
-                    label: "Off chain votes %",
-                    value: (0, get_weights_1.coalesce)(stat.offChainVotesPct),
-                    weight: (0, get_weights_1.coalesce)(lifetime.offChainVotesPct),
-                    op: "+",
-                },
-            ];
+        return [
+            {
+                label: "Delegated Votes",
+                value: (0, get_weights_1.coalesce)(stat.delegatedVotes),
+                weight: (0, get_weights_1.coalesce)(lifetime.delegatedVotes),
+            },
+            {
+                label: "Off chain votes %",
+                value: (0, get_weights_1.coalesce)(stat.offChainVotesPct),
+                weight: (0, get_weights_1.coalesce)(lifetime.offChainVotesPct),
+                op: "+",
+            },
+        ];
     }
 }
 exports.OptimismDaoScoreProvider = OptimismDaoScoreProvider;

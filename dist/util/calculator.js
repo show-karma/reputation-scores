@@ -41,11 +41,11 @@ class ScoreCalculator {
      *    label: 'Age',
      *    value: 30,
      *    weight: 2,
+     *    childrenOp: '/',
      *    children: [{
      *      label: 'Weight',
      *      value: 2,
      *      weight: 1,
-     *      op: '/',
      *    }]
      *  },
      *  {
@@ -73,7 +73,7 @@ class ScoreCalculator {
                 const childrenValue = this.calculate(item.children);
                 // The operator in the first children indicates the operation type
                 // for the parent versus children
-                const { op = "+" } = item.children[0];
+                const { childrenOp: op = "+" } = item;
                 // Gets the result from the operation `parent <op> children`
                 // Then multiplies by parent weight
                 result += this.evaluate(op, subTotal, childrenValue);
@@ -99,11 +99,11 @@ class ScoreCalculator {
      *    label: 'Age',
      *    value: 30,
      *    weight: 2,
+     *    childrenOp: '/',
      *    children: [{
      *      label: 'Weight',
      *      value: 2,
      *      weight: 1,
-     *      op: '/',
      *    }]
      *  },
      *  {

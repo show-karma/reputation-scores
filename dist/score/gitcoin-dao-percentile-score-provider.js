@@ -46,12 +46,12 @@ class GitcoinDaoPercentileScoreProvider extends default_dao_score_provider_1.Def
                     label: "Percent Multiplier",
                     value: 100,
                     weight: 1,
+                    childrenOp: "*",
                     children: [
                         {
                             label: "Proposals Initiated Percentile",
                             value: (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.proposalsDiscussedPercentile, 1),
-                            op: "*",
                         },
                         {
                             label: "Proposals Discussed Percentile",
@@ -104,12 +104,12 @@ class GitcoinDaoPercentileScoreProvider extends default_dao_score_provider_1.Def
                 label: "Percent Multiplier",
                 value: 100,
                 weight: 1,
+                childrenOp: "*",
                 children: [
                     {
                         label: "Forum Activity Score",
                         value: (0, get_weights_1.coalesce)(stat.forumActivityScore),
                         weight: (0, get_weights_1.coalesce)(score.forumActivityScore, 1),
-                        op: "*",
                     },
                     {
                         label: "Off-chain Votes %",

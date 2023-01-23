@@ -56,8 +56,7 @@ class GitcoinHealthScoreProvider {
                 (karmaData.forumTopicCount - karmaData.proposalsInitiated) *
                     (0, get_weights_1.coalesce)(lifetime["forumTopicCount-proposalsInitiated"], 1) +
                 (karmaData.forumPostCount - karmaData.proposalsDiscussed) *
-                    (0, get_weights_1.coalesce)(lifetime["forumPostCount-proposalsDiscussed"]),
-                1) /
+                    (0, get_weights_1.coalesce)(lifetime["forumPostCount-proposalsDiscussed"], 1)) /
                 Math.sqrt(this.getStewardDays(publicAddress)) +
             this.getWorkstreamInvolvement(publicAddress);
         return Math.floor(score);
@@ -128,7 +127,6 @@ class GitcoinHealthScoreProvider {
                 label: "Off-chain Votes %",
                 value: (0, get_weights_1.coalesce)(stat.offChainVotesPct),
                 weight: (0, get_weights_1.coalesce)(weights.offChainVotesPct),
-                op: "+",
             },
             {
                 label: "Proposals Initiated",
@@ -176,38 +174,24 @@ class GitcoinHealthScoreProvider {
                 const defaultBreakdown = this.getDefaultBreakdown(stat, weights, workstreamScore);
                 const offChainVotesObj = defaultBreakdown.shift();
                 offChainVotesObj.children = defaultBreakdown;
+                delete offChainVotesObj.children[0].op;
                 return [
+                    { ...offChainVotesObj, childrenOp: "+" },
                     {
-                        label: "Off-chain Votes %",
-                        value: 0,
+                        label: `Square root of Steward Days (0-180)`,
+                        value: Math.min(180, this.getStewardDays(publicAddress)),
                         weight: 1,
-                        children: [
-                            {
-                                label: "Score",
-                                value: 0,
-                                weight: 1,
-                                children: defaultBreakdown,
-                                op: "+",
-                            },
-                            {
-                                label: "Square Root of Steward Days",
-                                value: Math.min(180, this.getStewardDays(publicAddress)),
-                                weight: 1,
-                                children: [
-                                    {
-                                        label: `Workstream Involvement: ${workstreamScore === 5
-                                            ? "Lead"
-                                            : workstreamScore === 3
-                                                ? "Contributor"
-                                                : "None"}`,
-                                        value: workstreamScore,
-                                        weight: 1,
-                                        op: "+",
-                                    },
-                                ],
-                                op: "/",
-                            },
-                        ],
+                        op: "/",
+                    },
+                    {
+                        label: `Workstream Involvement: ${workstreamScore === 5
+                            ? "Lead"
+                            : workstreamScore === 3
+                                ? "Contributor"
+                                : "None"}`,
+                        value: workstreamScore,
+                        weight: 1,
+                        op: "+",
                     },
                 ];
             }
@@ -220,6 +204,7 @@ class GitcoinHealthScoreProvider {
                         // 1/180 ~ 0.005
                         weight: 0.00556,
                         op: "*",
+                        childrenOp: "+",
                         children: this.getDefaultBreakdown(stat, weights, workstreamScore),
                     },
                 ];

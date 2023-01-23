@@ -54,6 +54,7 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
                     label: "Percent Multiplier",
                     value: 100,
                     weight: 1,
+                    childrenOp: "*",
                     children: [
                         {
                             label: "Proposals Initiated Percentile",
@@ -105,6 +106,7 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
                 label: "Percent Multiplier",
                 value: 100,
                 weight: 1,
+                childrenOp: "*",
                 children: [
                     {
                         label: "Forum Activity Score",
