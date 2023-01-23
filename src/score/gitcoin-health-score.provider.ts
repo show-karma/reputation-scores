@@ -244,23 +244,11 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
         const {
           healthScore: { lifetime: weights },
         } = this.weights;
-        const defaultBreakdown = this.getDefaultBreakdown(
-          stat,
-          weights,
-          workstreamScore
-        );
+        const defaultBreakdown = this.getDefaultBreakdown(stat, weights);
         const offChainVotesObj = defaultBreakdown.shift();
-        offChainVotesObj.children = defaultBreakdown;
-        delete offChainVotesObj.children[0].op;
+        delete defaultBreakdown[0].op;
 
         return [
-          { ...offChainVotesObj, childrenOp: "+" },
-          {
-            label: `Square root of Steward Days (0-180)`,
-            value: Math.min(180, this.getStewardDays(publicAddress)),
-            weight: 1,
-            op: "/",
-          },
           {
             label: `Workstream Involvement: ${
               workstreamScore === 5
@@ -271,7 +259,24 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
             }`,
             value: workstreamScore,
             weight: 1,
-            op: "+",
+          },
+          {
+            ...offChainVotesObj,
+            childrenOp: "+",
+            children: [
+              {
+                label: "Subtotal",
+                value: 0,
+                weight: 1,
+                children: defaultBreakdown,
+              },
+              {
+                label: `Square root of Steward Days (0-180)`,
+                value: Math.min(180, this.getStewardDays(publicAddress)),
+                weight: 1,
+                op: "/",
+              },
+            ],
           },
         ];
       }

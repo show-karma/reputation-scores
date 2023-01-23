@@ -72,6 +72,7 @@ export class ScoreCalculator {
       if (item.children) {
         // Do calculation inside the children recursively
         const childrenValue = this.calculate(item.children);
+        // console.log("children of", item.label, "value", childrenValue);
         // The operator in the first children indicates the operation type
         // for the parent versus children
         const { childrenOp: op = "+" } = item;
@@ -120,22 +121,22 @@ export class ScoreCalculator {
   static breakdownToString(breakdown: ScoreBreakdownCalc) {
     return breakdown.reduce((result, item, index) => {
       // Gets the subtotal, being the value * weight
-      const subTotal = `${item.label} * ${item.weight}`;
+      const subTotal = `(${item.label}: ${item.value} * ${item.weight})`;
       // If item has children, then do the operation inside the children, multiply by its weight and then concatenates
       if (item.children) {
         // Do calculation inside the children recursively
         const childrenValue = this.breakdownToString(item.children);
         // The operator in the first children indicates the operation type
         // for the parent versus children
-        const { op = "+" } = item.children[0];
+        const { childrenOp: op = "+" } = item;
         // Gets the result from the operation `parent <op> children`
         // Then multiplies by parent weight
-        result += `${item.op} ( ( ${subTotal} )\n${op} ( ${childrenValue} ) )\n`; //this.evaluate(op, subTotal, childrenValue);
+        result += ` ${item.op || ""} (${subTotal} ${op} (${childrenValue}))`; //this.evaluate(op, subTotal, childrenValue);
       } else if (item.op && index > 0) {
         // If item has operator, gets the result
-        result += `${item.op} ( ${item.label} * ${item.weight} )\n`; //this.evaluate(item.op, result, subTotal);
+        result += ` ${item.op} (${item.label}: ${item.value} * ${item.weight})`; //this.evaluate(item.op, result, subTotal);
         // Else only adds the subtotal
-      } else result += `( ${subTotal} )\n`;
+      } else result += `${subTotal}`;
       return result;
     }, "");
   }
