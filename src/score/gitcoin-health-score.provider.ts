@@ -5,7 +5,10 @@ import {
   AdditionalScoreProvider,
   DelegateStat,
   DelegateStatPeriod,
+  ScoreBreakdownCalc,
+  ScoreMultiplier,
 } from "./interfaces";
+import { getWeights, coalesce } from "../util/get-weights";
 
 interface GithubRecord {
   address: string;
@@ -20,6 +23,7 @@ const GITHUB_DATA_URL =
 
 export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
   private githubData: Record<string, GithubRecord>;
+  private weights: ScoreMultiplier;
 
   async preload(): Promise<void> {
     const data = (await axios.get(GITHUB_DATA_URL)).data.data as GithubRecord[];
@@ -29,6 +33,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
       }
     });
     this.githubData = _.keyBy(data, "address");
+    this.weights = await getWeights("gitcoin");
   }
 
   isPublicAddressEligible(publicAddress: string): Promise<boolean> {
@@ -64,12 +69,18 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
       "forumPostCount",
     ]);
 
+    const {
+      healthScore: { lifetime = {} },
+    } = this.weights;
     const score =
-      karmaData.offChainVotesPct * 0.7 +
-      (karmaData.proposalsInitiated * 1.5 +
-        karmaData.proposalsDiscussed * 1 +
-        (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
-        (karmaData.forumPostCount - karmaData.proposalsDiscussed) * 0.7) /
+      karmaData.offChainVotesPct * coalesce(lifetime.offChainVotesPct, 1) +
+      (karmaData.proposalsInitiated * coalesce(lifetime.proposalsInitiated, 1) +
+        karmaData.proposalsDiscussed *
+          coalesce(lifetime.proposalsDiscussed, 1) +
+        (karmaData.forumTopicCount - karmaData.proposalsInitiated) *
+          coalesce(lifetime["forumTopicCount-proposalsInitiated"], 1) +
+        (karmaData.forumPostCount - karmaData.proposalsDiscussed) *
+          coalesce(lifetime["forumPostCount-proposalsDiscussed"], 1)) /
         Math.sqrt(this.getStewardDays(publicAddress)) +
       this.getWorkstreamInvolvement(publicAddress);
 
@@ -80,6 +91,10 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     publicAddress: string,
     stat: Partial<DelegateStat>
   ): number {
+    const {
+      healthScore: { "180d": weights = {} },
+    } = this.weights;
+
     const karmaData = this.getKarmaData(stat, [
       "offChainVotesPct",
       "proposalsInitiated",
@@ -89,11 +104,13 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     ]);
 
     const score =
-      (karmaData.offChainVotesPct * 0.7 +
-        karmaData.proposalsInitiated * 1.5 +
-        karmaData.proposalsDiscussed * 0.7 +
-        (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
-        (karmaData.forumPostCount - karmaData.proposalsDiscussed) * 0.6 +
+      (karmaData.offChainVotesPct * coalesce(weights.offChainVotesPct) +
+        karmaData.proposalsInitiated * coalesce(weights.proposalsInitiated) +
+        karmaData.proposalsDiscussed * coalesce(weights.proposalsDiscussed) +
+        (karmaData.forumTopicCount - karmaData.proposalsInitiated) *
+          coalesce(weights["forumTopicCount-proposalsInitiated"]) +
+        (karmaData.forumPostCount - karmaData.proposalsDiscussed) *
+          coalesce(weights["forumPostCount-proposalsDiscussed"]) +
         this.getWorkstreamInvolvement(publicAddress)) *
       (Math.min(180, this.getStewardDays(publicAddress)) / 180);
 
@@ -112,25 +129,36 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
       "forumPostCount",
     ]);
 
+    const {
+      healthScore: { "30d": weights = {} },
+    } = this.weights;
+
     const score =
-      karmaData.offChainVotesPct * 0.7 +
-      karmaData.proposalsInitiated * 1.5 +
-      karmaData.proposalsDiscussed * 0.7 +
-      (karmaData.forumTopicCount - karmaData.proposalsInitiated) * 1.1 +
-      (karmaData.forumPostCount - karmaData.proposalsDiscussed) * 0.6 +
+      karmaData.offChainVotesPct * coalesce(weights.offChainVotesPct) +
+      karmaData.proposalsInitiated * coalesce(weights.proposalsInitiated) +
+      karmaData.proposalsDiscussed * coalesce(weights.proposalsDiscussed) +
+      (karmaData.forumTopicCount - karmaData.proposalsInitiated) *
+        coalesce(weights["forumTopicCount-proposalsInitiated"]) +
+      (karmaData.forumPostCount - karmaData.proposalsDiscussed) *
+        coalesce(weights["forumPostCount-proposalsDiscussed"]) +
       this.getWorkstreamInvolvement(publicAddress);
 
     return Math.floor(score);
   }
 
   private getWorkstreamInvolvement(publicAddress: string): number {
+    const { workstreamInvolvement } = this.weights;
+
     const workstreamsLead = this.githubData[publicAddress]?.workstreamsLead;
     const workstreamsContributor =
       this.githubData[publicAddress]?.workstreamsContributor;
-    if (workstreamsLead) return 5;
-    if (workstreamsContributor) return 3;
 
-    return 0;
+    if (workstreamsLead) return coalesce(workstreamInvolvement?.lead, 5);
+
+    if (workstreamsContributor)
+      return coalesce(workstreamInvolvement?.contributor, 3);
+
+    return coalesce(workstreamInvolvement?.none, 0);
   }
 
   private getStewardDays(publicAddress: string) {
@@ -149,5 +177,131 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     }
 
     return result as { [K in T]: DelegateStat[K] | 0 };
+  }
+
+  getDefaultBreakdown(
+    stat: Partial<DelegateStat>,
+    weights: Record<string, number>,
+    workstreamScore?: number
+  ): ScoreBreakdownCalc {
+    const breakdown: ScoreBreakdownCalc = [
+      {
+        label: "Off-chain Votes %",
+        value: coalesce(stat.offChainVotesPct),
+        weight: coalesce(weights.offChainVotesPct),
+      },
+      {
+        label: "Proposals Initiated",
+        value: coalesce(stat.proposalsInitiated),
+        weight: coalesce(weights.proposalsInitiated),
+        op: "+",
+      },
+      {
+        label: "Proposals Discussed",
+        value: coalesce(stat.proposalsDiscussed),
+        weight: coalesce(weights.proposalsDiscussed),
+        op: "+",
+      },
+      {
+        label: "Forum Topic Count - Proposals Initiated",
+        value: coalesce(stat.forumTopicCount - stat.proposalsInitiated),
+        weight: coalesce(weights["forumTopicCount-proposalsInitiated"]),
+        op: "+",
+      },
+      {
+        label: "Forum Post Count - Proposals Discussed",
+        value: coalesce(stat.forumPostCount - stat.proposalsDiscussed),
+        weight: coalesce(weights["forumPostCount-proposalsDiscussed"]),
+        op: "+",
+      },
+    ];
+    if (workstreamScore >= 0)
+      breakdown.push({
+        label: `Workstream Involvement: ${
+          workstreamScore === 5
+            ? "Lead"
+            : workstreamScore === 3
+            ? "Contributor"
+            : "None"
+        }`,
+        value: workstreamScore,
+        weight: 1,
+        op: "+",
+      });
+
+    return breakdown;
+  }
+
+  getScoreBreakdownCalc(
+    publicAddress: string,
+    stat: Partial<DelegateStat>,
+    period?: DelegateStatPeriod,
+    type?: "forum" | "score"
+  ): ScoreBreakdownCalc {
+    const workstreamScore = this.getWorkstreamInvolvement(publicAddress);
+    switch (period) {
+      case DelegateStatPeriod["lifetime"]: {
+        const {
+          healthScore: { lifetime: weights },
+        } = this.weights;
+        const defaultBreakdown = this.getDefaultBreakdown(stat, weights);
+        const offChainVotesObj = defaultBreakdown.shift();
+        delete defaultBreakdown[0].op;
+
+        return [
+          {
+            label: `Workstream Involvement: ${
+              workstreamScore === 5
+                ? "Lead"
+                : workstreamScore === 3
+                ? "Contributor"
+                : "None"
+            }`,
+            value: workstreamScore,
+            weight: 1,
+          },
+          {
+            ...offChainVotesObj,
+            op: "+",
+            childrenOp: "+",
+            children: [
+              {
+                label: "Subtotal",
+                value: 0,
+                weight: 1,
+                children: defaultBreakdown,
+              },
+              {
+                label: `Square root of Steward Days (0-180)`,
+                value: Math.min(this.getStewardDays(publicAddress)),
+                weight: 1,
+                op: "/",
+              },
+            ],
+          },
+        ];
+      }
+      case DelegateStatPeriod["180d"]: {
+        const {
+          healthScore: { "180d": weights },
+        } = this.weights;
+        return [
+          {
+            label: "Steward days (0-180)",
+            value: Math.min(180, this.getStewardDays(publicAddress)),
+            // 1/180 ~ 0.005
+            weight: 0.00556,
+            childrenOp: "*",
+            children: this.getDefaultBreakdown(stat, weights, workstreamScore),
+          },
+        ];
+      }
+      default: {
+        const {
+          healthScore: { "30d": weights },
+        } = this.weights;
+        return this.getDefaultBreakdown(stat, weights, workstreamScore);
+      }
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { ScoreCalculator } from "../util/calculator";
 export interface DaoProviderDescriptor {
     cls: string;
     args: unknown[];
@@ -40,18 +41,71 @@ export interface DelegateStat {
     forumLikesReceivedPercentile: number;
     forumPostsReadCountPercentile: number;
 }
-export declare class BaseProvider {
+export declare abstract class BaseProvider {
     private readonly args;
     constructor(...args: unknown[]);
     toProviderDescriptor(): DaoProviderDescriptor;
 }
 export interface GetDaoScore {
+    weights: ScoreMultiplier;
     getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
     getForumScore(stat: Partial<DelegateStat>): number;
     getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[];
+    preload(resourceName: string | "default"): Promise<void>;
+    getScoreBreakdownCalc(stat: Partial<DelegateStat>, period?: DelegateStatPeriod, type?: "forum" | "score"): ScoreBreakdownCalc;
 }
 export interface AdditionalScoreProvider {
     preload(): Promise<void>;
     isPublicAddressEligible(publicAddress: string): Promise<boolean>;
     getScore(publicAddress: string, stat: Partial<DelegateStat>): Promise<number>;
+    getScoreBreakdownCalc(publicAddress: string, stat: Partial<DelegateStat>, period?: DelegateStatPeriod, type?: "forum" | "score"): ScoreBreakdownCalc;
 }
+export interface MultiplierType {
+    "7d": Record<string, number>;
+    "180d": Record<string, number>;
+    "90d": Record<string, number>;
+    "30d": Record<string, number>;
+    lifetime: Record<string, number>;
+}
+interface WorkstreamInvolvement {
+    lead: number;
+    contributor: number;
+    none: number;
+}
+export interface ScoreMultiplier {
+    score: MultiplierType;
+    healthScore?: MultiplierType;
+    forumScore?: MultiplierType;
+    workstreamInvolvement?: WorkstreamInvolvement;
+}
+export declare type Operator = "+" | "-" | "/" | "*";
+export interface ScoreBreakdownCalcItem {
+    /**
+     * The item name
+     */
+    label: string;
+    /**
+     * The value to be weighted
+     */
+    value: number;
+    /**
+     * The weight to multiply the value
+     */
+    weight: number;
+    /**
+     * Operation to perform betwen parent and children
+     */
+    childrenOp?: Operator;
+    /**
+     * The sub calculation, will be interpreted as
+     *
+     * > `Parent <Child[0].op> ( ChildrenResult )`
+     */
+    children?: ScoreBreakdownCalc;
+    /**
+     * Mathematical operator represented as string
+     */
+    op?: Operator;
+}
+export declare type ScoreBreakdownCalc = ScoreBreakdownCalcItem[];
+export { ScoreCalculator };

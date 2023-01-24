@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseProvider = exports.DelegateStatPeriod = void 0;
+exports.ScoreCalculator = exports.BaseProvider = exports.DelegateStatPeriod = void 0;
+const calculator_1 = require("../util/calculator");
+Object.defineProperty(exports, "ScoreCalculator", { enumerable: true, get: function () { return calculator_1.ScoreCalculator; } });
 var DelegateStatPeriod;
 (function (DelegateStatPeriod) {
     DelegateStatPeriod["lifetime"] = "lifetime";

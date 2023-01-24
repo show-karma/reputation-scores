@@ -3,6 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultWithDeworkDaoScoreProvider = void 0;
 const interfaces_1 = require("./interfaces");
 class DefaultWithDeworkDaoScoreProvider extends interfaces_1.BaseProvider {
+    getScoreBreakdownCalc(stat, period) {
+        return [];
+    }
+    preload(daoName) {
+        return;
+    }
     getForumScore(stat) {
         return (Math.round((stat.proposalsInitiated || 0) * 1 +
             (stat.proposalsDiscussed || 0) * 0.2 +

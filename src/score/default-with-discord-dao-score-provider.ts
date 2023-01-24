@@ -1,9 +1,26 @@
-import { BaseProvider, DelegateStat, GetDaoScore } from "./interfaces";
+import {
+  BaseProvider,
+  DelegateStat,
+  DelegateStatPeriod,
+  GetDaoScore,
+  ScoreBreakdownCalc,
+  ScoreMultiplier,
+} from "./interfaces";
 
 export class DefaultWithDiscordDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore
 {
+  weights: ScoreMultiplier;
+  getScoreBreakdownCalc(
+    stat: Partial<DelegateStat>,
+    period?: DelegateStatPeriod
+  ): ScoreBreakdownCalc {
+    return [];
+  }
+  preload(daoName: string): Promise<void> {
+    return;
+  }
   getForumScore(stat: Partial<DelegateStat>): number {
     return (
       Math.round(
