@@ -65,7 +65,7 @@ export interface GetDaoScore {
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
   getForumScore(stat: Partial<DelegateStat>): number;
   getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[];
-  preload(resourceName: string | "default"): Promise<void>;
+  preload(resourceName?: string | "default"): Promise<void>;
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
     period?: DelegateStatPeriod,
