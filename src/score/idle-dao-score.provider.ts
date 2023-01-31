@@ -11,8 +11,8 @@ import {
 export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
   weights: ScoreMultiplier;
 
-  async preload(_: string): Promise<void> {
-    this.weights = await getWeights("idlefinance");
+  async preload(resourceName = "idlefinance"): Promise<void> {
+    this.weights = await getWeights(resourceName);
   }
 
   getForumScore(stat: Partial<DelegateStat>): number {

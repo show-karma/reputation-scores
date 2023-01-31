@@ -14,8 +14,14 @@ export class DefaultDaoScoreProvider
 {
   weights: ScoreMultiplier;
 
-  async preload(resourceName: string) {
-    const resource = await getWeights(resourceName);
+  constructor(private readonly resourceName?: string) {
+    super(resourceName);
+  }
+
+  async preload(resourceName?: string) {
+    const resource = await getWeights(
+      resourceName || this.resourceName || "default"
+    );
     this.weights = resource;
   }
 

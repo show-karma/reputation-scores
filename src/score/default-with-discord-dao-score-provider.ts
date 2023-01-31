@@ -18,7 +18,7 @@ export class DefaultWithDiscordDaoScoreProvider
   ): ScoreBreakdownCalc {
     return [];
   }
-  preload(daoName: string): Promise<void> {
+  preload(resourceName?: string): Promise<void> {
     return;
   }
   getForumScore(stat: Partial<DelegateStat>): number {
