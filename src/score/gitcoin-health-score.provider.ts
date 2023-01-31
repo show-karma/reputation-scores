@@ -217,7 +217,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     ];
     if (workstreamScore >= 0)
       breakdown.push({
-        label: `Workstream Involvement: ${
+        label: `Workstream Involvement - ${
           workstreamScore === 5
             ? "Lead"
             : workstreamScore === 3
@@ -250,7 +250,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
 
         return [
           {
-            label: `Workstream Involvement: ${
+            label: `Workstream Involvement - ${
               workstreamScore === 5
                 ? "Lead"
                 : workstreamScore === 3
@@ -285,12 +285,19 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
         const {
           healthScore: { "180d": weights },
         } = this.weights;
+
         return [
           {
             label: "Steward days (0-180)",
             value: Math.min(180, this.getStewardDays(publicAddress)),
             // 1/180 ~ 0.005
             weight: 0.00556,
+          },
+          {
+            label: "Forum Score",
+            value: 1,
+            weight: 1,
+            op: "+",
             childrenOp: "*",
             children: this.getDefaultBreakdown(stat, weights, workstreamScore),
           },
