@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { ScoreMultiplier } from "../score/interfaces";
 const githubUrl = (resourceName: string) =>
-  `https://raw.githubusercontent.com/show-karma/dao-score-weights/main/${resourceName}.json`;
+  `https://raw.githubusercontent.com/show-karma/reputation-scores/main/${resourceName}.json`;
 
 const weights: Record<string, ScoreMultiplier> = {};
 
