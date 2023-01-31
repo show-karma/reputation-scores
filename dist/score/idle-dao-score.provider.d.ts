@@ -1,7 +1,7 @@
 import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc, ScoreMultiplier } from "./interfaces";
 export declare class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     weights: ScoreMultiplier;
-    preload(_: string): Promise<void>;
+    preload(resourceName?: string): Promise<void>;
     getForumScore(stat: Partial<DelegateStat>): number;
     getKarmaScore(stat: Partial<DelegateStat>, median: number): number;
     getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[];

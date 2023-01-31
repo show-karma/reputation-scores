@@ -4,8 +4,8 @@ exports.IdleDaoScoreProvider = void 0;
 const get_weights_1 = require("../util/get-weights");
 const interfaces_1 = require("./interfaces");
 class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
-    async preload(_) {
-        this.weights = await (0, get_weights_1.getWeights)("idlefinance");
+    async preload(resourceName = "idlefinance") {
+        this.weights = await (0, get_weights_1.getWeights)(resourceName);
     }
     getForumScore(stat) {
         const { forumScore: { lifetime }, } = this.weights;

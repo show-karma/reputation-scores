@@ -4,8 +4,8 @@ exports.OptimismDaoScoreProvider = void 0;
 const get_weights_1 = require("../util/get-weights");
 const interfaces_1 = require("./interfaces");
 class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
-    async preload() {
-        this.weights = await (0, get_weights_1.getWeights)("optimism");
+    async preload(resourceName = "optimism") {
+        this.weights = await (0, get_weights_1.getWeights)(resourceName);
     }
     getForumScore(stat) {
         const { forumScore: { lifetime = {} }, } = this.weights;
