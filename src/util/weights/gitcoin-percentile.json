@@ -1,0 +1,18 @@
+{
+  "score": {
+    "lifetime": {
+      "forumActivityScore": 1,
+      "offChainVotesPct": 1
+    }
+  },
+  "forumScore": {
+    "lifetime": {
+      "proposalsInitiatedPercentile": 10,
+      "proposalsDiscussedPercentile": 2,
+      "forumPostCountPercentile": 1,
+      "forumTopicCountPercentile": 3,
+      "forumLikesReceivedPercentile": 0.5,
+      "forumPostsReadCountPercentile": 0.1
+    }
+  }
+}

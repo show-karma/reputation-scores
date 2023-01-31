@@ -1,0 +1,20 @@
+{
+  "score": {
+    "lifetime": {
+      "forumActivityScore": 5,
+      "offChainVotesPct": 2,
+      "onChainVotesPct": 0.001,
+      "discordMessagesCount": 0.01
+    }
+  },
+  "forumScore": {
+    "lifetime": {
+      "proposalsInitiated": 10,
+      "proposalsDiscussed": 2,
+      "forumPostCount": 1,
+      "forumTopicCount": 3,
+      "forumLikesReceived": 0.5,
+      "forumPostsReadCount": 0.1
+    }
+  }
+}

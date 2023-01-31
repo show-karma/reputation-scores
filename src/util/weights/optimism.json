@@ -1,0 +1,18 @@
+{
+  "score": {
+    "lifetime": {
+      "delegatedVotes": 0.0001,
+      "offChainVotesPct": 2
+    }
+  },
+  "forumScore": {
+    "lifetime": {
+      "proposalsInitiated": 10,
+      "proposalsDiscussed": 2,
+      "forumPostCount": 1,
+      "forumTopicCount": 3,
+      "forumLikesReceived": 0.5,
+      "forumPostsReadCount": 0.1
+    }
+  }
+}
