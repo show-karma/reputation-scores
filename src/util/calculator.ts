@@ -83,7 +83,7 @@ export class ScoreCalculator {
         // Gets the result from the operation `parent <op> children`
         // Then multiplies by parent weight
         result = this.evaluate(
-          item.op,
+          item.op || "+",
           result,
           this.evaluate(op, subTotal, childrenValue)
         );
@@ -128,17 +128,17 @@ export class ScoreCalculator {
    */
   static breakdownToString(breakdown: ScoreBreakdownCalc, withLabels = false) {
     const getSubtotalStr = (item: ScoreBreakdownCalcItem) => {
-      return withLabels && !item.value && !item.weight
+      return withLabels &&
+        typeof item.value === "undefined" &&
+        typeof item.weight === "undefined"
         ? `${item.label}: `
-        : withLabels && item.value
+        : withLabels && typeof item.value !== "undefined"
         ? `(${item.label}: ${item.value} ${
-            item.weight ? `* ${item.weight}` : ""
+            typeof item.weight !== "undefined" ? `* ${item.weight}` : ""
           })`
         : `${
             item.value
               ? `(${item.value} ${item.weight ? `* ${item.weight}` : ""})`
-              : !withLabels && !item.value && !item.weight
-              ? ""
               : `(${item.value} * ${item.weight})`
           }`;
     };
@@ -163,7 +163,8 @@ export class ScoreCalculator {
         result += ` ${item.op} ${getSubtotalStr(item)}`; //this.evaluate(item.op, result, subTotal);
         // Else only adds the subtotal
       } else result += `${subTotal}`;
-      return result.replace(/(\()\s+|\s+(\))|(\n)\s/gim, "$1$2$3");
+      // remove extra spaces
+      return result.replace(/(\()\s+|\s+(\))|(\n)\s|(\s)\s+/gim, "$1$2$3$4");
     }, "");
   }
 }
