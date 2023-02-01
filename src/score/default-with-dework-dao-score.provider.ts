@@ -18,7 +18,7 @@ export class DefaultWithDeworkDaoScoreProvider
   ): ScoreBreakdownCalc {
     return [];
   }
-  preload(daoName: string): Promise<void> {
+  preload(resourceName?: string): Promise<void> {
     return;
   }
 

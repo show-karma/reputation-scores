@@ -14,8 +14,8 @@ export class OptimismDaoScoreProvider
 {
   weights: ScoreMultiplier;
 
-  async preload(): Promise<void> {
-    this.weights = await getWeights("optimism");
+  async preload(resourceName = "optimism"): Promise<void> {
+    this.weights = await getWeights(resourceName);
   }
 
   getForumScore(stat: Partial<DelegateStat>): number {
@@ -91,19 +91,19 @@ export class OptimismDaoScoreProvider
           op: "+",
         },
       ];
-    
-      return [
-        {
-          label: "Delegated Votes",
-          value: coalesce(stat.delegatedVotes),
-          weight: coalesce(lifetime.delegatedVotes),
-        },
-        {
-          label: "Off chain votes %",
-          value: coalesce(stat.offChainVotesPct),
-          weight: coalesce(lifetime.offChainVotesPct),
-          op: "+",
-        },
-      ];
+
+    return [
+      {
+        label: "Delegated Votes",
+        value: coalesce(stat.delegatedVotes),
+        weight: coalesce(lifetime.delegatedVotes),
+      },
+      {
+        label: "Off chain votes %",
+        value: coalesce(stat.offChainVotesPct),
+        weight: coalesce(lifetime.offChainVotesPct),
+        op: "+",
+      },
+    ];
   }
 }

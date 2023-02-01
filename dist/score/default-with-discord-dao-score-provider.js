@@ -6,7 +6,7 @@ class DefaultWithDiscordDaoScoreProvider extends interfaces_1.BaseProvider {
     getScoreBreakdownCalc(stat, period) {
         return [];
     }
-    preload(daoName) {
+    preload(resourceName) {
         return;
     }
     getForumScore(stat) {

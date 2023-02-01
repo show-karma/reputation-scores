@@ -4,8 +4,12 @@ exports.DefaultDaoScoreProvider = void 0;
 const interfaces_1 = require("./interfaces");
 const get_weights_1 = require("../util/get-weights");
 class DefaultDaoScoreProvider extends interfaces_1.BaseProvider {
+    constructor(resourceName) {
+        super(resourceName);
+        this.resourceName = resourceName;
+    }
     async preload(resourceName) {
-        const resource = await (0, get_weights_1.getWeights)(resourceName);
+        const resource = await (0, get_weights_1.getWeights)(resourceName || this.resourceName || "default");
         this.weights = resource;
     }
     getForumScore(stat) {

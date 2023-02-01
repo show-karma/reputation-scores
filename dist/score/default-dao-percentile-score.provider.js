@@ -4,8 +4,12 @@ exports.DefaultDaoPercentileScoreProvider = void 0;
 const get_weights_1 = require("../util/get-weights");
 const interfaces_1 = require("./interfaces");
 class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
-    async preload() {
-        this.weights = await (0, get_weights_1.getWeights)("default-percentile");
+    constructor(resourceName) {
+        super(resourceName);
+        this.resourceName = resourceName;
+    }
+    async preload(resourceName) {
+        this.weights = await (0, get_weights_1.getWeights)(resourceName || this.resourceName || "default-percentile");
     }
     // max here 100 + 20 + 10 + 30 + 5 + 1 = 166
     getForumScore(stat) {

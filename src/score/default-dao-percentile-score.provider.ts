@@ -14,8 +14,14 @@ export class DefaultDaoPercentileScoreProvider
 {
   weights: ScoreMultiplier;
 
-  async preload(): Promise<void> {
-    this.weights = await getWeights("default-percentile");
+  constructor(private readonly resourceName?: string) {
+    super(resourceName);
+  }
+
+  async preload(resourceName?: string): Promise<void> {
+    this.weights = await getWeights(
+      resourceName || this.resourceName || "default-percentile"
+    );
   }
 
   // max here 100 + 20 + 10 + 30 + 5 + 1 = 166
