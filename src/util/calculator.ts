@@ -71,7 +71,7 @@ export class ScoreCalculator {
   static calculate(breakdown: ScoreBreakdownCalc) {
     return breakdown.reduce((result, item, index) => {
       // Gets the subtotal, being the value * weight
-      const subTotal = item.value * item.weight || 1;
+      const subTotal = item.value * item.weight || 0;
       // If item has children, then do the operation inside the children, multiply by its weight and then concatenates
       if (item.children) {
         // Do calculation inside the children recursively
@@ -82,7 +82,11 @@ export class ScoreCalculator {
         const { childrenOp: op = "+" } = item;
         // Gets the result from the operation `parent <op> children`
         // Then multiplies by parent weight
-        result += this.evaluate(op, subTotal, childrenValue);
+        result = this.evaluate(
+          item.op,
+          result,
+          this.evaluate(op, subTotal, childrenValue)
+        );
       } else if (item.op && index > 0) {
         // If item has operator, gets the result
         result = this.evaluate(item.op, result, subTotal);
@@ -142,10 +146,6 @@ export class ScoreCalculator {
     return breakdown.reduce((result, item, index) => {
       // Gets the subtotal, being the value * weight
       const subTotal = getSubtotalStr(item);
-
-      // `(${withLabels ? `${item.label}` : ""} ${
-      //   item.value || ""
-      // } ${item.weight ? `* ${item.weight}` : ""})`;
       // If item has children, then do the operation inside the children, multiply by its weight and then concatenates
       if (item.children) {
         // Do calculation inside the children recursively

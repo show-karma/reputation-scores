@@ -266,13 +266,11 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
             childrenOp: "+",
             children: [
               {
-                label: "Subtotal",
-                value: 0,
-                weight: 1,
+                label: "Forum Score",
                 children: defaultBreakdown,
               },
               {
-                label: `Square root of Steward Days (0-180)`,
+                label: `Square root of Steward Days`,
                 value: Math.min(this.getStewardDays(publicAddress)),
                 weight: 1,
                 op: "/",
@@ -295,10 +293,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
           },
           {
             label: "Forum Score",
-            value: 1,
-            weight: 1,
             op: "+",
-            childrenOp: "*",
             children: this.getDefaultBreakdown(stat, weights, workstreamScore),
           },
         ];
