@@ -128,19 +128,25 @@ export class ScoreCalculator {
    */
   static breakdownToString(breakdown: ScoreBreakdownCalc, withLabels = false) {
     const getSubtotalStr = (item: ScoreBreakdownCalcItem) => {
-      return withLabels &&
-        typeof item.value === "undefined" &&
-        typeof item.weight === "undefined"
-        ? `${item.label}: `
-        : withLabels && typeof item.value !== "undefined"
-        ? `(${item.label}: ${item.value} ${
-            typeof item.weight !== "undefined" ? `* ${item.weight}` : ""
-          })`
-        : `${
-            item.value
-              ? `(${item.value} ${item.weight ? `* ${item.weight}` : ""})`
-              : `(${item.value} * ${item.weight})`
-          }`;
+      return withLabels
+        ? `(${item.label}${item.weight >= 0 ? ` * ${item.weight}` : ""})`
+        : typeof item.value !== "undefined"
+        ? `(${item.value}${item.weight >= 0 ? ` * ${item.weight}` : ""})`
+        : "";
+
+      // return withLabels &&
+      //   typeof item.value === "undefined" &&
+      //   typeof item.weight === "undefined"
+      //   ? `${item.label}: `
+      //   : withLabels && typeof item.value !== "undefined"
+      //   ? `(${item.label}: ${item.value} ${
+      //       typeof item.weight !== "undefined" ? `* ${item.weight}` : ""
+      //     })`
+      //   : `${
+      //       item.value
+      //         ? `(${item.value} ${item.weight ? `* ${item.weight}` : ""})`
+      //         : `(${item.value} * ${item.weight})`
+      //     }`;
     };
 
     return breakdown.reduce((result, item, index) => {
