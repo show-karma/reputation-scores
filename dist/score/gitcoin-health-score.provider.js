@@ -155,7 +155,7 @@ class GitcoinHealthScoreProvider {
         ];
         if (workstreamScore >= 0)
             breakdown.push({
-                label: `Workstream Involvement: ${workstreamScore === 5
+                label: `Workstream Involvement - ${workstreamScore === 5
                     ? "Lead"
                     : workstreamScore === 3
                         ? "Contributor"
@@ -176,7 +176,7 @@ class GitcoinHealthScoreProvider {
                 delete defaultBreakdown[0].op;
                 return [
                     {
-                        label: `Workstream Involvement: ${workstreamScore === 5
+                        label: `Workstream Involvement - ${workstreamScore === 5
                             ? "Lead"
                             : workstreamScore === 3
                                 ? "Contributor"
@@ -190,13 +190,11 @@ class GitcoinHealthScoreProvider {
                         childrenOp: "+",
                         children: [
                             {
-                                label: "Subtotal",
-                                value: 0,
-                                weight: 1,
+                                label: "Forum Score",
                                 children: defaultBreakdown,
                             },
                             {
-                                label: `Square root of Steward Days (0-180)`,
+                                label: `Square root of Steward Days`,
                                 value: Math.min(this.getStewardDays(publicAddress)),
                                 weight: 1,
                                 op: "/",
@@ -213,7 +211,10 @@ class GitcoinHealthScoreProvider {
                         value: Math.min(180, this.getStewardDays(publicAddress)),
                         // 1/180 ~ 0.005
                         weight: 0.00556,
-                        childrenOp: "*",
+                    },
+                    {
+                        label: "Forum Score",
+                        op: "+",
                         children: this.getDefaultBreakdown(stat, weights, workstreamScore),
                     },
                 ];

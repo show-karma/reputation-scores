@@ -86,5 +86,5 @@ export declare class ScoreCalculator {
      * // ((30 * 2) / (2*1)) + (30 * 0.5)
      * ```
      */
-    static breakdownToString(breakdown: ScoreBreakdownCalc): string;
+    static breakdownToString(breakdown: ScoreBreakdownCalc, withLabels?: boolean): string;
 }

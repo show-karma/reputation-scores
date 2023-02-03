@@ -87,11 +87,11 @@ export interface ScoreBreakdownCalcItem {
     /**
      * The value to be weighted
      */
-    value: number;
+    value?: number;
     /**
      * The weight to multiply the value
      */
-    weight: number;
+    weight?: number;
     /**
      * Operation to perform betwen parent and children
      */

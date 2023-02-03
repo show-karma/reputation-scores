@@ -66,7 +66,7 @@ class ScoreCalculator {
     static calculate(breakdown) {
         return breakdown.reduce((result, item, index) => {
             // Gets the subtotal, being the value * weight
-            const subTotal = item.value * item.weight;
+            const subTotal = item.value * item.weight || 0;
             // If item has children, then do the operation inside the children, multiply by its weight and then concatenates
             if (item.children) {
                 // Do calculation inside the children recursively
@@ -77,7 +77,7 @@ class ScoreCalculator {
                 const { childrenOp: op = "+" } = item;
                 // Gets the result from the operation `parent <op> children`
                 // Then multiplies by parent weight
-                result += this.evaluate(op, subTotal, childrenValue);
+                result = this.evaluate(item.op || "+", result, this.evaluate(op, subTotal, childrenValue));
             }
             else if (item.op && index > 0) {
                 // If item has operator, gets the result
@@ -119,29 +119,41 @@ class ScoreCalculator {
      * // ((30 * 2) / (2*1)) + (30 * 0.5)
      * ```
      */
-    static breakdownToString(breakdown) {
+    static breakdownToString(breakdown, withLabels = false) {
+        const getSubtotalStr = (item) => {
+            return withLabels &&
+                typeof item.value === "undefined" &&
+                typeof item.weight === "undefined"
+                ? `${item.label}: `
+                : withLabels && typeof item.value !== "undefined"
+                    ? `(${item.label}: ${item.value} ${typeof item.weight !== "undefined" ? `* ${item.weight}` : ""})`
+                    : `${item.value
+                        ? `(${item.value} ${item.weight ? `* ${item.weight}` : ""})`
+                        : `(${item.value} * ${item.weight})`}`;
+        };
         return breakdown.reduce((result, item, index) => {
             // Gets the subtotal, being the value * weight
-            const subTotal = `(${item.value} * ${item.weight})`;
+            const subTotal = getSubtotalStr(item);
             // If item has children, then do the operation inside the children, multiply by its weight and then concatenates
             if (item.children) {
                 // Do calculation inside the children recursively
-                const childrenValue = this.breakdownToString(item.children);
+                const childrenValue = this.breakdownToString(item.children, withLabels);
                 // The operator in the first children indicates the operation type
                 // for the parent versus children
-                const { childrenOp: op = "+" } = item;
+                const { childrenOp: op } = item;
                 // Gets the result from the operation `parent <op> children`
                 // Then multiplies by parent weight
-                result += ` ${item.op || ""} (${subTotal} ${op} (${childrenValue}))`; //this.evaluate(op, subTotal, childrenValue);
+                result += `\n${item.op || ""} (${subTotal} ${op || ""} (${childrenValue}))\n`; //this.evaluate(op, subTotal, childrenValue);
             }
             else if (item.op && index > 0) {
                 // If item has operator, gets the result
-                result += ` ${item.op} (${item.value} * ${item.weight})`; //this.evaluate(item.op, result, subTotal);
+                result += ` ${item.op} ${getSubtotalStr(item)}`; //this.evaluate(item.op, result, subTotal);
                 // Else only adds the subtotal
             }
             else
                 result += `${subTotal}`;
-            return result;
+            // remove extra spaces
+            return result.replace(/(\()\s+|\s+(\))|(\n)\s|(\s)\s+/gim, "$1$2$3$4");
         }, "");
     }
 }
