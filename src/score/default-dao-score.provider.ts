@@ -134,6 +134,7 @@ export class DefaultDaoScoreProvider
         label: "On-Chain Votes Pct",
         value: coalesce(stat.onChainVotesPct),
         weight: coalesce(score.onChainVotesPct, 1),
+        op: "+",
       },
       {
         label: "Discord Messages Count",
