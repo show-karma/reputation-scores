@@ -155,7 +155,7 @@ class GitcoinHealthScoreProvider {
         ];
         if (workstreamScore >= 0)
             breakdown.push({
-                label: `Workstream Involvement: ${workstreamScore === 5
+                label: `Workstream Involvement - ${workstreamScore === 5
                     ? "Lead"
                     : workstreamScore === 3
                         ? "Contributor"
@@ -168,6 +168,7 @@ class GitcoinHealthScoreProvider {
     }
     getScoreBreakdownCalc(publicAddress, stat, period, type) {
         const workstreamScore = this.getWorkstreamInvolvement(publicAddress);
+        const stewardDays = this.getStewardDays(publicAddress);
         switch (period) {
             case interfaces_1.DelegateStatPeriod["lifetime"]: {
                 const { healthScore: { lifetime: weights }, } = this.weights;
@@ -176,7 +177,7 @@ class GitcoinHealthScoreProvider {
                 delete defaultBreakdown[0].op;
                 return [
                     {
-                        label: `Workstream Involvement: ${workstreamScore === 5
+                        label: `Workstream Involvement - ${workstreamScore === 5
                             ? "Lead"
                             : workstreamScore === 3
                                 ? "Contributor"
@@ -190,14 +191,12 @@ class GitcoinHealthScoreProvider {
                         childrenOp: "+",
                         children: [
                             {
-                                label: "Subtotal",
-                                value: 0,
-                                weight: 1,
+                                label: "Forum Score",
                                 children: defaultBreakdown,
                             },
                             {
-                                label: `Square root of Steward Days (0-180)`,
-                                value: Math.min(this.getStewardDays(publicAddress)),
+                                label: `Square root of Steward Days (${stewardDays})`,
+                                value: +Math.sqrt(stewardDays).toFixed(6),
                                 weight: 1,
                                 op: "/",
                             },
@@ -210,10 +209,13 @@ class GitcoinHealthScoreProvider {
                 return [
                     {
                         label: "Steward days (0-180)",
-                        value: Math.min(180, this.getStewardDays(publicAddress)),
+                        value: Math.min(180, stewardDays),
                         // 1/180 ~ 0.005
                         weight: 0.00556,
-                        childrenOp: "*",
+                    },
+                    {
+                        label: "Forum Score",
+                        op: "*",
                         children: this.getDefaultBreakdown(stat, weights, workstreamScore),
                     },
                 ];

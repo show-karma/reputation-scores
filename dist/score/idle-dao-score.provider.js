@@ -91,6 +91,7 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
                 label: "Forum Activity Score",
                 value: (0, get_weights_1.coalesce)(stat.forumActivityScore),
                 weight: (0, get_weights_1.coalesce)(score.forumActivityScore, 1),
+                op: "+",
             },
             {
                 label: "Off-Chain Votes Pct",
@@ -102,6 +103,7 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
                 label: "On-Chain Votes Pct",
                 value: (0, get_weights_1.coalesce)(stat.onChainVotesPct),
                 weight: (0, get_weights_1.coalesce)(score.onChainVotesPct, 1),
+                op: "+",
             },
             {
                 label: "Discord Messages Count",

@@ -15,8 +15,7 @@ export async function getWeights(
     );
     return resource;
   } catch (err) {
-    const error = err as AxiosError;
-    if (error.response.status === 404) {
+    if (err instanceof AxiosError && err.response?.status === 404) {
       return getWeights("default");
     }
   }

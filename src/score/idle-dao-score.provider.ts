@@ -123,6 +123,7 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
         label: "Forum Activity Score",
         value: coalesce(stat.forumActivityScore),
         weight: coalesce(score.forumActivityScore, 1),
+        op: "+",
       },
       {
         label: "Off-Chain Votes Pct",
@@ -134,6 +135,7 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
         label: "On-Chain Votes Pct",
         value: coalesce(stat.onChainVotesPct),
         weight: coalesce(score.onChainVotesPct, 1),
+        op: "+",
       },
       {
         label: "Discord Messages Count",

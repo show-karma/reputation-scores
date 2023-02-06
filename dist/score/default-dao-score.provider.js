@@ -97,6 +97,7 @@ class DefaultDaoScoreProvider extends interfaces_1.BaseProvider {
                 label: "On-Chain Votes Pct",
                 value: (0, get_weights_1.coalesce)(stat.onChainVotesPct),
                 weight: (0, get_weights_1.coalesce)(score.onChainVotesPct, 1),
+                op: "+",
             },
             {
                 label: "Discord Messages Count",
