@@ -215,7 +215,7 @@ class GitcoinHealthScoreProvider {
                     },
                     {
                         label: "Forum Score",
-                        op: "+",
+                        op: "*",
                         children: this.getDefaultBreakdown(stat, weights, workstreamScore),
                     },
                 ];

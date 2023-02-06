@@ -294,7 +294,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
           },
           {
             label: "Forum Score",
-            op: "+",
+            op: "*",
             children: this.getDefaultBreakdown(stat, weights, workstreamScore),
           },
         ];
