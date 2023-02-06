@@ -272,7 +272,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
               },
               {
                 label: `Square root of Steward Days (${stewardDays})`,
-                value: Math.floor(Math.sqrt(stewardDays)),
+                value: +Math.sqrt(stewardDays).toString(6),
                 weight: 1,
                 op: "/",
               },
