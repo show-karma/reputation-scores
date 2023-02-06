@@ -168,6 +168,7 @@ class GitcoinHealthScoreProvider {
     }
     getScoreBreakdownCalc(publicAddress, stat, period, type) {
         const workstreamScore = this.getWorkstreamInvolvement(publicAddress);
+        const stewardDays = this.getStewardDays(publicAddress);
         switch (period) {
             case interfaces_1.DelegateStatPeriod["lifetime"]: {
                 const { healthScore: { lifetime: weights }, } = this.weights;
@@ -194,8 +195,8 @@ class GitcoinHealthScoreProvider {
                                 children: defaultBreakdown,
                             },
                             {
-                                label: `Square root of Steward Days`,
-                                value: Math.sqrt(this.getStewardDays(publicAddress)),
+                                label: `Square root of Steward Days (${stewardDays})`,
+                                value: Math.floor(Math.sqrt(stewardDays)),
                                 weight: 1,
                                 op: "/",
                             },
@@ -208,7 +209,7 @@ class GitcoinHealthScoreProvider {
                 return [
                     {
                         label: "Steward days (0-180)",
-                        value: Math.min(180, this.getStewardDays(publicAddress)),
+                        value: Math.min(180, stewardDays),
                         // 1/180 ~ 0.005
                         weight: 0.00556,
                     },

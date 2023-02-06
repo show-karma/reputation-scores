@@ -239,6 +239,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
     type?: "forum" | "score"
   ): ScoreBreakdownCalc {
     const workstreamScore = this.getWorkstreamInvolvement(publicAddress);
+    const stewardDays = this.getStewardDays(publicAddress);
     switch (period) {
       case DelegateStatPeriod["lifetime"]: {
         const {
@@ -270,8 +271,8 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
                 children: defaultBreakdown,
               },
               {
-                label: `Square root of Steward Days`,
-                value: Math.sqrt(this.getStewardDays(publicAddress)),
+                label: `Square root of Steward Days (${stewardDays})`,
+                value: Math.floor(Math.sqrt(stewardDays)),
                 weight: 1,
                 op: "/",
               },
@@ -287,7 +288,7 @@ export class GitcoinHealthScoreProvider implements AdditionalScoreProvider {
         return [
           {
             label: "Steward days (0-180)",
-            value: Math.min(180, this.getStewardDays(publicAddress)),
+            value: Math.min(180, stewardDays),
             // 1/180 ~ 0.005
             weight: 0.00556,
           },
