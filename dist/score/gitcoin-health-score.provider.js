@@ -196,7 +196,7 @@ class GitcoinHealthScoreProvider {
                             },
                             {
                                 label: `Square root of Steward Days (${stewardDays})`,
-                                value: +Math.sqrt(stewardDays).toString(6),
+                                value: +Math.sqrt(stewardDays).toFixed(6),
                                 weight: 1,
                                 op: "/",
                             },
