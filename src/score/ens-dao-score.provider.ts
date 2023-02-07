@@ -29,14 +29,13 @@ export class EnsDaoScoreProvider extends DefaultDaoScoreProvider {
     } = this.weights;
     return (
       Math.round(
-        stat.forumActivityScore ||
-          0 * coalesce(lifetime.forumActivityScore, 1) +
-            (stat.offChainVotesPct || 0) *
-              coalesce(lifetime.offChainVotesPct, 1) +
-            (stat.onChainVotesPct || 0) *
-              coalesce(lifetime.onChainVotesPct, 1) +
-            (stat.discordMessagesCount || 0) *
-              coalesce(lifetime.discordMessagesCount, 1)
+        (stat.forumActivityScore || 0) *
+          coalesce(lifetime.forumActivityScore, 1) +
+          (stat.offChainVotesPct || 0) *
+            coalesce(lifetime.offChainVotesPct, 1) +
+          (stat.onChainVotesPct || 0) * coalesce(lifetime.onChainVotesPct, 1) +
+          (stat.discordMessagesCount || 0) *
+            coalesce(lifetime.discordMessagesCount, 1)
       ) || 0
     );
   }
