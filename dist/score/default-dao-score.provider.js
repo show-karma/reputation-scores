@@ -23,14 +23,14 @@ class DefaultDaoScoreProvider extends interfaces_1.BaseProvider {
     }
     getKarmaScore(stat, median) {
         const { score: { lifetime = {} }, } = this.weights;
-        return (Math.round(stat.forumActivityScore ||
-            0 * (0, get_weights_1.coalesce)(lifetime.forumActivityScore, 1) +
-                (stat.offChainVotesPct || 0) *
-                    (0, get_weights_1.coalesce)(lifetime.offChainVotesPct, 1) +
-                (stat.onChainVotesPct || 0) *
-                    (0, get_weights_1.coalesce)(lifetime.onChainVotesPct, 1) +
-                (stat.discordMessagesCount || 0) *
-                    (0, get_weights_1.coalesce)(lifetime.discordMessagesCount, 1)) || 0);
+        return (Math.round((stat.forumActivityScore || 0) *
+            (0, get_weights_1.coalesce)(lifetime.forumActivityScore, 1) +
+            (stat.offChainVotesPct || 0) *
+                (0, get_weights_1.coalesce)(lifetime.offChainVotesPct, 1) +
+            (stat.onChainVotesPct || 0) *
+                (0, get_weights_1.coalesce)(lifetime.onChainVotesPct, 1) +
+            (stat.discordMessagesCount || 0) *
+                (0, get_weights_1.coalesce)(lifetime.discordMessagesCount, 1)) || 0);
     }
     getKarmaScoreProps() {
         return [

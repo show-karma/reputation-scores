@@ -122,23 +122,10 @@ class ScoreCalculator {
     static breakdownToString(breakdown, withLabels = false) {
         const getSubtotalStr = (item) => {
             return withLabels
-                ? `(${item.label}${item.weight >= 0 ? ` * ${item.weight}` : ""})`
+                ? `(${item.label}${typeof item.weight !== "undefined" ? ` * ${item.weight}` : ""})`
                 : typeof item.value !== "undefined"
-                    ? `(${item.value}${item.weight >= 0 ? ` * ${item.weight}` : ""})`
+                    ? `(${item.value}${typeof item.weight !== "undefined" ? ` * ${item.weight}` : ""})`
                     : "";
-            // return withLabels &&
-            //   typeof item.value === "undefined" &&
-            //   typeof item.weight === "undefined"
-            //   ? `${item.label}: `
-            //   : withLabels && typeof item.value !== "undefined"
-            //   ? `(${item.label}: ${item.value} ${
-            //       typeof item.weight !== "undefined" ? `* ${item.weight}` : ""
-            //     })`
-            //   : `${
-            //       item.value
-            //         ? `(${item.value} ${item.weight ? `* ${item.weight}` : ""})`
-            //         : `(${item.value} * ${item.weight})`
-            //     }`;
         };
         return breakdown.reduce((result, item, index) => {
             // Gets the subtotal, being the value * weight
