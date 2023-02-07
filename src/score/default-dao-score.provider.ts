@@ -10,8 +10,7 @@ import { coalesce, getWeights } from "../util/get-weights";
 
 export class DefaultDaoScoreProvider
   extends BaseProvider
-  implements GetDaoScore
-{
+  implements GetDaoScore {
   weights: ScoreMultiplier;
 
   constructor(private readonly resourceName?: string) {
@@ -32,11 +31,11 @@ export class DefaultDaoScoreProvider
     return (
       Math.round(
         stat.proposalsInitiated * coalesce(lifetime.proposalsInitiated, 1) +
-          stat.proposalsDiscussed * coalesce(lifetime.proposalsDiscussed, 1) +
-          stat.forumPostCount * coalesce(lifetime.forumPostCount, 1) +
-          stat.forumTopicCount * coalesce(lifetime.forumTopicCount, 1) +
-          stat.forumLikesReceived * coalesce(lifetime.forumLikesReceived, 1) +
-          stat.forumPostsReadCount * coalesce(lifetime.forumPostsReadCount, 1)
+        stat.proposalsDiscussed * coalesce(lifetime.proposalsDiscussed, 1) +
+        stat.forumPostCount * coalesce(lifetime.forumPostCount, 1) +
+        stat.forumTopicCount * coalesce(lifetime.forumTopicCount, 1) +
+        stat.forumLikesReceived * coalesce(lifetime.forumLikesReceived, 1) +
+        stat.forumPostsReadCount * coalesce(lifetime.forumPostsReadCount, 1)
       ) || 0
     );
   }
@@ -47,14 +46,14 @@ export class DefaultDaoScoreProvider
     } = this.weights;
     return (
       Math.round(
-        stat.forumActivityScore ||
-          0 * coalesce(lifetime.forumActivityScore, 1) +
-            (stat.offChainVotesPct || 0) *
-              coalesce(lifetime.offChainVotesPct, 1) +
-            (stat.onChainVotesPct || 0) *
-              coalesce(lifetime.onChainVotesPct, 1) +
-            (stat.discordMessagesCount || 0) *
-              coalesce(lifetime.discordMessagesCount, 1)
+        (stat.forumActivityScore || 0) *
+        coalesce(lifetime.forumActivityScore, 1) +
+        (stat.offChainVotesPct || 0) *
+        coalesce(lifetime.offChainVotesPct, 1) +
+        (stat.onChainVotesPct || 0) *
+        coalesce(lifetime.onChainVotesPct, 1) +
+        (stat.discordMessagesCount || 0) *
+        coalesce(lifetime.discordMessagesCount, 1)
       ) || 0
     );
   }
