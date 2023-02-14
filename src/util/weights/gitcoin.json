@@ -38,12 +38,12 @@
   },
   "forumScore": {
     "lifetime": {
-      "proposalsInitiated": 1,
-      "proposalsDiscussed": 0.2,
-      "forumPostCount": 0.1,
-      "forumTopicCount": 0.3,
-      "forumLikesReceived": 0.05,
-      "forumPostsReadCount": 0.01
+      "proposalsInitiated": 10,
+      "proposalsDiscussed": 2,
+      "forumPostCount": 1,
+      "forumTopicCount": 3,
+      "forumLikesReceived": 0.5,
+      "forumPostsReadCount": 0.1
     }
   }
 }
