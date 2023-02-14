@@ -6,13 +6,11 @@
     "180d": {},
     "lifetime": {}
   },
-
   "workstreamInvolvement": {
     "lead": 5,
     "contributor": 3,
     "none": 0
   },
-
   "healthScore": {
     "7d": {},
     "30d": {
@@ -36,6 +34,16 @@
       "proposalsDiscussed": 1,
       "forumTopicCount-proposalsInitiated": 1.1,
       "forumPostCount-proposalsDiscussed": 0.7
+    }
+  },
+  "forumScore": {
+    "lifetime": {
+      "proposalsInitiated": 1,
+      "proposalsDiscussed": 0.2,
+      "forumPostCount": 0.1,
+      "forumTopicCount": 0.3,
+      "forumLikesReceived": 0.05,
+      "forumPostsReadCount": 0.01
     }
   }
 }
