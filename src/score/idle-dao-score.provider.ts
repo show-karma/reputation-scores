@@ -76,10 +76,9 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     if (type === "forum")
       return [
         {
-          label: "Forum Topic Count",
+          label: "Proposals Inititated",
           value: coalesce(stat.proposalsInitiated),
           weight: coalesce(forum.proposalsInitiated),
-          op: "+",
         },
         {
           label: "Proposals Discussed",
