@@ -45,10 +45,9 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
         if (type === "forum")
             return [
                 {
-                    label: "Forum Topic Count",
+                    label: "Proposals Inititated",
                     value: (0, get_weights_1.coalesce)(stat.proposalsInitiated),
                     weight: (0, get_weights_1.coalesce)(forum.proposalsInitiated),
-                    op: "+",
                 },
                 {
                     label: "Proposals Discussed",
