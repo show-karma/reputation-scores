@@ -70,7 +70,7 @@ export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
     if (type == "forum")
       return [
         {
-          label: "Percent Multiplier",
+          label: "Max Score Setting",
           value: 100,
           weight: 1,
           childrenOp: "*",
@@ -113,7 +113,7 @@ export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
           ],
         },
         {
-          label: "Total Weights",
+          label: "Sum of Weights times Max Score Setting",
           // sum all weights * 100 to get total pct divisor
           value:
             (coalesce(forum.proposalsDiscussedPercentile, 1) +
@@ -130,7 +130,7 @@ export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
 
     return [
       {
-        label: "Percent Multiplier",
+        label: "Max Score Setting",
         value: 100,
         weight: 1,
         childrenOp: "*",
@@ -149,7 +149,7 @@ export class GitcoinDaoPercentileScoreProvider extends DefaultDaoScoreProvider {
         ],
       },
       {
-        label: "Total Weights",
+        label: "Sum of Weights times Max Score Setting",
         value:
           (coalesce(score.forumActivityScore, 1) +
             coalesce(score.offChainVotesPct, 1)) *

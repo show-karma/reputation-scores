@@ -92,7 +92,7 @@ export class DefaultDaoPercentileScoreProvider
     if (type == "forum")
       return [
         {
-          label: "Percent Multiplier",
+          label: "Max Score Setting",
           value: 100,
           weight: 1,
           childrenOp: "*",
@@ -136,7 +136,7 @@ export class DefaultDaoPercentileScoreProvider
           ],
         },
         {
-          label: "Total Weights",
+          label: "Sum of Weights times Max Score Setting",
           value: getTotalWeight(forum),
           weight: 1,
           op: "/",
@@ -145,7 +145,7 @@ export class DefaultDaoPercentileScoreProvider
 
     return [
       {
-        label: "Percent Multiplier",
+        label: "Max Score Setting",
         value: 100,
         weight: 1,
         childrenOp: "*",
@@ -177,7 +177,7 @@ export class DefaultDaoPercentileScoreProvider
         ],
       },
       {
-        label: "Total Weights",
+        label: "Sum of Weights times Max Score Setting",
         value: getTotalWeight(score),
         weight: 1,
         op: "/",
