@@ -25,3 +25,4 @@ __exportStar(require("./score/default-with-discord-dao-score-provider"), exports
 __exportStar(require("./score/default-with-dework-dao-score.provider"), exports);
 __exportStar(require("./score/gitcoin-dao-percentile-score-provider"), exports);
 __exportStar(require("./score/default-dao-percentile-score.provider"), exports);
+__exportStar(require("./score/apecoin-dao-percentile-score.provider"), exports);
