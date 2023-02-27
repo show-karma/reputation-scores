@@ -1,0 +1,34 @@
+{
+  "score": {
+    "lifetime": {
+      "forumActivityScore": 1,
+      "offChainVotesPct": 3,
+      "onChainVotesPct": 5,
+      "discordMessagePercentile": 0.01
+    },
+    "7d": {},
+    "30d": {
+      "forumActivityScore": 1,
+      "offChainVotesPct": 3,
+      "onChainVotesPct": 5,
+      "discordMessagePercentile": 0.01
+    },
+    "180d": {
+      "forumActivityScore": 1,
+      "offChainVotesPct": 3,
+      "onChainVotesPct": 5,
+      "discordMessagePercentile": 0.01
+    },
+    "90d": {}
+  },
+  "forumScore": {
+    "lifetime": {
+      "proposalsInitiatedPercentile": 1,
+      "proposalsDiscussedPercentile": 0.2,
+      "forumPostCountPercentile": 0.1,
+      "forumTopicCountPercentile": 0.3,
+      "forumLikesReceivedPercentile": 0.05,
+      "forumPostsReadCountPercentile": 0.01
+    }
+  }
+}
