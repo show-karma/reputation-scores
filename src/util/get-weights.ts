@@ -57,6 +57,6 @@ export const getTotalWeight = (
  * @param value
  * @param replacement
  */
-export function coalesce(value: string | number, replacement = 0) {
+export function coalesce(value: string | number | undefined, replacement = 0) {
   return value && !Number.isNaN(+value) ? +value : replacement;
 }

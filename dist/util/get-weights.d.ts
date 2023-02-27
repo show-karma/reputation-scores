@@ -30,4 +30,4 @@ export declare const getTotalWeight: (obj: Record<string, number>, pct?: boolean
  * @param value
  * @param replacement
  */
-export declare function coalesce(value: string | number, replacement?: number): number;
+export declare function coalesce(value: string | number | undefined, replacement?: number): number;
