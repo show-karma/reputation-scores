@@ -21,7 +21,7 @@ export class GivethPercentileScoreProvider
 
   async preload(resourceName?: string): Promise<void> {
     this.weights = await getWeights(
-      resourceName || this.resourceName || "apecoin"
+      resourceName || this.resourceName || "giveth"
     );
   }
 
