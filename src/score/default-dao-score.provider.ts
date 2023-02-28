@@ -8,7 +8,7 @@ import {
 } from "./interfaces";
 import { coalesce, getWeights } from "../util/get-weights";
 
-export class DefaultDaoScoreProvider
+export abstract class DefaultDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore {
   weights: ScoreMultiplier;
