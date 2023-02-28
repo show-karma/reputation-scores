@@ -43,6 +43,8 @@ export interface DelegateStat {
   forumTopicCountPercentile: number;
   forumLikesReceivedPercentile: number;
   forumPostsReadCountPercentile: number;
+  avgPostLikes: number;
+  avgPostLength: number;
 }
 
 export abstract class BaseProvider {

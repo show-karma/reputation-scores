@@ -40,6 +40,8 @@ export interface DelegateStat {
     forumTopicCountPercentile: number;
     forumLikesReceivedPercentile: number;
     forumPostsReadCountPercentile: number;
+    avgPostLikes: number;
+    avgPostLength: number;
 }
 export declare abstract class BaseProvider {
     private readonly args;
