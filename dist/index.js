@@ -14,9 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./score/default-dao-score.provider"), exports);
 __exportStar(require("./score/ens-dao-score.provider"), exports);
-__exportStar(require("./score/gitcoin-dao-score.provider"), exports);
 __exportStar(require("./score/optimism-dao-score.provider"), exports);
 __exportStar(require("./score/idle-dao-score.provider"), exports);
 __exportStar(require("./score/interfaces"), exports);
