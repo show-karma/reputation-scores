@@ -2,7 +2,9 @@
   "score": {
     "lifetime": {
       "forumActivityScore": 1,
-      "offChainVotesPct": 1
+      "onChainVotesPct": 1,
+      "offChainVotesPct": 1,
+      "githubScore": 1
     }
   },
   "forumScore": {
@@ -12,7 +14,8 @@
       "forumPostCountPercentile": 1,
       "forumTopicCountPercentile": 3,
       "forumLikesReceivedPercentile": 0.5,
-      "forumPostsReadCountPercentile": 0.1
+      "forumPostsReadCountPercentile": 0.1,
+      "avgPostLength": 1.5
     }
   }
 }
