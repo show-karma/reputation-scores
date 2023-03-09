@@ -71,7 +71,7 @@ export class GivethPercentileScoreProvider
 
   getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
     return [
-      "onChainVotesPct",
+      "offChainVotesPct",
       "offChainVotesPct",
     ];
   }
