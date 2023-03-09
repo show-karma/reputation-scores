@@ -9,7 +9,7 @@ class GivethPercentileScoreProvider extends interfaces_1.BaseProvider {
         this.resourceName = resourceName;
     }
     async preload(resourceName) {
-        this.weights = await (0, get_weights_1.getWeights)(resourceName || this.resourceName || "apecoin");
+        this.weights = await (0, get_weights_1.getWeights)(resourceName || this.resourceName || "giveth");
     }
     getForumScore(stat) {
         const { forumScore: { lifetime }, } = this.weights;
@@ -44,7 +44,7 @@ class GivethPercentileScoreProvider extends interfaces_1.BaseProvider {
     }
     getKarmaScoreProps() {
         return [
-            "offChainVotesPct",
+            "onChainVotesPct",
             "offChainVotesPct",
         ];
     }
