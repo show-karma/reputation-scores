@@ -60,8 +60,9 @@ export class GivethPercentileScoreProvider
       ((coalesce(stat.offChainVotesPct) *
         coalesce(lifetime?.offChainVotesPct, 1) +
         coalesce(stat.onChainVotesPct) *
-          coalesce(lifetime?.onChainVotesPct, 1) +
-        coalesce(stat.onChainVotesPct)+
+        coalesce(lifetime?.onChainVotesPct, 1) +
+        coalesce(stat.githubScore) *
+        coalesce(lifetime?.githubScore, 1) +
         coalesce(stat.forumActivityScore) *
         coalesce(lifetime?.forumActivityScore, 1)) /
         totalWeight) *
@@ -71,8 +72,10 @@ export class GivethPercentileScoreProvider
 
   getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
     return [
+      "forumActivityScore",
       "onChainVotesPct",
       "offChainVotesPct",
+      "githubScore"
     ];
   }
 
@@ -163,6 +166,12 @@ export class GivethPercentileScoreProvider
             label: "On-chain Votes %",
             value: coalesce(stat.onChainVotesPct),
             weight: coalesce(score.onChainVotesPct, 1),
+            op: "+",
+          },
+          {
+            label: "Github Score %",
+            value: coalesce(stat.githubScore),
+            weight: coalesce(score.githubScore, 1),
             op: "+",
           }
         ],
