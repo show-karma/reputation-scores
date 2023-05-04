@@ -46,6 +46,7 @@ export interface DelegateStat {
   avgPostLikes: number;
   avgPostLength: number;
   githubScore: number
+  aragonVotesPct : number;
 }
 
 export abstract class BaseProvider {

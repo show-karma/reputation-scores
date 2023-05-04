@@ -36,6 +36,8 @@ class GivethPercentileScoreProvider extends interfaces_1.BaseProvider {
             (0, get_weights_1.coalesce)(lifetime?.offChainVotesPct, 1) +
             (0, get_weights_1.coalesce)(stat.onChainVotesPct) *
                 (0, get_weights_1.coalesce)(lifetime?.onChainVotesPct, 1) +
+            (0, get_weights_1.coalesce)(stat.aragonVotesPct) *
+                (0, get_weights_1.coalesce)(lifetime?.aragonVotesPct, 1) +
             (0, get_weights_1.coalesce)(stat.githubScore) *
                 (0, get_weights_1.coalesce)(lifetime?.githubScore, 1) +
             (0, get_weights_1.coalesce)(stat.forumActivityScore) *
@@ -48,7 +50,8 @@ class GivethPercentileScoreProvider extends interfaces_1.BaseProvider {
             "forumActivityScore",
             "onChainVotesPct",
             "offChainVotesPct",
-            "githubScore"
+            "githubScore",
+            "aragonVotesPct"
         ];
     }
     getScoreBreakdownCalc(stat, period, type = "score") {
@@ -135,6 +138,12 @@ class GivethPercentileScoreProvider extends interfaces_1.BaseProvider {
                         label: "Github Score %",
                         value: (0, get_weights_1.coalesce)(stat.githubScore),
                         weight: (0, get_weights_1.coalesce)(score.githubScore, 1),
+                        op: "+",
+                    },
+                    {
+                        label: "Aragon Score %",
+                        value: (0, get_weights_1.coalesce)(stat.aragonVotesPct),
+                        weight: (0, get_weights_1.coalesce)(score.aragonVotesPct, 1),
                         op: "+",
                     }
                 ],
