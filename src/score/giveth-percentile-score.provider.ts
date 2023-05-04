@@ -61,6 +61,8 @@ export class GivethPercentileScoreProvider
         coalesce(lifetime?.offChainVotesPct, 1) +
         coalesce(stat.onChainVotesPct) *
         coalesce(lifetime?.onChainVotesPct, 1) +
+        coalesce(stat.aragonVotesPct) *
+        coalesce(lifetime?.aragonVotesPct, 1) +
         coalesce(stat.githubScore) *
         coalesce(lifetime?.githubScore, 1) +
         coalesce(stat.forumActivityScore) *
@@ -75,7 +77,8 @@ export class GivethPercentileScoreProvider
       "forumActivityScore",
       "onChainVotesPct",
       "offChainVotesPct",
-      "githubScore"
+      "githubScore",
+      "aragonVotesPct"
     ];
   }
 
@@ -172,6 +175,12 @@ export class GivethPercentileScoreProvider
             label: "Github Score %",
             value: coalesce(stat.githubScore),
             weight: coalesce(score.githubScore, 1),
+            op: "+",
+          },
+          {
+            label: "Aragon Score %",
+            value: coalesce(stat.aragonVotesPct),
+            weight: coalesce(score.aragonVotesPct, 1),
             op: "+",
           }
         ],
