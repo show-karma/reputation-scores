@@ -1,4 +1,4 @@
-import { coalesce, getWeights } from "../util/get-weights";
+import { coalesce, getTotalWeight, getWeights } from "../util/get-weights";
 import {
   BaseProvider,
   DelegateStat,
@@ -19,18 +19,24 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     const {
       forumScore: { lifetime },
     } = this.weights;
+    const totalWeight = getTotalWeight(lifetime);
+
     return (
       Math.round(
-        (stat.proposalsInitiated || 0) *
-          coalesce(lifetime.proposalsInitiated, 1) +
-          (stat.proposalsDiscussed || 0) *
-            coalesce(lifetime.proposalsDiscussed, 1) +
-          (stat.forumPostCount || 0) * coalesce(lifetime.forumPostCount, 1) +
-          (stat.forumTopicCount || 0) * coalesce(lifetime.forumTopicCount, 1) +
-          (stat.forumLikesReceived || 0) *
-            coalesce(lifetime.forumLikesReceived, 1) +
-          (stat.forumPostsReadCount || 0) *
-            coalesce(lifetime.forumPostsReadCount, 1)
+        ((coalesce(stat.proposalsInitiatedPercentile) *
+          coalesce(lifetime?.proposalsInitiatedPercentile, 1) +
+          coalesce(stat.proposalsDiscussedPercentile) *
+            coalesce(lifetime?.proposalsDiscussedPercentile, 1) +
+          coalesce(stat.forumPostCountPercentile) *
+            coalesce(lifetime?.forumPostCountPercentile, 1) +
+          coalesce(stat.forumTopicCountPercentile) *
+            coalesce(lifetime?.forumTopicCountPercentile, 1) +
+          coalesce(stat.forumLikesReceivedPercentile) *
+            coalesce(lifetime?.forumLikesReceivedPercentile, 1) +
+          coalesce(stat.forumPostsReadCountPercentile) *
+            coalesce(lifetime?.forumPostsReadCountPercentile, 1)) /
+          totalWeight) *
+          100
       ) || 0
     );
   }
@@ -39,17 +45,21 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     const {
       score: { lifetime },
     } = this.weights;
+    const totalWeight = getTotalWeight(lifetime);
     return (
       Math.round(
-        stat.delegatedVotes * coalesce(lifetime.delegatedVotes, 1) +
-          (stat.forumActivityScore || 0) *
+        (coalesce(stat.voteWeight, 0) *
+          coalesce(lifetime.delegatedVotes, 1) +
+          coalesce(stat.forumActivityScore, 0) *
             coalesce(lifetime.forumActivityScore, 1) +
-          (stat.offChainVotesPct || 0) *
+          coalesce(stat.offChainVotesPct, 0) *
             coalesce(lifetime.offChainVotesPct, 1) +
-          (stat.onChainVotesPct || 0) * coalesce(lifetime.onChainVotesPct, 1) +
-          (stat.discordMessagesCount || 0) *
-            coalesce(lifetime.discordMessagesCount, 1)
-      ) || 0
+          coalesce(stat.onChainVotesPct, 0) *
+            coalesce(lifetime.onChainVotesPct, 1) +
+          coalesce(stat.discordMessagePercentile, 0) *
+            coalesce(lifetime.discordMessagePercentile, 1)) /
+          totalWeight
+      ) * 100
     );
   }
 
@@ -76,71 +86,100 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     if (type === "forum")
       return [
         {
-          label: "Proposals Inititated",
-          value: coalesce(stat.proposalsInitiated),
-          weight: coalesce(forum.proposalsInitiated),
+          label: "Max Score Setting",
+          value: 100,
+          weight: 1,
+          childrenOp: "*",
+          children: [
+            {
+              label: "Proposals Initiated Percentile",
+              value: coalesce(stat.proposalsDiscussedPercentile),
+              weight: coalesce(forum?.proposalsDiscussedPercentile, 1),
+              op: "*",
+            },
+            {
+              label: "Proposals Discussed Percentile",
+              value: coalesce(stat.proposalsInitiatedPercentile),
+              weight: coalesce(forum?.proposalsInitiatedPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Post Count Percentile",
+              value: coalesce(stat.forumPostCountPercentile),
+              weight: coalesce(forum?.forumPostCountPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Topic Count Percentile",
+              value: coalesce(stat.forumTopicCountPercentile),
+              weight: coalesce(forum?.forumTopicCountPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Likes Received Percentile",
+              value: coalesce(stat.forumLikesReceivedPercentile),
+              weight: coalesce(forum?.forumLikesReceivedPercentile, 1),
+              op: "+",
+            },
+            {
+              label: "Forum Posts Read Count Percentile",
+              value: coalesce(stat.forumPostsReadCountPercentile),
+              weight: coalesce(forum?.forumPostsReadCountPercentile, 1),
+              op: "+",
+            },
+          ],
         },
         {
-          label: "Proposals Discussed",
-          value: coalesce(stat.proposalsDiscussed),
-          weight: coalesce(forum.proposalsDiscussed),
-          op: "+",
-        },
-        {
-          label: "Forum Post Count",
-          value: coalesce(stat.forumPostCount),
-          weight: coalesce(forum.forumPostCount),
-          op: "+",
-        },
-        {
-          label: "Forum Topic Count",
-          value: coalesce(stat.forumTopicCount),
-          weight: coalesce(forum.forumTopicCount),
-          op: "+",
-        },
-        {
-          label: "Forum Likes Received",
-          value: coalesce(stat.forumLikesReceived),
-          weight: coalesce(forum.forumLikesReceived),
-          op: "+",
-        },
-        {
-          label: "Forum Posts Read Count",
-          value: coalesce(stat.forumPostsReadCount),
-          weight: coalesce(forum.forumPostsReadCount),
-          op: "+",
+          label: "Sum of Weights times Max Score Setting",
+          value: getTotalWeight(forum),
+          weight: 1,
+          op: "/",
         },
       ];
 
     return [
       {
-        label: "Delegated Votes",
-        value: coalesce(stat.delegatedVotes),
-        weight: coalesce(score.delegatedVotes, 1),
+        label: "Max Score Setting",
+        value: 100,
+        weight: 1,
+        childrenOp: "*",
+        children: [
+          {
+            label: "Delegated Votes %",
+            value: coalesce(stat.voteWeight, 0),
+            weight: coalesce(score.delegatedVotes, 1),
+          },
+          {
+            label: "Forum Activity Score",
+            value: coalesce(stat.forumActivityScore),
+            weight: coalesce(score.forumActivityScore, 1),
+            op: "+",
+          },
+          {
+            label: "Off-Chain Votes Pct",
+            value: coalesce(stat.offChainVotesPct),
+            weight: coalesce(score.offChainVotesPct, 1),
+            op: "+",
+          },
+          {
+            label: "On-Chain Votes Pct",
+            value: coalesce(stat.onChainVotesPct),
+            weight: coalesce(score.onChainVotesPct, 1),
+            op: "+",
+          },
+          {
+            label: "Discord Messages Count",
+            value: coalesce(stat.discordMessagesCount),
+            weight: coalesce(score.discordMessagesCount, 1),
+            op: "+",
+          },
+        ],
       },
       {
-        label: "Forum Activity Score",
-        value: coalesce(stat.forumActivityScore),
-        weight: coalesce(score.forumActivityScore, 1),
-        op: "+",
-      },
-      {
-        label: "Off-Chain Votes Pct",
-        value: coalesce(stat.offChainVotesPct),
-        weight: coalesce(score.offChainVotesPct, 1),
-        op: "+",
-      },
-      {
-        label: "On-Chain Votes Pct",
-        value: coalesce(stat.onChainVotesPct),
-        weight: coalesce(score.onChainVotesPct, 1),
-        op: "+",
-      },
-      {
-        label: "Discord Messages Count",
-        value: coalesce(stat.discordMessagesCount),
-        weight: coalesce(score.discordMessagesCount, 1),
-        op: "+",
+        label: "Sum of Weights times Max Score Setting",
+        value: getTotalWeight(score),
+        weight: 1,
+        op: "/",
       },
     ];
   }

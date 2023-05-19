@@ -1,4 +1,4 @@
-import { coalesce, getWeights } from "../util/get-weights";
+import { coalesce, getTotalWeight, getWeights } from "../util/get-weights";
 import {
   BaseProvider,
   DelegateStat,
@@ -22,21 +22,37 @@ export class OptimismDaoScoreProvider
     const {
       forumScore: { lifetime = {} },
     } = this.weights;
-
-    return (
-      Math.round(
-        stat.proposalsInitiated * coalesce(lifetime.proposalsInitiated, 1) +
-          stat.proposalsDiscussed * coalesce(lifetime.proposalsDiscussed, 1) +
-          stat.forumPostCount * coalesce(lifetime.forumPostCount, 1) +
-          stat.forumTopicCount * coalesce(lifetime.forumTopicCount, 1) +
-          stat.forumLikesReceived * coalesce(lifetime.forumLikesReceived, 1) +
-          stat.forumPostsReadCount * coalesce(lifetime.forumPostsReadCount, 1)
-      ) || 0
+    const totalWeight = getTotalWeight(lifetime);
+    return Math.round(
+      ((coalesce(stat.proposalsInitiatedPercentile, 0) *
+        coalesce(lifetime.proposalsInitiated, 1) +
+        coalesce(stat.proposalsDiscussedPercentile, 0) *
+          coalesce(lifetime.proposalsDiscussed, 1) +
+        coalesce(stat.forumPostCountPercentile, 0) *
+          coalesce(lifetime.forumPostCount, 1) +
+        coalesce(stat.forumTopicCountPercentile, 0) *
+          coalesce(lifetime.forumTopicCount, 1) +
+        coalesce(stat.forumLikesReceivedPercentile, 0) *
+          coalesce(lifetime.forumLikesReceived, 1) +
+        coalesce(stat.forumPostsReadCountPercentile, 0) *
+          coalesce(lifetime.forumPostsReadCount, 1)) /
+        totalWeight) *
+        100
     );
   }
 
   getKarmaScore(stat: Partial<DelegateStat>, median: number): number {
-    return Math.round(stat.delegatedVotes / 10000 + stat.offChainVotesPct * 2);
+    const {
+      score: { lifetime },
+    } = this.weights;
+    const totalWeight = getTotalWeight(lifetime);
+    return Math.round(
+      ((coalesce(stat.voteWeight, 0) * coalesce(lifetime.delegatedVotes, 1) +
+        coalesce(stat.offChainVotesPct, 0) *
+          coalesce(lifetime.offChainVotesPct, 1)) /
+        totalWeight) *
+        100
+    );
   }
 
   getKarmaScoreProps(): (keyof Partial<DelegateStat> | "median")[] {
@@ -56,53 +72,81 @@ export class OptimismDaoScoreProvider
     if (type === "forum")
       return [
         {
-          label: "Proposals Initiated",
-          value: coalesce(stat.proposalsInitiated),
-          weight: coalesce(forum.proposalsInitiated),
+          label: "Max Score Setting",
+          value: 100,
+          weight: 1,
+          childrenOp: "*",
+          children: [
+            {
+              label: "Proposals Initiated",
+              value: coalesce(stat.proposalsInitiated),
+              weight: coalesce(forum.proposalsInitiated),
+            },
+            {
+              label: "Proposals Discussed",
+              value: coalesce(stat.proposalsDiscussed),
+              weight: coalesce(forum.proposalsDiscussed),
+              op: "+",
+            },
+            {
+              label: "Forum Post Count",
+              value: coalesce(stat.forumPostCount),
+              weight: coalesce(forum.forumPostCount),
+              op: "+",
+            },
+            {
+              label: "Forum Topic Count",
+              value: coalesce(stat.forumTopicCount),
+              weight: coalesce(forum.forumTopicCount),
+              op: "+",
+            },
+            {
+              label: "Forum Likes Received",
+              value: coalesce(stat.forumLikesReceived),
+              weight: coalesce(forum.forumLikesReceived),
+              op: "+",
+            },
+            {
+              label: "Forum Posts Read Count",
+              value: coalesce(stat.forumPostsReadCount),
+              weight: coalesce(forum.forumPostsReadCount),
+              op: "+",
+            },
+          ],
         },
         {
-          label: "Proposals Discussed",
-          value: coalesce(stat.proposalsDiscussed),
-          weight: coalesce(forum.proposalsDiscussed),
-          op: "+",
-        },
-        {
-          label: "Forum Post Count",
-          value: coalesce(stat.forumPostCount),
-          weight: coalesce(forum.forumPostCount),
-          op: "+",
-        },
-        {
-          label: "Forum Topic Count",
-          value: coalesce(stat.forumTopicCount),
-          weight: coalesce(forum.forumTopicCount),
-          op: "+",
-        },
-        {
-          label: "Forum Likes Received",
-          value: coalesce(stat.forumLikesReceived),
-          weight: coalesce(forum.forumLikesReceived),
-          op: "+",
-        },
-        {
-          label: "Forum Posts Read Count",
-          value: coalesce(stat.forumPostsReadCount),
-          weight: coalesce(forum.forumPostsReadCount),
-          op: "+",
+          label: "Total Weight",
+          value: getTotalWeight(forum),
+          weight: 1,
+          op: "/",
         },
       ];
 
     return [
       {
-        label: "Delegated Votes",
-        value: coalesce(stat.delegatedVotes),
-        weight: coalesce(lifetime.delegatedVotes),
+        label: "Max Score Setting",
+        value: 100,
+        weight: 1,
+        childrenOp: "*",
+        children: [
+          {
+            label: "Delegated Votes %",
+            value: coalesce(stat.voteWeight),
+            weight: coalesce(lifetime.delegatedVotes),
+          },
+          {
+            label: "Off chain votes %",
+            value: coalesce(stat.offChainVotesPct),
+            weight: coalesce(lifetime.offChainVotesPct),
+            op: "+",
+          },
+        ],
       },
       {
-        label: "Off chain votes %",
-        value: coalesce(stat.offChainVotesPct),
-        weight: coalesce(lifetime.offChainVotesPct),
-        op: "+",
+        label: "Total Weight",
+        value: getTotalWeight(lifetime),
+        weight: 1,
+        op: "/",
       },
     ];
   }
