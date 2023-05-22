@@ -9,15 +9,30 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
     }
     getForumScore(stat) {
         const { forumScore: { lifetime = {} }, } = this.weights;
-        return (Math.round(stat.proposalsInitiated * (0, get_weights_1.coalesce)(lifetime.proposalsInitiated, 1) +
-            stat.proposalsDiscussed * (0, get_weights_1.coalesce)(lifetime.proposalsDiscussed, 1) +
-            stat.forumPostCount * (0, get_weights_1.coalesce)(lifetime.forumPostCount, 1) +
-            stat.forumTopicCount * (0, get_weights_1.coalesce)(lifetime.forumTopicCount, 1) +
-            stat.forumLikesReceived * (0, get_weights_1.coalesce)(lifetime.forumLikesReceived, 1) +
-            stat.forumPostsReadCount * (0, get_weights_1.coalesce)(lifetime.forumPostsReadCount, 1)) || 0);
+        const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
+        return Math.round((((0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile, 0) *
+            (0, get_weights_1.coalesce)(lifetime.proposalsInitiated, 1) +
+            (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.proposalsDiscussed, 1) +
+            (0, get_weights_1.coalesce)(stat.forumPostCountPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumPostCount, 1) +
+            (0, get_weights_1.coalesce)(stat.forumTopicCountPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumTopicCount, 1) +
+            (0, get_weights_1.coalesce)(stat.forumLikesReceivedPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumLikesReceived, 1) +
+            (0, get_weights_1.coalesce)(stat.forumPostsReadCountPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumPostsReadCount, 1)) /
+            totalWeight) *
+            100);
     }
     getKarmaScore(stat, median) {
-        return Math.round(stat.delegatedVotes / 10000 + stat.offChainVotesPct * 2);
+        const { score: { lifetime }, } = this.weights;
+        const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
+        return Math.round((((0, get_weights_1.coalesce)(stat.voteWeight, 0) * (0, get_weights_1.coalesce)(lifetime.delegatedVotes, 1) +
+            (0, get_weights_1.coalesce)(stat.offChainVotesPct, 0) *
+                (0, get_weights_1.coalesce)(lifetime.offChainVotesPct, 1)) /
+            totalWeight) *
+            100);
     }
     getKarmaScoreProps() {
         return ["delegatedVotes", "offChainVotesPct"];
@@ -27,52 +42,80 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
         if (type === "forum")
             return [
                 {
-                    label: "Proposals Initiated",
-                    value: (0, get_weights_1.coalesce)(stat.proposalsInitiated),
-                    weight: (0, get_weights_1.coalesce)(forum.proposalsInitiated),
+                    label: "Max Score Setting",
+                    value: 100,
+                    weight: 1,
+                    childrenOp: "*",
+                    children: [
+                        {
+                            label: "Proposals Initiated",
+                            value: (0, get_weights_1.coalesce)(stat.proposalsInitiated),
+                            weight: (0, get_weights_1.coalesce)(forum.proposalsInitiated),
+                        },
+                        {
+                            label: "Proposals Discussed",
+                            value: (0, get_weights_1.coalesce)(stat.proposalsDiscussed),
+                            weight: (0, get_weights_1.coalesce)(forum.proposalsDiscussed),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Post Count",
+                            value: (0, get_weights_1.coalesce)(stat.forumPostCount),
+                            weight: (0, get_weights_1.coalesce)(forum.forumPostCount),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Topic Count",
+                            value: (0, get_weights_1.coalesce)(stat.forumTopicCount),
+                            weight: (0, get_weights_1.coalesce)(forum.forumTopicCount),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Likes Received",
+                            value: (0, get_weights_1.coalesce)(stat.forumLikesReceived),
+                            weight: (0, get_weights_1.coalesce)(forum.forumLikesReceived),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Posts Read Count",
+                            value: (0, get_weights_1.coalesce)(stat.forumPostsReadCount),
+                            weight: (0, get_weights_1.coalesce)(forum.forumPostsReadCount),
+                            op: "+",
+                        },
+                    ],
                 },
                 {
-                    label: "Proposals Discussed",
-                    value: (0, get_weights_1.coalesce)(stat.proposalsDiscussed),
-                    weight: (0, get_weights_1.coalesce)(forum.proposalsDiscussed),
-                    op: "+",
-                },
-                {
-                    label: "Forum Post Count",
-                    value: (0, get_weights_1.coalesce)(stat.forumPostCount),
-                    weight: (0, get_weights_1.coalesce)(forum.forumPostCount),
-                    op: "+",
-                },
-                {
-                    label: "Forum Topic Count",
-                    value: (0, get_weights_1.coalesce)(stat.forumTopicCount),
-                    weight: (0, get_weights_1.coalesce)(forum.forumTopicCount),
-                    op: "+",
-                },
-                {
-                    label: "Forum Likes Received",
-                    value: (0, get_weights_1.coalesce)(stat.forumLikesReceived),
-                    weight: (0, get_weights_1.coalesce)(forum.forumLikesReceived),
-                    op: "+",
-                },
-                {
-                    label: "Forum Posts Read Count",
-                    value: (0, get_weights_1.coalesce)(stat.forumPostsReadCount),
-                    weight: (0, get_weights_1.coalesce)(forum.forumPostsReadCount),
-                    op: "+",
+                    label: "Total Weight",
+                    value: (0, get_weights_1.getTotalWeight)(forum),
+                    weight: 1,
+                    op: "/",
                 },
             ];
         return [
             {
-                label: "Delegated Votes",
-                value: (0, get_weights_1.coalesce)(stat.delegatedVotes),
-                weight: (0, get_weights_1.coalesce)(lifetime.delegatedVotes),
+                label: "Max Score Setting",
+                value: 100,
+                weight: 1,
+                childrenOp: "*",
+                children: [
+                    {
+                        label: "Delegated Votes %",
+                        value: (0, get_weights_1.coalesce)(stat.voteWeight),
+                        weight: (0, get_weights_1.coalesce)(lifetime.delegatedVotes),
+                    },
+                    {
+                        label: "Off chain votes %",
+                        value: (0, get_weights_1.coalesce)(stat.offChainVotesPct),
+                        weight: (0, get_weights_1.coalesce)(lifetime.offChainVotesPct),
+                        op: "+",
+                    },
+                ],
             },
             {
-                label: "Off chain votes %",
-                value: (0, get_weights_1.coalesce)(stat.offChainVotesPct),
-                weight: (0, get_weights_1.coalesce)(lifetime.offChainVotesPct),
-                op: "+",
+                label: "Total Weight",
+                value: (0, get_weights_1.getTotalWeight)(lifetime),
+                weight: 1,
+                op: "/",
             },
         ];
     }
