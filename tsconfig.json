@@ -6,9 +6,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "declaration": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types"]
   },
-  "files": [
-    "src/index.ts"
-  ]
+  "files": ["src/index.ts"]
 }

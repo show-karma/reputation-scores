@@ -26,6 +26,7 @@ export interface DelegateStat {
     forumTopicCount: number;
     forumPostCount: number;
     delegatedVotes: number;
+    voteWeight: number;
     offChainVotesPct: number;
     onChainVotesPct: number;
     percentile: number;

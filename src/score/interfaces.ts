@@ -29,6 +29,7 @@ export interface DelegateStat {
   forumTopicCount: number;
   forumPostCount: number;
   delegatedVotes: number;
+  voteWeight: number;
   offChainVotesPct: number;
   onChainVotesPct: number;
   percentile: number;
@@ -45,8 +46,8 @@ export interface DelegateStat {
   forumPostsReadCountPercentile: number;
   avgPostLikes: number;
   avgPostLength: number;
-  githubScore: number
-  aragonVotesPct : number;
+  githubScore: number;
+  aragonVotesPct: number;
 }
 
 export abstract class BaseProvider {
