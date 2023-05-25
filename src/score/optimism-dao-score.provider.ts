@@ -79,36 +79,36 @@ export class OptimismDaoScoreProvider
           children: [
             {
               label: "Proposals Initiated",
-              value: coalesce(stat.proposalsInitiated),
+              value: coalesce(stat.proposalsInitiatedPercentile),
               weight: coalesce(forum.proposalsInitiated),
             },
             {
               label: "Proposals Discussed",
-              value: coalesce(stat.proposalsDiscussed),
+              value: coalesce(stat.proposalsDiscussedPercentile),
               weight: coalesce(forum.proposalsDiscussed),
               op: "+",
             },
             {
               label: "Forum Post Count",
-              value: coalesce(stat.forumPostCount),
+              value: coalesce(stat.forumPostCountPercentile),
               weight: coalesce(forum.forumPostCount),
               op: "+",
             },
             {
               label: "Forum Topic Count",
-              value: coalesce(stat.forumTopicCount),
+              value: coalesce(stat.forumTopicCountPercentile),
               weight: coalesce(forum.forumTopicCount),
               op: "+",
             },
             {
               label: "Forum Likes Received",
-              value: coalesce(stat.forumLikesReceived),
+              value: coalesce(stat.forumLikesReceivedPercentile),
               weight: coalesce(forum.forumLikesReceived),
               op: "+",
             },
             {
               label: "Forum Posts Read Count",
-              value: coalesce(stat.forumPostsReadCount),
+              value: coalesce(stat.forumPostsReadCountPercentile),
               weight: coalesce(forum.forumPostsReadCount),
               op: "+",
             },

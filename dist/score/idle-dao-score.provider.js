@@ -23,22 +23,17 @@ class IdleDaoScoreProvider extends interfaces_1.BaseProvider {
             (0, get_weights_1.coalesce)(stat.forumPostsReadCountPercentile) *
                 (0, get_weights_1.coalesce)(lifetime?.forumPostsReadCountPercentile, 1)) /
             totalWeight) *
-            100) || 0);
+            100));
     }
     getKarmaScore(stat, median) {
         const { score: { lifetime }, } = this.weights;
         const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
-        return (Math.round(((0, get_weights_1.coalesce)(stat.voteWeight, 0) *
-            (0, get_weights_1.coalesce)(lifetime.delegatedVotes, 1) +
-            (0, get_weights_1.coalesce)(stat.forumActivityScore, 0) *
-                (0, get_weights_1.coalesce)(lifetime.forumActivityScore, 1) +
-            (0, get_weights_1.coalesce)(stat.offChainVotesPct, 0) *
-                (0, get_weights_1.coalesce)(lifetime.offChainVotesPct, 1) +
-            (0, get_weights_1.coalesce)(stat.onChainVotesPct, 0) *
-                (0, get_weights_1.coalesce)(lifetime.onChainVotesPct, 1) +
-            (0, get_weights_1.coalesce)(stat.discordMessagePercentile, 0) *
-                (0, get_weights_1.coalesce)(lifetime.discordMessagePercentile, 1)) /
-            totalWeight) * 100);
+        return (Math.round((((0, get_weights_1.coalesce)(stat.voteWeight, 0) * (0, get_weights_1.coalesce)(lifetime.delegatedVotes, 1) +
+            (0, get_weights_1.coalesce)(stat.forumActivityScore, 0) * (0, get_weights_1.coalesce)(lifetime.forumActivityScore, 1) +
+            (0, get_weights_1.coalesce)(stat.offChainVotesPct, 0) * (0, get_weights_1.coalesce)(lifetime.offChainVotesPct, 1) +
+            (0, get_weights_1.coalesce)(stat.onChainVotesPct, 0) * (0, get_weights_1.coalesce)(lifetime.onChainVotesPct, 1) +
+            (0, get_weights_1.coalesce)(stat.discordMessagePercentile, 0) * (0, get_weights_1.coalesce)(lifetime.discordMessagePercentile, 1)) /
+            totalWeight) * 100));
     }
     getKarmaScoreProps() {
         return [

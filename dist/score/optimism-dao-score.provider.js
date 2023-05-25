@@ -49,36 +49,36 @@ class OptimismDaoScoreProvider extends interfaces_1.BaseProvider {
                     children: [
                         {
                             label: "Proposals Initiated",
-                            value: (0, get_weights_1.coalesce)(stat.proposalsInitiated),
+                            value: (0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.proposalsInitiated),
                         },
                         {
                             label: "Proposals Discussed",
-                            value: (0, get_weights_1.coalesce)(stat.proposalsDiscussed),
+                            value: (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.proposalsDiscussed),
                             op: "+",
                         },
                         {
                             label: "Forum Post Count",
-                            value: (0, get_weights_1.coalesce)(stat.forumPostCount),
+                            value: (0, get_weights_1.coalesce)(stat.forumPostCountPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.forumPostCount),
                             op: "+",
                         },
                         {
                             label: "Forum Topic Count",
-                            value: (0, get_weights_1.coalesce)(stat.forumTopicCount),
+                            value: (0, get_weights_1.coalesce)(stat.forumTopicCountPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.forumTopicCount),
                             op: "+",
                         },
                         {
                             label: "Forum Likes Received",
-                            value: (0, get_weights_1.coalesce)(stat.forumLikesReceived),
+                            value: (0, get_weights_1.coalesce)(stat.forumLikesReceivedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.forumLikesReceived),
                             op: "+",
                         },
                         {
                             label: "Forum Posts Read Count",
-                            value: (0, get_weights_1.coalesce)(stat.forumPostsReadCount),
+                            value: (0, get_weights_1.coalesce)(stat.forumPostsReadCountPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.forumPostsReadCount),
                             op: "+",
                         },
