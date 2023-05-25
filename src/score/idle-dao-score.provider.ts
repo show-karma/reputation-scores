@@ -48,18 +48,17 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     const totalWeight = getTotalWeight(lifetime);
     return (
       Math.round(
-        ((coalesce(stat.voteWeight, 0) *
-          coalesce(lifetime.delegatedVotes, 1) +
-          coalesce(stat.forumActivityScore, 0) *
-          coalesce(lifetime.forumActivityScore, 1) +
-          coalesce(stat.offChainVotesPct, 0) *
-          coalesce(lifetime.offChainVotesPct, 1) +
-          coalesce(stat.onChainVotesPct, 0) *
-          coalesce(lifetime.onChainVotesPct, 1) +
-          coalesce(stat.discordMessagePercentile, 0) *
-          coalesce(lifetime.discordMessagePercentile, 1)) /
-          totalWeight)
-      ) * 100
+        (
+          (
+            coalesce(stat.voteWeight, 0) * coalesce(lifetime.delegatedVotes, 1) +
+            coalesce(stat.forumActivityScore, 0) * coalesce(lifetime.forumActivityScore, 1) +
+            coalesce(stat.offChainVotesPct, 0) * coalesce(lifetime.offChainVotesPct, 1) +
+            coalesce(stat.onChainVotesPct, 0) * coalesce(lifetime.onChainVotesPct, 1) +
+            coalesce(stat.discordMessagePercentile, 0) * coalesce(lifetime.discordMessagePercentile, 1)
+          ) /
+          totalWeight
+        ) * 100
+      )
     );
   }
 
