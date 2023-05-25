@@ -26,18 +26,18 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
         ((coalesce(stat.proposalsInitiatedPercentile) *
           coalesce(lifetime?.proposalsInitiatedPercentile, 1) +
           coalesce(stat.proposalsDiscussedPercentile) *
-            coalesce(lifetime?.proposalsDiscussedPercentile, 1) +
+          coalesce(lifetime?.proposalsDiscussedPercentile, 1) +
           coalesce(stat.forumPostCountPercentile) *
-            coalesce(lifetime?.forumPostCountPercentile, 1) +
+          coalesce(lifetime?.forumPostCountPercentile, 1) +
           coalesce(stat.forumTopicCountPercentile) *
-            coalesce(lifetime?.forumTopicCountPercentile, 1) +
+          coalesce(lifetime?.forumTopicCountPercentile, 1) +
           coalesce(stat.forumLikesReceivedPercentile) *
-            coalesce(lifetime?.forumLikesReceivedPercentile, 1) +
+          coalesce(lifetime?.forumLikesReceivedPercentile, 1) +
           coalesce(stat.forumPostsReadCountPercentile) *
-            coalesce(lifetime?.forumPostsReadCountPercentile, 1)) /
+          coalesce(lifetime?.forumPostsReadCountPercentile, 1)) /
           totalWeight) *
-          100
-      ) || 0
+        100
+      )
     );
   }
 
@@ -48,17 +48,17 @@ export class IdleDaoScoreProvider extends BaseProvider implements GetDaoScore {
     const totalWeight = getTotalWeight(lifetime);
     return (
       Math.round(
-        (coalesce(stat.voteWeight, 0) *
+        ((coalesce(stat.voteWeight, 0) *
           coalesce(lifetime.delegatedVotes, 1) +
           coalesce(stat.forumActivityScore, 0) *
-            coalesce(lifetime.forumActivityScore, 1) +
+          coalesce(lifetime.forumActivityScore, 1) +
           coalesce(stat.offChainVotesPct, 0) *
-            coalesce(lifetime.offChainVotesPct, 1) +
+          coalesce(lifetime.offChainVotesPct, 1) +
           coalesce(stat.onChainVotesPct, 0) *
-            coalesce(lifetime.onChainVotesPct, 1) +
+          coalesce(lifetime.onChainVotesPct, 1) +
           coalesce(stat.discordMessagePercentile, 0) *
-            coalesce(lifetime.discordMessagePercentile, 1)) /
-          totalWeight
+          coalesce(lifetime.discordMessagePercentile, 1)) /
+          totalWeight)
       ) * 100
     );
   }
