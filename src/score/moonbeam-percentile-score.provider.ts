@@ -8,7 +8,7 @@ import {
   ScoreMultiplier,
 } from "./interfaces";
 
-export class DefaultDaoPercentileScoreProvider
+export class MoonbeamPercentileScoreProvider
   extends BaseProvider
   implements GetDaoScore {
   weights: ScoreMultiplier;
