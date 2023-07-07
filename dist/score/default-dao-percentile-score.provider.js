@@ -15,17 +15,17 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
     getForumScore(stat) {
         const { forumScore: { lifetime }, } = this.weights;
         const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
-        return (Math.round(((stat.proposalsInitiatedPercentile *
+        return (Math.round((((0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile, 0) *
             (0, get_weights_1.coalesce)(lifetime.proposalsInitiatedPercentile, 1) +
-            stat.proposalsDiscussedPercentile *
+            (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile, 0) *
                 (0, get_weights_1.coalesce)(lifetime.proposalsDiscussedPercentile, 1) +
-            stat.forumPostCountPercentile *
+            (0, get_weights_1.coalesce)(stat.forumPostCountPercentile, 0) *
                 (0, get_weights_1.coalesce)(lifetime.forumPostCountPercentile, 1) +
-            stat.forumTopicCountPercentile *
+            (0, get_weights_1.coalesce)(stat.forumTopicCountPercentile, 0) *
                 (0, get_weights_1.coalesce)(lifetime.forumTopicCountPercentile, 1) +
-            stat.forumLikesReceivedPercentile *
+            (0, get_weights_1.coalesce)(stat.forumLikesReceivedPercentile, 0) *
                 (0, get_weights_1.coalesce)(lifetime.forumLikesReceivedPercentile, 1) +
-            stat.forumPostsReadCountPercentile *
+            (0, get_weights_1.coalesce)(stat.forumPostsReadCountPercentile, 0) *
                 (0, get_weights_1.coalesce)(lifetime.forumPostsReadCountPercentile, 1)) /
             totalWeight) *
             100) || 0);
@@ -34,7 +34,7 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
     getKarmaScore(stat, median) {
         const { score: { lifetime }, } = this.weights;
         const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
-        return (Math.round(((stat.forumActivityScore * (0, get_weights_1.coalesce)(lifetime.forumActivityScore) +
+        return (Math.round((((0, get_weights_1.coalesce)(stat.forumActivityScore, 1) * (0, get_weights_1.coalesce)(lifetime.forumActivityScore) +
             (stat.offChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.offChainVotesPct) +
             (stat.onChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.onChainVotesPct) +
             (stat.discordMessagePercentile || 0) *
