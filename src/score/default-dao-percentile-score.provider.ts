@@ -10,8 +10,7 @@ import {
 
 export class DefaultDaoPercentileScoreProvider
   extends BaseProvider
-  implements GetDaoScore
-{
+  implements GetDaoScore {
   weights: ScoreMultiplier;
 
   constructor(private readonly resourceName?: string) {
@@ -32,20 +31,20 @@ export class DefaultDaoPercentileScoreProvider
     const totalWeight = getTotalWeight(lifetime);
     return (
       Math.round(
-        ((stat.proposalsInitiatedPercentile *
+        ((coalesce(stat.proposalsInitiatedPercentile, 0) *
           coalesce(lifetime.proposalsInitiatedPercentile, 1) +
-          stat.proposalsDiscussedPercentile *
-            coalesce(lifetime.proposalsDiscussedPercentile, 1) +
-          stat.forumPostCountPercentile *
-            coalesce(lifetime.forumPostCountPercentile, 1) +
-          stat.forumTopicCountPercentile *
-            coalesce(lifetime.forumTopicCountPercentile, 1) +
-          stat.forumLikesReceivedPercentile *
-            coalesce(lifetime.forumLikesReceivedPercentile, 1) +
-          stat.forumPostsReadCountPercentile *
-            coalesce(lifetime.forumPostsReadCountPercentile, 1)) /
+          coalesce(stat.proposalsDiscussedPercentile, 0) *
+          coalesce(lifetime.proposalsDiscussedPercentile, 1) +
+          coalesce(stat.forumPostCountPercentile, 0) *
+          coalesce(lifetime.forumPostCountPercentile, 1) +
+          coalesce(stat.forumTopicCountPercentile, 0) *
+          coalesce(lifetime.forumTopicCountPercentile, 1) +
+          coalesce(stat.forumLikesReceivedPercentile, 0) *
+          coalesce(lifetime.forumLikesReceivedPercentile, 1) +
+          coalesce(stat.forumPostsReadCountPercentile, 0) *
+          coalesce(lifetime.forumPostsReadCountPercentile, 1)) /
           totalWeight) *
-          100
+        100
       ) || 0
     );
   }
@@ -59,13 +58,13 @@ export class DefaultDaoPercentileScoreProvider
 
     return (
       Math.round(
-        ((stat.forumActivityScore * coalesce(lifetime.forumActivityScore) +
+        ((coalesce(stat.forumActivityScore, 1) * coalesce(lifetime.forumActivityScore) +
           (stat.offChainVotesPct || 0) * coalesce(lifetime.offChainVotesPct) +
           (stat.onChainVotesPct || 0) * coalesce(lifetime.onChainVotesPct) +
           (stat.discordMessagePercentile || 0) *
-            coalesce(lifetime.discordMessagePercentile)) /
+          coalesce(lifetime.discordMessagePercentile)) /
           totalWeight) *
-          100
+        100
       ) || 0
     );
   }
