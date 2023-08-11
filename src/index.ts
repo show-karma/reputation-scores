@@ -8,4 +8,5 @@ export * from "./score/gitcoin-dao-percentile-score-provider";
 export * from "./score/default-dao-percentile-score.provider";
 export * from "./score/apecoin-dao-percentile-score.provider";
 export * from "./score/giveth-percentile-score.provider";
+export * from "./score/ssvnetwork-dao-percentile-score.provider";
 export * from "./score/moonbeam-percentile-score.provider";
