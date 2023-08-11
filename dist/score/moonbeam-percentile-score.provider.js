@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultDaoPercentileScoreProvider = void 0;
+exports.MoonbeamPercentileScoreProvider = void 0;
 const get_weights_1 = require("../util/get-weights");
 const interfaces_1 = require("./interfaces");
-class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
+class MoonbeamPercentileScoreProvider extends interfaces_1.BaseProvider {
     constructor(resourceName) {
         super(resourceName);
         this.resourceName = resourceName;
@@ -35,10 +35,7 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
         const { score: { lifetime }, } = this.weights;
         const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
         return (Math.round((((0, get_weights_1.coalesce)(stat.forumActivityScore, 1) * (0, get_weights_1.coalesce)(lifetime.forumActivityScore) +
-            (stat.offChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.offChainVotesPct) +
-            (stat.onChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.onChainVotesPct) +
-            (stat.discordMessagePercentile || 0) *
-                (0, get_weights_1.coalesce)(lifetime.discordMessagePercentile)) /
+            (stat.onChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.onChainVotesPct)) /
             totalWeight) *
             100) || 0);
     }
@@ -119,21 +116,9 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
                         op: "*",
                     },
                     {
-                        label: "Off-chain Votes %",
-                        value: (0, get_weights_1.coalesce)(stat.offChainVotesPct),
-                        weight: (0, get_weights_1.coalesce)(score.offChainVotesPct, 1),
-                        op: "+",
-                    },
-                    {
                         label: "On-chain Votes %",
                         value: (0, get_weights_1.coalesce)(stat.onChainVotesPct),
                         weight: (0, get_weights_1.coalesce)(score.onChainVotesPct, 1),
-                        op: "+",
-                    },
-                    {
-                        label: "Discord Messages %",
-                        value: (0, get_weights_1.coalesce)(stat.discordMessagePercentile),
-                        weight: (0, get_weights_1.coalesce)(score.discordMessagePercentile, 1),
                         op: "+",
                     },
                 ],
@@ -147,4 +132,4 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
         ];
     }
 }
-exports.DefaultDaoPercentileScoreProvider = DefaultDaoPercentileScoreProvider;
+exports.MoonbeamPercentileScoreProvider = MoonbeamPercentileScoreProvider;

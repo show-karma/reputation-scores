@@ -25,3 +25,4 @@ __exportStar(require("./score/default-dao-percentile-score.provider"), exports);
 __exportStar(require("./score/apecoin-dao-percentile-score.provider"), exports);
 __exportStar(require("./score/giveth-percentile-score.provider"), exports);
 __exportStar(require("./score/ssvnetwork-dao-percentile-score.provider"), exports);
+__exportStar(require("./score/moonbeam-percentile-score.provider"), exports);
