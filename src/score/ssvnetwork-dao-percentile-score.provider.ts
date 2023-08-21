@@ -10,8 +10,7 @@ import {
 
 export class SSVNetworkPercentileScoreProvider
   extends BaseProvider
-  implements GetDaoScore
-{
+  implements GetDaoScore {
   weights: ScoreMultiplier;
 
   constructor(private readonly resourceName?: string) {
@@ -34,17 +33,17 @@ export class SSVNetworkPercentileScoreProvider
         ((coalesce(stat.proposalsInitiatedPercentile) *
           coalesce(lifetime?.proposalsInitiatedPercentile, 1) +
           coalesce(stat.proposalsDiscussedPercentile) *
-            coalesce(lifetime?.proposalsDiscussedPercentile, 1) +
+          coalesce(lifetime?.proposalsDiscussedPercentile, 1) +
           coalesce(stat.forumPostCountPercentile) *
-            coalesce(lifetime?.forumPostCountPercentile, 1) +
+          coalesce(lifetime?.forumPostCountPercentile, 1) +
           coalesce(stat.forumTopicCountPercentile) *
-            coalesce(lifetime?.forumTopicCountPercentile, 1) +
+          coalesce(lifetime?.forumTopicCountPercentile, 1) +
           coalesce(stat.forumLikesReceivedPercentile) *
-            coalesce(lifetime?.forumLikesReceivedPercentile, 1) +
+          coalesce(lifetime?.forumLikesReceivedPercentile, 1) +
           coalesce(stat.forumPostsReadCountPercentile) *
-            coalesce(lifetime?.forumPostsReadCountPercentile, 1)) /
+          coalesce(lifetime?.forumPostsReadCountPercentile, 1)) /
           totalWeight) *
-          100
+        100
       ) || 0
     );
   }
@@ -59,11 +58,11 @@ export class SSVNetworkPercentileScoreProvider
       ((coalesce(stat.forumActivityScore) *
         coalesce(lifetime?.forumActivityScore, 1) +
         coalesce(stat.offChainVotesPct) *
-          coalesce(lifetime?.offChainVotesPct, 1) +
+        coalesce(lifetime?.offChainVotesPct, 1) +
         coalesce(stat.discordMessagePercentile) *
-          coalesce(lifetime?.discordMessagePercentile, 1)) /
+        coalesce(lifetime?.discordMessagePercentile, 1)) /
         totalWeight) *
-        100
+      100
     );
   }
 
@@ -95,14 +94,14 @@ export class SSVNetworkPercentileScoreProvider
           children: [
             {
               label: "Proposals Initiated Percentile",
-              value: coalesce(stat.proposalsDiscussedPercentile),
-              weight: coalesce(forum?.proposalsDiscussedPercentile, 1),
+              value: coalesce(stat.proposalsInitiatedPercentile),
+              weight: coalesce(forum?.proposalsInitiatedPercentile, 1),
               op: "*",
             },
             {
               label: "Proposals Discussed Percentile",
-              value: coalesce(stat.proposalsInitiatedPercentile),
-              weight: coalesce(forum?.proposalsInitiatedPercentile, 1),
+              value: coalesce(stat.proposalsDiscussedPercentile),
+              weight: coalesce(forum?.proposalsDiscussedPercentile, 1),
               op: "+",
             },
             {
