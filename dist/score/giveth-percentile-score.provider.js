@@ -65,13 +65,13 @@ class GivethPercentileScoreProvider extends interfaces_1.BaseProvider {
                     childrenOp: "*",
                     children: [
                         {
-                            label: "Proposals Initiated Percentile",
+                            label: "Proposals Discussed Percentile",
                             value: (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum?.proposalsDiscussedPercentile, 1),
                             op: "*",
                         },
                         {
-                            label: "Proposals Discussed Percentile",
+                            label: "Proposals Initiated Percentile",
                             value: (0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum?.proposalsInitiatedPercentile, 1),
                             op: "+",

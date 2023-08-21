@@ -60,14 +60,14 @@ class SSVNetworkPercentileScoreProvider extends interfaces_1.BaseProvider {
                     children: [
                         {
                             label: "Proposals Initiated Percentile",
-                            value: (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile),
-                            weight: (0, get_weights_1.coalesce)(forum?.proposalsDiscussedPercentile, 1),
+                            value: (0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum?.proposalsInitiatedPercentile, 1),
                             op: "*",
                         },
                         {
                             label: "Proposals Discussed Percentile",
-                            value: (0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile),
-                            weight: (0, get_weights_1.coalesce)(forum?.proposalsInitiatedPercentile, 1),
+                            value: (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum?.proposalsDiscussedPercentile, 1),
                             op: "+",
                         },
                         {

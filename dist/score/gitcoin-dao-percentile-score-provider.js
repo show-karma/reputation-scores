@@ -49,12 +49,12 @@ class GitcoinDaoPercentileScoreProvider extends default_dao_score_provider_1.Def
                     childrenOp: "*",
                     children: [
                         {
-                            label: "Proposals Initiated Percentile",
+                            label: "Proposals Discussed Percentile",
                             value: (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.proposalsDiscussedPercentile, 1),
                         },
                         {
-                            label: "Proposals Discussed Percentile",
+                            label: "Proposals Initiated Percentile",
                             value: (0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile),
                             weight: (0, get_weights_1.coalesce)(forum.proposalsInitiatedPercentile, 1),
                             op: "+",
