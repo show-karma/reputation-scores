@@ -101,13 +101,13 @@ export class GivethPercentileScoreProvider
           childrenOp: "*",
           children: [
             {
-              label: "Proposals Initiated Percentile",
+              label: "Proposals Discussed Percentile",
               value: coalesce(stat.proposalsDiscussedPercentile),
               weight: coalesce(forum?.proposalsDiscussedPercentile, 1),
               op: "*",
             },
             {
-              label: "Proposals Discussed Percentile",
+              label: "Proposals Initiated Percentile",
               value: coalesce(stat.proposalsInitiatedPercentile),
               weight: coalesce(forum?.proposalsInitiatedPercentile, 1),
               op: "+",
