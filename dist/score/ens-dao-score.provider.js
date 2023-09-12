@@ -2,46 +2,139 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnsDaoScoreProvider = void 0;
 const get_weights_1 = require("../util/get-weights");
-const default_dao_score_provider_1 = require("./default-dao-score.provider");
-class EnsDaoScoreProvider extends default_dao_score_provider_1.DefaultDaoScoreProvider {
-    getForumScore(stat) {
-        const { forumScore: { lifetime = {} }, } = this.weights;
-        const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
-        return Math.round((((0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile, 0) *
-            (0, get_weights_1.coalesce)(lifetime.proposalsInitiated, 1) +
-            (0, get_weights_1.coalesce)(stat.proposalsDiscussed, 0) *
-                (0, get_weights_1.coalesce)(lifetime.proposalsDiscussed, 1) +
-            (0, get_weights_1.coalesce)(stat.forumPostCount, 0) *
-                (0, get_weights_1.coalesce)(lifetime.forumPostCount, 1) +
-            (0, get_weights_1.coalesce)(stat.forumTopicCount, 0) *
-                (0, get_weights_1.coalesce)(lifetime.forumTopicCount, 1) +
-            (0, get_weights_1.coalesce)(stat.forumLikesReceived, 0) *
-                (0, get_weights_1.coalesce)(lifetime.forumLikesReceived, 1) +
-            (0, get_weights_1.coalesce)(stat.forumPostsReadCount, 0) *
-                (0, get_weights_1.coalesce)(lifetime.forumPostsReadCount, 1)) /
-            totalWeight) *
-            100);
+const interfaces_1 = require("./interfaces");
+class EnsDaoScoreProvider extends interfaces_1.BaseProvider {
+    constructor(resourceName) {
+        super(resourceName);
+        this.resourceName = resourceName;
     }
-    getKarmaScore(stat, median) {
-        const { score: { lifetime = {} }, } = this.weights;
+    async preload(resourceName) {
+        this.weights = await (0, get_weights_1.getWeights)(resourceName || this.resourceName || "default-percentile");
+    }
+    // max here 100 + 20 + 10 + 30 + 5 + 1 = 166
+    getForumScore(stat) {
+        const { forumScore: { lifetime }, } = this.weights;
         const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
-        return Math.round((((0, get_weights_1.coalesce)(stat.forumActivityScore, 0) *
-            (0, get_weights_1.coalesce)(lifetime.forumActivityScore, 1) +
-            (0, get_weights_1.coalesce)(stat.offChainVotesPct, 0) *
-                (0, get_weights_1.coalesce)(lifetime.offChainVotesPct, 1) +
-            (0, get_weights_1.coalesce)(stat.onChainVotesPct, 0) *
-                (0, get_weights_1.coalesce)(lifetime.onChainVotesPct, 1) +
-            (0, get_weights_1.coalesce)(stat.discordMessagesCount, 0) *
-                (0, get_weights_1.coalesce)(lifetime.discordMessagesCount, 1)) /
+        return (Math.round((((0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile, 0) *
+            (0, get_weights_1.coalesce)(lifetime.proposalsInitiatedPercentile, 1) +
+            (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.proposalsDiscussedPercentile, 1) +
+            (0, get_weights_1.coalesce)(stat.forumPostCountPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumPostCountPercentile, 1) +
+            (0, get_weights_1.coalesce)(stat.forumTopicCountPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumTopicCountPercentile, 1) +
+            (0, get_weights_1.coalesce)(stat.forumLikesReceivedPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumLikesReceivedPercentile, 1) +
+            (0, get_weights_1.coalesce)(stat.forumPostsReadCountPercentile, 0) *
+                (0, get_weights_1.coalesce)(lifetime.forumPostsReadCountPercentile, 1)) /
             totalWeight) *
-            100);
+            100) || 0);
+    }
+    // max here 100 + 300 + 500 + 1 = 901
+    getKarmaScore(stat, median) {
+        const { score: { lifetime }, } = this.weights;
+        const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
+        return (Math.round((((0, get_weights_1.coalesce)(stat.forumActivityScore, 1) * (0, get_weights_1.coalesce)(lifetime.forumActivityScore) +
+            (stat.offChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.offChainVotesPct) +
+            (stat.onChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.onChainVotesPct)) /
+            totalWeight) *
+            100) || 0);
     }
     getKarmaScoreProps() {
         return [
+            "forumActivityScore",
             "offChainVotesPct",
             "onChainVotesPct",
-            "delegatedVotes",
-            "discordMessagesCount",
+        ];
+    }
+    getScoreBreakdownCalc(stat, period, type = "score") {
+        const { score: { lifetime: score }, forumScore: { lifetime: forum }, } = this.weights;
+        if (type == "forum")
+            return [
+                {
+                    label: "Max Score Setting",
+                    value: 100,
+                    weight: 1,
+                    childrenOp: "*",
+                    children: [
+                        {
+                            label: "Proposals Discussed Percentile",
+                            value: (0, get_weights_1.coalesce)(stat.proposalsDiscussedPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum.proposalsDiscussedPercentile, 1),
+                            op: "*",
+                        },
+                        {
+                            label: "Proposals Initiated Percentile",
+                            value: (0, get_weights_1.coalesce)(stat.proposalsInitiatedPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum.proposalsInitiatedPercentile, 1),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Post Count Percentile",
+                            value: (0, get_weights_1.coalesce)(stat.forumPostCountPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum.forumPostCountPercentile, 1),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Topic Count Percentile",
+                            value: (0, get_weights_1.coalesce)(stat.forumTopicCountPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum.forumTopicCountPercentile, 1),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Likes Received Percentile",
+                            value: (0, get_weights_1.coalesce)(stat.forumLikesReceivedPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum.forumLikesReceivedPercentile, 1),
+                            op: "+",
+                        },
+                        {
+                            label: "Forum Posts Read Count Percentile",
+                            value: (0, get_weights_1.coalesce)(stat.forumPostsReadCountPercentile),
+                            weight: (0, get_weights_1.coalesce)(forum.forumPostsReadCountPercentile, 1),
+                            op: "+",
+                        },
+                    ],
+                },
+                {
+                    label: "Sum of Weights times Max Score Setting",
+                    value: (0, get_weights_1.getTotalWeight)(forum),
+                    weight: 1,
+                    op: "/",
+                },
+            ];
+        return [
+            {
+                label: "Max Score Setting",
+                value: 100,
+                weight: 1,
+                childrenOp: "*",
+                children: [
+                    {
+                        label: "Forum Activity Score",
+                        value: (0, get_weights_1.coalesce)(stat.forumActivityScore),
+                        weight: (0, get_weights_1.coalesce)(score.forumActivityScore, 1),
+                        op: "*",
+                    },
+                    {
+                        label: "Off-chain Votes %",
+                        value: (0, get_weights_1.coalesce)(stat.offChainVotesPct),
+                        weight: (0, get_weights_1.coalesce)(score.offChainVotesPct, 1),
+                        op: "+",
+                    },
+                    {
+                        label: "On-chain Votes %",
+                        value: (0, get_weights_1.coalesce)(stat.onChainVotesPct),
+                        weight: (0, get_weights_1.coalesce)(score.onChainVotesPct, 1),
+                        op: "+",
+                    }
+                ],
+            },
+            {
+                label: "Sum of Weights times Max Score Setting",
+                value: (0, get_weights_1.getTotalWeight)(score),
+                weight: 1,
+                op: "/",
+            },
         ];
     }
 }
