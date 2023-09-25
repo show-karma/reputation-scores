@@ -36,9 +36,7 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
         const totalWeight = (0, get_weights_1.getTotalWeight)(lifetime);
         return (Math.round((((0, get_weights_1.coalesce)(stat.forumActivityScore, 1) * (0, get_weights_1.coalesce)(lifetime.forumActivityScore) +
             (stat.offChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.offChainVotesPct) +
-            (stat.onChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.onChainVotesPct) +
-            (stat.discordMessagePercentile || 0) *
-                (0, get_weights_1.coalesce)(lifetime.discordMessagePercentile)) /
+            (stat.onChainVotesPct || 0) * (0, get_weights_1.coalesce)(lifetime.onChainVotesPct)) /
             totalWeight) *
             100) || 0);
     }
@@ -47,7 +45,6 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
             "forumActivityScore",
             "offChainVotesPct",
             "onChainVotesPct",
-            "discordMessagePercentile",
         ];
     }
     getScoreBreakdownCalc(stat, period, type = "score") {
@@ -129,13 +126,7 @@ class DefaultDaoPercentileScoreProvider extends interfaces_1.BaseProvider {
                         value: (0, get_weights_1.coalesce)(stat.onChainVotesPct),
                         weight: (0, get_weights_1.coalesce)(score.onChainVotesPct, 1),
                         op: "+",
-                    },
-                    {
-                        label: "Discord Messages %",
-                        value: (0, get_weights_1.coalesce)(stat.discordMessagePercentile),
-                        weight: (0, get_weights_1.coalesce)(score.discordMessagePercentile, 1),
-                        op: "+",
-                    },
+                    }
                 ],
             },
             {

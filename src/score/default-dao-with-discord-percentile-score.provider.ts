@@ -8,7 +8,7 @@ import {
   ScoreMultiplier,
 } from "./interfaces";
 
-export class DefaultDaoPercentileScoreProvider
+export class DefaultWithDiscordDaoPercentileScoreProvider
   extends BaseProvider
   implements GetDaoScore {
   weights: ScoreMultiplier;
@@ -19,7 +19,7 @@ export class DefaultDaoPercentileScoreProvider
 
   async preload(resourceName?: string): Promise<void> {
     this.weights = await getWeights(
-      resourceName || this.resourceName || "default-percentile"
+      resourceName || this.resourceName || "default-percentile-discord"
     );
   }
 
@@ -60,7 +60,9 @@ export class DefaultDaoPercentileScoreProvider
       Math.round(
         ((coalesce(stat.forumActivityScore, 1) * coalesce(lifetime.forumActivityScore) +
           (stat.offChainVotesPct || 0) * coalesce(lifetime.offChainVotesPct) +
-          (stat.onChainVotesPct || 0) * coalesce(lifetime.onChainVotesPct)) /
+          (stat.onChainVotesPct || 0) * coalesce(lifetime.onChainVotesPct) +
+          (stat.discordMessagePercentile || 0) *
+          coalesce(lifetime.discordMessagePercentile)) /
           totalWeight) *
         100
       ) || 0
@@ -72,6 +74,7 @@ export class DefaultDaoPercentileScoreProvider
       "forumActivityScore",
       "offChainVotesPct",
       "onChainVotesPct",
+      "discordMessagePercentile",
     ];
   }
 
@@ -163,7 +166,13 @@ export class DefaultDaoPercentileScoreProvider
             value: coalesce(stat.onChainVotesPct),
             weight: coalesce(score.onChainVotesPct, 1),
             op: "+",
-          }
+          },
+          {
+            label: "Discord Messages %",
+            value: coalesce(stat.discordMessagePercentile),
+            weight: coalesce(score.discordMessagePercentile, 1),
+            op: "+",
+          },
         ],
       },
       {

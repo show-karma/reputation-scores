@@ -3,7 +3,8 @@
     "lifetime": {
       "forumActivityScore": 1,
       "offChainVotesPct": 3,
-      "onChainVotesPct": 5
+      "onChainVotesPct": 5,
+      "discordMessagePercentile": 0.01
     }
   },
   "forumScore": {
