@@ -19,6 +19,7 @@ export class DefaultWithDeworkDaoScoreProvider
     this.weights = resource;
   }
 
+  // Used for score breakdown display
   getScoreBreakdownCalc(
     stat: Partial<DelegateStat>,
     period?: DelegateStatPeriod,
