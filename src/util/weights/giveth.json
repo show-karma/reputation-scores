@@ -3,8 +3,7 @@
     "lifetime": {
       "offChainVotesPct": 2,
       "onChainVotesPct": 2,
-      "forumActivityScore": 1,
-      "aragonVotesPct": 2
+      "forumActivityScore": 1
     }
   },
   "forumScore": {
