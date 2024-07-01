@@ -8,6 +8,7 @@ class DefaultWithDeworkDaoScoreProvider extends interfaces_1.BaseProvider {
         const resource = await (0, get_weights_1.getWeights)(resourceName || "default-with-dework");
         this.weights = resource;
     }
+    // Used for score breakdown display
     getScoreBreakdownCalc(stat, period, type = "score") {
         const { score: { lifetime: karma }, forumScore: { lifetime: forum }, } = this.weights;
         switch (type) {
