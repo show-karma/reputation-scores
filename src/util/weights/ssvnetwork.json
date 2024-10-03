@@ -1,20 +1,20 @@
 {
   "score": {
     "lifetime": {
-      "forumActivityScore": 3,
-      "offChainVotesPct": 10,
-      "discordMessagePercentile": 0.33
+      "forumActivityScore": 1,
+      "offChainVotesPct": 3,
+      "discordMessagePercentile": 0.01
     },
     "7d": {},
     "30d": {
-      "forumActivityScore": 3,
-      "offChainVotesPct": 10,
-      "discordMessagePercentile": 0.33
+      "forumActivityScore": 1,
+      "offChainVotesPct": 3,
+      "discordMessagePercentile": 0.01
     },
     "180d": {
-      "forumActivityScore": 3,
-      "offChainVotesPct": 10,
-      "discordMessagePercentile": 0.33
+      "forumActivityScore": 1,
+      "offChainVotesPct": 3,
+      "discordMessagePercentile": 0.01
     },
     "90d": {}
   },
