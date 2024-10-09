@@ -9,7 +9,7 @@ class SSVStagNetworkPercentileScoreProvider extends interfaces_1.BaseProvider {
         this.resourceName = resourceName;
     }
     async preload(resourceName) {
-        this.weights = await (0, get_weights_1.getWeights)(resourceName || this.resourceName || "ssvnetwork_custom");
+        this.weights = await (0, get_weights_1.getWeights)("ssvnetwork_custom");
     }
     getForumScore(stat) {
         const { forumScore: { lifetime }, } = this.weights;
