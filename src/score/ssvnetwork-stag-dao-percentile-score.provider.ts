@@ -18,9 +18,7 @@ export class SSVStagNetworkPercentileScoreProvider
   }
 
   async preload(resourceName?: string): Promise<void> {
-    this.weights = await getWeights(
-      resourceName || this.resourceName || "ssvnetwork_custom"
-    );
+    this.weights = await getWeights("ssvnetwork_custom");
   }
 
   getForumScore(stat: Partial<DelegateStat>): number {
