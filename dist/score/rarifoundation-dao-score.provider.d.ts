@@ -1,5 +1,5 @@
 import { BaseProvider, DelegateStat, DelegateStatPeriod, GetDaoScore, ScoreBreakdownCalc, ScoreMultiplier } from "./interfaces";
-export declare abstract class RariFoundationDaoScoreProvider extends BaseProvider implements GetDaoScore {
+export declare class RariFoundationDaoScoreProvider extends BaseProvider implements GetDaoScore {
     private readonly resourceName;
     weights: ScoreMultiplier;
     constructor(resourceName?: string);

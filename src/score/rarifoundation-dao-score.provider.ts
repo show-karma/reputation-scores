@@ -8,7 +8,7 @@ import {
 } from "./interfaces";
 import { coalesce, getWeights } from "../util/get-weights";
 
-export abstract class RariFoundationDaoScoreProvider
+export class RariFoundationDaoScoreProvider
   extends BaseProvider
   implements GetDaoScore {
   weights: ScoreMultiplier;
