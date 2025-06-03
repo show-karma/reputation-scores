@@ -28,3 +28,4 @@ __exportStar(require("./score/ssvnetwork-dao-percentile-score.provider"), export
 __exportStar(require("./score/ssvnetwork-stag-dao-percentile-score.provider"), exports);
 __exportStar(require("./score/moonbeam-percentile-score.provider"), exports);
 __exportStar(require("./score/default-dao-with-discord-percentile-score.provider"), exports);
+__exportStar(require("./score/rarifoundation-dao-score.provider"), exports);
